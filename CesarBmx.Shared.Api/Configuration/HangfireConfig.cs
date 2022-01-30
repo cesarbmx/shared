@@ -18,6 +18,7 @@ namespace CesarBmx.Shared.Api.Configuration
             // Configure
             app.UseHangfireDashboard("/hangfire", new DashboardOptions
             {
+                // ReSharper disable once RedundantCast
                 Authorization = new[] { enableBasicAuthentication ? (IDashboardAuthorizationFilter)new HangfireBasicAuthorization() : new HangfireNonAuthorization() },
                 
             });

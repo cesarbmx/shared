@@ -75,7 +75,7 @@ namespace CesarBmx.Shared.Api.Configuration
                 c.OperationFilter<CamelCaseParameOperationFilter>();
 
                 //Find all controllers from the calling assembly (Swagger custom ordering)
-                var order = GetControllerOrderMap(type.Assembly);
+                var order = GetControllerOrderMap(type.Assembly, Assembly.GetExecutingAssembly());
 
                 //Order based on the prefix, if in the dictionary, otherwise, use the controller name as is
                 if (order.Count > 0)
@@ -129,10 +129,14 @@ namespace CesarBmx.Shared.Api.Configuration
             return app;
         }
 
-        private static Dictionary<string, string> GetControllerOrderMap(Assembly assembly)
+        private static Dictionary<string, string> GetControllerOrderMap(Assembly assembly, Assembly sharedAssembly)
         {
             //Find all controllers in assembly
-            var controllerTypes = assembly.GetTypes().Where(t => typeof(ControllerBase).IsAssignableFrom(t));
+            var types = new List<Type>();
+            types.AddRange(assembly.GetTypes());
+            types.AddRange(sharedAssembly.GetTypes());
+            var controllerTypes = types.Where(t => typeof(ControllerBase).IsAssignableFrom(t));
+
             //Build the dictionary
             var orderMap = new Dictionary<string, string>(
                 controllerTypes.Where(c => c.GetCustomAttributes<SwaggerControllerOrderAttribute>().Any())

@@ -9,7 +9,7 @@ namespace CesarBmx.Shared.Tests.Common.Extensions
     {
         private enum MyEnum
         {
-            Value1
+            VALUE1
         }
 
         [TestMethod]
@@ -63,7 +63,7 @@ namespace CesarBmx.Shared.Tests.Common.Extensions
         {
             //Arrange
             var subClass = new { SubClassId = 2, SubClassName = "MySubClass" };
-            var obj = new { ObjectId = 1, ObjectName = MyEnum.Value1, SubClass = subClass };
+            var obj = new { ObjectId = 1, ObjectName = MyEnum.VALUE1, SubClass = subClass };
 
             //Act
             var dictionary = obj.AsDictionary();
@@ -71,7 +71,7 @@ namespace CesarBmx.Shared.Tests.Common.Extensions
             //Assert
             Assert.IsTrue(dictionary.Count == 3);
             Assert.AreEqual(1, dictionary["ObjectId"]);
-            Assert.AreEqual(MyEnum.Value1, dictionary["ObjectName"]);
+            Assert.AreEqual(MyEnum.VALUE1, dictionary["ObjectName"]);
             Assert.IsTrue(dictionary["SubClass"] is Dictionary<string, object>);
             Assert.AreEqual(2, ((Dictionary<string, object>)dictionary["SubClass"])["SubClassId"]);
             Assert.AreEqual("MySubClass", ((Dictionary<string, object>)dictionary["SubClass"])["SubClassName"]);

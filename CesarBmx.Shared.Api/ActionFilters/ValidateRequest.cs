@@ -43,7 +43,7 @@ namespace CesarBmx.Shared.Api.ActionFilters
                         // Handle DataAnotations Required
                         if (value.Contains("field is required"))
                         {
-                            validationErrorsResponse.Add(new ValidationError(nameof(Application.Messages.ErrorMessage.Required), error.Key, Application.Messages.ErrorMessage.Required));
+                            validationErrorsResponse.Add(new ValidationError(nameof(Application.Messages.ErrorMessage.Required), error.Key.ToFirstLetterLower(), Application.Messages.ErrorMessage.Required));
                         }
                         else // Handle fluent validations
                         {

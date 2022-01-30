@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using CesarBmx.Shared.Application.Responses;
+using CesarBmx.Shared.Common.Extensions;
 
 namespace CesarBmx.Shared.Api.ActionFilters
 {
@@ -49,7 +50,7 @@ namespace CesarBmx.Shared.Api.ActionFilters
                             var index = value.IndexOf(" ", StringComparison.Ordinal);
                             var code = value.Substring(0, index);
                             var message = value.Substring(index + 1);
-                            validationErrorsResponse.Add(new ValidationError(code, error.Key, message));
+                            validationErrorsResponse.Add(new ValidationError(code, error.Key.ToFirstLetterLower(), message));
                         }
                     }
                 }

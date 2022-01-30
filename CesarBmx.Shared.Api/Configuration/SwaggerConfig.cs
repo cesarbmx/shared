@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using CesarBmx.Shared.Api.Controllers;
+using CesarBmx.Shared.Api.Helpers;
 using MicroElements.Swashbuckle.FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -66,7 +67,8 @@ namespace CesarBmx.Shared.Api.Configuration
                 c.EnableAnnotations();
                 c.SchemaFilter<FluentValidationRules>();
                 c.OperationFilter<FluentValidationOperationFilter>();
-                
+                c.OperationFilter<CamelCaseParameOperationFilter>();
+
                 // XML documentation file
                 var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
                 var commentsFileName = assemblyName.Name + ".xml";

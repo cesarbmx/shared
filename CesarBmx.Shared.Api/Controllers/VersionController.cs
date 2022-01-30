@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using CesarBmx.Shared.Api.ActionFilters;
 using CesarBmx.Shared.Application.ResponseBuilders;
 using CesarBmx.Shared.Application.Responses;
 using Microsoft.AspNetCore.Authorization;
@@ -11,8 +12,8 @@ namespace CesarBmx.Shared.Api.Controllers
     [SwaggerResponse(401, Type = typeof(Unauthorized))]
     [SwaggerResponse(403, Type = typeof(Forbidden))]
     [AllowAnonymous]
-    // ReSharper disable once InconsistentNaming
-    public class Z_VersionController : Controller
+    [SwaggerControllerOrder(orderPrefix: "Z")]
+    public class VersionController : Controller
     {
         /// <summary>
         /// Get version

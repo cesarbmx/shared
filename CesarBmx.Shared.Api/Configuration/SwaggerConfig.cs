@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection;
+using CesarBmx.Shared.Api.ActionFilters;
 using CesarBmx.Shared.Api.Controllers;
 using CesarBmx.Shared.Api.Helpers;
 using MicroElements.Swashbuckle.FluentValidation;
@@ -8,6 +11,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using CesarBmx.Shared.Api.ResponseExamples;
+using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Filters;
 
 namespace CesarBmx.Shared.Api.Configuration
@@ -55,19 +59,27 @@ namespace CesarBmx.Shared.Api.Configuration
 
                 var assemblyName = type.Assembly.GetName();
 
-                c.SwaggerDoc("v1",
-                    new OpenApiInfo
-                    {
-                        Title = appName,
-                        Version = assemblyName.Version?.ToString()
-                    }); 
+                if (assemblyName.Version is { })
+                    c.SwaggerDoc("v1",
+                        new OpenApiInfo
+                        {
+                            Title = appName,
+                            Version = assemblyName.Version.ToString()
+                        });
                 c.ExampleFilters();
-                c.OperationFilter<AddResponseHeadersFilter>(); 
-                c.OperationFilter<AppendAuthorizeToSummaryOperationFilter>();              
-                c.EnableAnnotations();
+                c.OperationFilter<AddResponseHeadersFilter>();
+                c.OperationFilter<AppendAuthorizeToSummaryOperationFilter>();
+                c.EnableAnnotations(enableAnnotationsForInheritance: true, enableAnnotationsForPolymorphism: true);
                 c.SchemaFilter<FluentValidationRules>();
                 c.OperationFilter<FluentValidationOperationFilter>();
                 c.OperationFilter<CamelCaseParameOperationFilter>();
+
+                //Find all controllers from the calling assembly (Swagger custom ordering)
+                var order = GetControllerOrderMap(type.Assembly);
+
+                //Order based on the prefix, if in the dictionary, otherwise, use the controller name as is
+                if (order.Count > 0)
+                    c.OrderActionsBy(d => order.TryGetValue(d.ActionDescriptor.RouteValues["controller"], out var value) ? value : d.ActionDescriptor.RouteValues["controller"]);
 
                 // XML documentation file
                 var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
@@ -76,9 +88,16 @@ namespace CesarBmx.Shared.Api.Configuration
                 c.IncludeXmlComments(commentsFile);
 
                 // XML documentation file (BASE)
-                commentsFileName = typeof(Z_VersionController).Assembly.GetName().Name + ".xml";
+                commentsFileName = typeof(VersionController).Assembly.GetName().Name + ".xml";
                 commentsFile = Path.Combine(baseDirectory, commentsFileName);
                 c.IncludeXmlComments(commentsFile);
+                c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
+
+                // Inheritance
+                c.UseAllOfForInheritance();
+
+                // Polymorphism
+                c.UseOneOfForPolymorphism();
             });
 
             // Add swagger examples
@@ -108,6 +127,30 @@ namespace CesarBmx.Shared.Api.Configuration
             });
 
             return app;
+        }
+
+        private static Dictionary<string, string> GetControllerOrderMap(Assembly assembly)
+        {
+            //Find all controllers in assembly
+            var controllerTypes = assembly.GetTypes().Where(t => typeof(ControllerBase).IsAssignableFrom(t));
+            //Build the dictionary
+            var orderMap = new Dictionary<string, string>(
+                controllerTypes.Where(c => c.GetCustomAttributes<SwaggerControllerOrderAttribute>().Any())
+                    .Select(c => new { Name = StripControllerName(c.Name), c.GetCustomAttribute<SwaggerControllerOrderAttribute>()?.OrderPrefix })
+                    .ToDictionary(a => a.Name, a => a.OrderPrefix), StringComparer.OrdinalIgnoreCase);
+
+            //Remove the Controller suffix from the name, if it exists
+            string StripControllerName(string name)
+            {
+                var suffix = "Controller";
+                if (name.EndsWith(suffix, StringComparison.OrdinalIgnoreCase))
+                    // Return name with suffix stripped
+                    return name.Substring(0, name.Length - suffix.Length);
+                // Suffix not found, return name as is
+                return name;
+            }
+
+            return orderMap;
         }
     }
 }

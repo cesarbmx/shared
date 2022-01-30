@@ -37,7 +37,7 @@ namespace CesarBmx.Shared.Api.Configuration
             services.Configure<IISServerOptions>(options => { options.AllowSynchronousIO = true; });
             services.Configure<KestrelServerOptions>(options => { options.AllowSynchronousIO = true; });
 
-            services.AddControllers().AddApplicationPart(typeof(Z_VersionController).Assembly);
+            services.AddControllers().AddApplicationPart(typeof(VersionController).Assembly);
 
             return services;
         }

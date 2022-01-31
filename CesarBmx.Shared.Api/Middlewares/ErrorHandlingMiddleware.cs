@@ -60,7 +60,7 @@ namespace CesarBmx.Shared.Api.Middlewares
                 case ConflictException _:     // 409
                     var conflictException = (ConflictException) exception;
                     code = 409;
-                    errorResponse = conflictException.Response;
+                    errorResponse = conflictException.Conflict;
                     break;
                 default:                      // 500
                     code = 500;

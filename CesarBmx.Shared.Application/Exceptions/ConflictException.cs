@@ -6,11 +6,11 @@ namespace CesarBmx.Shared.Application.Exceptions
 {
     public class ConflictException: Exception
     {
-        public object Response { get; set; }
+        public object Conflict { get; set; }
 
-        public ConflictException(object response)
+        public ConflictException(object conflict)
         {
-            Response = response;
+            Conflict = conflict;
         }
     }
 }

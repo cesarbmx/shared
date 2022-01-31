@@ -1,10 +1,16 @@
 ﻿
 
+using System;
+
 namespace CesarBmx.Shared.Application.Exceptions
 {
-    public class ConflictException: DomainException
+    public class ConflictException: Exception
     {
-        public ConflictException(string message) : base(message)
-        {}
+        public object Response { get; set; }
+
+        public ConflictException(object response)
+        {
+            Response = response;
+        }
     }
 }

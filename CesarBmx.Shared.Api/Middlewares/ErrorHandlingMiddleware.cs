@@ -38,27 +38,33 @@ namespace CesarBmx.Shared.Api.Middlewares
         private Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             // Response
-            Error errorResponse;
+            object errorResponse;
+            int code;
             switch (exception)
             {
                 case UnauthorizedException _: // 401
                     var unauthorizedException = (UnauthorizedException)exception;
-                    errorResponse = new Unauthorized(nameof(ErrorMessage.Unauthorized), unauthorizedException.Message);
+                    code = 401;
+                    errorResponse = new Unauthorized( unauthorizedException.Message);
                     break;
                 case ForbiddenException _:    // 403
                     var forbiddenException = (ForbiddenException)exception;
-                    errorResponse = new Forbidden(nameof(ErrorMessage.Forbidden), forbiddenException.Message);
+                    code = 403;
+                    errorResponse = new Forbidden(forbiddenException.Message);
                     break;
                 case NotFoundException _:     // 404
                     var notFoundException = (NotFoundException)exception;
-                    errorResponse = new NotFound(nameof(ErrorMessage.NotFound), notFoundException.Message);
+                    code = 404;
+                    errorResponse = new NotFound(notFoundException.Message);
                     break;
                 case ConflictException _:     // 409
-                    var conflictException = (ConflictException)exception;
-                    errorResponse = new Conflict(nameof(ErrorMessage.Conflict), conflictException.Message);
+                    var conflictException = (ConflictException) exception;
+                    code = 409;
+                    errorResponse = conflictException.Response;
                     break;
                 default:                      // 500
-                    errorResponse = new InternalServerError(nameof(ErrorMessage.InternalServerError), ErrorMessage.InternalServerError);
+                    code = 500;
+                    errorResponse = new InternalServerError(ErrorMessage.InternalServerError);
                     // Log error
                     _logger.LogSplunkError(exception);
                     break;
@@ -72,7 +78,7 @@ namespace CesarBmx.Shared.Api.Middlewares
                     Converters = new List<JsonConverter> { new Newtonsoft.Json.Converters.StringEnumConverter() }
                 });
             context.Response.ContentType = "application/json";
-            context.Response.StatusCode = errorResponse.Status;
+            context.Response.StatusCode = code;
             return context.Response.WriteAsync(response);
         }
     }

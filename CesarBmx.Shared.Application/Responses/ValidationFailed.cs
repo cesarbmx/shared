@@ -7,8 +7,8 @@ namespace CesarBmx.Shared.Application.Responses
     {
         public List<ValidationError> ValidationErrors { get; set; }
 
-        public ValidationFailed(string code, string message, List<ValidationError> validationErrors)
-        : base(code, 422, message)
+        public ValidationFailed(string message, List<ValidationError> validationErrors)
+        : base( 422, message)
         {
             ValidationErrors = validationErrors;
         }

@@ -47,7 +47,7 @@ namespace CesarBmx.Shared.Api.Helpers
         {
             Context.Response.StatusCode = StatusCodes.Status401Unauthorized;
             Context.Response.ContentType = "application/json; charset=utf-8";
-            var errorResponse = new Unauthorized(nameof(ErrorMessage.Unauthorized), ErrorMessage.Unauthorized);
+            var errorResponse = new Unauthorized(ErrorMessage.Unauthorized);
             var response = JsonConvert.SerializeObject(errorResponse);
             await Context.Response.WriteAsync(response);
         }
@@ -56,7 +56,7 @@ namespace CesarBmx.Shared.Api.Helpers
         {
             Context.Response.StatusCode = StatusCodes.Status403Forbidden;
             Context.Response.ContentType = "application/json; charset=utf-8";
-            var errorResponse = new Unauthorized(nameof(ErrorMessage.Forbidden), ErrorMessage.Forbidden);
+            var errorResponse = new Unauthorized(ErrorMessage.Forbidden);
             var response = JsonConvert.SerializeObject(errorResponse);
             await Context.Response.WriteAsync(response);
         }

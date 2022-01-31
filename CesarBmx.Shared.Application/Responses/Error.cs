@@ -5,14 +5,12 @@ namespace CesarBmx.Shared.Application.Responses
 {
     public abstract class Error
     {
-        public string Code { get; set; }
-        public int Status { get; set; }
+        public int Code { get; set; }
         public string Message { get; set; }
 
-        public Error(string code, int status, string message)
+        public Error(int code, string message)
         {
             Code = code;
-            Status = status;
             Message = message;
         }
     }

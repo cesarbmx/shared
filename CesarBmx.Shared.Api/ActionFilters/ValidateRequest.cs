@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -21,7 +20,7 @@ namespace CesarBmx.Shared.Api.ActionFilters
                     {
                         if (error.Exception != null || error.ErrorMessage.Contains("line ") && error.ErrorMessage.Contains("position "))
                         {
-                            var errorResponse = new BadRequest(nameof(Application.Messages.ErrorMessage.BadRequest), Application.Messages.ErrorMessage.BadRequest);
+                            var errorResponse = new BadRequest(Application.Messages.ErrorMessage.BadRequest);
                             filterContext.Result = new ObjectResult(errorResponse) { StatusCode = 400 };
                             return;
                         }
@@ -43,18 +42,15 @@ namespace CesarBmx.Shared.Api.ActionFilters
                         // Handle DataAnotations Required
                         if (value.Contains("field is required"))
                         {
-                            validationErrorsResponse.Add(new ValidationError(nameof(Application.Messages.ErrorMessage.Required), error.Key.ToFirstLetterLower(), Application.Messages.ErrorMessage.Required));
+                            validationErrorsResponse.Add(new ValidationError( error.Key.ToFirstLetterLower(), Application.Messages.ErrorMessage.Required));
                         }
                         else // Handle fluent validations
                         {
-                            var index = value.IndexOf(" ", StringComparison.Ordinal);
-                            var code = value.Substring(0, index);
-                            var message = value.Substring(index + 1);
-                            validationErrorsResponse.Add(new ValidationError(code, error.Key.ToFirstLetterLower(), message));
+                            validationErrorsResponse.Add(new ValidationError(error.Key.ToFirstLetterLower(), value));
                         }
                     }
                 }
-                var validationsResponse = new ValidationFailed(nameof(Application.Messages.ErrorMessage.ValidationFailed), Application.Messages.ErrorMessage.ValidationFailed, validationErrorsResponse);
+                var validationsResponse = new ValidationFailed(Application.Messages.ErrorMessage.ValidationFailed, validationErrorsResponse);
 
                 filterContext.Result = new ObjectResult(validationsResponse) { StatusCode = 422 };
             }

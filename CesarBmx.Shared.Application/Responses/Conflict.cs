@@ -3,10 +3,14 @@
 
 namespace CesarBmx.Shared.Application.Responses
 {
-    public class Conflict : Error
+    public class Conflict<TReason> : Error
     {
-        public Conflict(string code, string message)
-            : base(code, 409, message)
-        { }
+        public TReason Reason { get; set; }
+
+        public Conflict(TReason reason, string message)
+        :base(409, message)
+        {
+            Reason = reason;
+        }
     }
 }

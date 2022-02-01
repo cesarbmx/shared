@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using CesarBmx.Shared.Application.Responses;
 
 
 namespace CesarBmx.Shared.Application.ResponseBuilders
 {
     public static class ErrorMessageResponseBuilder
     {
-        public static Dictionary<string, ErrorMessage> BuildErrorMessages()
+        public static Dictionary<string, List<string>> BuildErrorMessages()
         {
-            var resources = new Dictionary<string, ErrorMessage>();
+            var resources = new Dictionary<string, List<string>>();
 
             var applicationAssemblies = new List<Assembly>();
             var  path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -39,11 +38,11 @@ namespace CesarBmx.Shared.Application.ResponseBuilders
                                                BindingFlags.FlattenHierarchy)
                     .Where(fi => fi.IsLiteral && !fi.IsInitOnly).ToList();
 
-                var errorMessage = new ErrorMessage();
+                var errorMessage = new List<string>();
 
                 foreach (var constant in constants)
                 {
-                    errorMessage.Add(constant.Name, constant.GetValue(null)?.ToString());
+                    errorMessage.Add(constant.GetValue(null)?.ToString());
                 }
                 resources.Add(type.Name.Replace("Message", ""), errorMessage);
             }

@@ -13,7 +13,6 @@ namespace CesarBmx.Shared.Application.Messages
         public const string BadRequest = "The request is invalid";
         public const string ValidationFailed = "Validation failed";
         public const string NotFound = "The resource does not exist";
-        public const string Conflict = "There is a conflict with the current state";
         public const string InternalServerError = "Internal Server Error";
        
     }

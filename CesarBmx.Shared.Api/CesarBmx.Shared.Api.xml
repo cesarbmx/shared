@@ -4,6 +4,23 @@
         <name>CesarBmx.Shared.Api</name>
     </assembly>
     <members>
+        <member name="T:CesarBmx.Shared.Api.ActionFilters.SwaggerControllerOrderAttribute">
+            <summary>
+            Annotates a controller with a prefix sorting order that is used when generating the Swagger 
+            documentation, in order to display the controllers in the desired order.
+            </summary>
+        </member>
+        <member name="P:CesarBmx.Shared.Api.ActionFilters.SwaggerControllerOrderAttribute.OrderPrefix">
+            <summary>
+            Determines the sorting order of the controller.
+            </summary>
+        </member>
+        <member name="M:CesarBmx.Shared.Api.ActionFilters.SwaggerControllerOrderAttribute.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CesarBmx.Shared.Api.ActionFilters.SwaggerControllerOrderAttribute"/> class.
+            </summary>
+            <param name="orderPrefix">Sets the sorting order prefix of the controller.</param>
+        </member>
         <member name="M:CesarBmx.Shared.Api.Configuration.SwaggerConfig.ConfigureSharedSwagger(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.String,System.Type)">
             <summary>
             Common configuration for swagger
@@ -13,22 +30,12 @@
             <param name="type">Swagger example type</param>
             <returns></returns>
         </member>
-        <member name="M:CesarBmx.Shared.Api.Controllers.X_AuditLogController.GetAllAuditLogs">
+        <member name="M:CesarBmx.Shared.Api.Controllers.ErrorMessagesController.GetErrorMessages">
             <summary>
-            Get all audit logs
+            Get error messages
             </summary>
         </member>
-        <member name="M:CesarBmx.Shared.Api.Controllers.X_AuditLogController.GetAuditLog(System.Guid)">
-            <summary>
-            Get audit log
-            </summary>
-        </member>
-        <member name="M:CesarBmx.Shared.Api.Controllers.Y_ErrorMessagesController.GetAllErrorMessages">
-            <summary>
-            Get all error messages
-            </summary>
-        </member>
-        <member name="M:CesarBmx.Shared.Api.Controllers.Z_VersionController.GetVersion">
+        <member name="M:CesarBmx.Shared.Api.Controllers.VersionController.GetVersion">
             <summary>
             Get version
             </summary>

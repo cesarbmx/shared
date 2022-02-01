@@ -16,13 +16,13 @@ namespace CesarBmx.Shared.Api.Controllers
     public class ErrorMessagesController : Controller
     {
         /// <summary>
-        /// Get all error messages
+        /// Get error messages
         /// </summary>
         [HttpGet]
         [Route("api/error-messages")]
         [SwaggerResponse(200, Type = typeof(Dictionary<string,string[]>))]
-        [SwaggerOperation(Tags = new[] { "Error messages" }, OperationId = "ErrorMessages_GetAllErrorMessages")]
-        public IActionResult GetAllErrorMessages()
+        [SwaggerOperation(Tags = new[] { "Error messages" }, OperationId = "ErrorMessages_GetErrorMessages")]
+        public IActionResult GetErrorMessages()
         {
             // Get error messages
             var errorMessages = ErrorMessageResponseBuilder.BuildErrorMessages();

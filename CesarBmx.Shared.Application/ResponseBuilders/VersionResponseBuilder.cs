@@ -1,6 +1,7 @@
-﻿using System.Reflection;
-using CesarBmx.Shared.Application.Responses;
+﻿using System;
+using System.Reflection;
 using CesarBmx.Shared.Common.Extensions;
+using Version = CesarBmx.Shared.Application.Responses.Version;
 
 namespace CesarBmx.Shared.Application.ResponseBuilders
 {
@@ -10,7 +11,7 @@ namespace CesarBmx.Shared.Application.ResponseBuilders
         {
             var assemblyDate = assembly.Date();
             versionResponse.BuildDateTime = assemblyDate.ToString("yyyy/MM/dd HH:mm");
-            versionResponse.LastBuildOccurred = assemblyDate.DaysHoursMinutesAndSecondsSinceDate();
+            versionResponse.LastBuildOccurred = assemblyDate.DaysHoursMinutesAndSecondsSinceDate(DateTime.Now);
             versionResponse.VersionNumber = assembly.VersionNumber();
 
             return versionResponse;

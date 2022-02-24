@@ -14,7 +14,7 @@ namespace CesarBmx.Shared.Common.Extensions
         public static string ToFirstLetterLower(this string input)
         {
             if (string.IsNullOrEmpty(input)) return input;
-            var firstLetter = input.Substring(0,1);
+            var firstLetter = input.Substring(0, 1);
             return firstLetter.ToLower() + input.Substring(1, input.Length - 1);
         }
         public static string ToReadable(this string input)

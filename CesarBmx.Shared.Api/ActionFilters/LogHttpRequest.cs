@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
-using CesarBmx.Shared.Logging.Extensions;
 
 namespace CesarBmx.Shared.Api.ActionFilters
 {
@@ -27,11 +26,8 @@ namespace CesarBmx.Shared.Api.ActionFilters
             base.OnResultExecuted(context);
             var actionName = context.HttpContext.GetRouteData().Values["action"]?.ToString();
             _stopwatch.Stop();
-            _logger.LogSplunkInformation("HttpRequestExecutionTime", new
-            {
-                Action = actionName ,
-                TimeInSeconds = _stopwatch.Elapsed.TotalSeconds
-            });
+            // Log
+            _logger.LogInformation("{@Event}, {@Action}, {@ExecutionTime}", "ExecutionTime", actionName, _stopwatch.Elapsed.TotalSeconds);
         }
     }
 }

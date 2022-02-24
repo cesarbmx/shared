@@ -7,7 +7,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using CesarBmx.Shared.Application.Exceptions;
 using CesarBmx.Shared.Application.Responses;
-using CesarBmx.Shared.Logging.Extensions;
 using ErrorMessage = CesarBmx.Shared.Application.Messages.ErrorMessage;
 
 namespace CesarBmx.Shared.Api.Middlewares
@@ -66,7 +65,7 @@ namespace CesarBmx.Shared.Api.Middlewares
                     code = 500;
                     errorResponse = new InternalServerError(ErrorMessage.InternalServerError);
                     // Log error
-                    _logger.LogSplunkError(exception);
+                    _logger.LogError(exception, exception.Message);
                     break;
             }
 

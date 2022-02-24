@@ -63,9 +63,10 @@ namespace CesarBmx.Shared.Api.Middlewares
                     break;
                 default:                      // 500
                     code = 500;
-                    errorResponse = new InternalServerError(ErrorMessage.InternalServerError);
+                    var id = Guid.NewGuid();
+                    errorResponse = new InternalServerError(ErrorMessage.InternalServerError, id);
                     // Log error
-                    _logger.LogError(exception, exception.Message);
+                    _logger.LogError(exception, "{@Message}, {@Id}", exception.Message, id);
                     break;
             }
 

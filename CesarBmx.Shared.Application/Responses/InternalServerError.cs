@@ -1,6 +1,4 @@
 ﻿
-
-
 using System;
 using Newtonsoft.Json;
 
@@ -9,12 +7,12 @@ namespace CesarBmx.Shared.Application.Responses
     public class InternalServerError : Error
     {
         [JsonProperty(Order = 2)]
-        public Guid ExceptionId { get; set; }
+        public Guid Id { get; set; }
 
-        public InternalServerError(string message)
+        public InternalServerError(string message, Guid id)
             : base(500, message)
         {
-            ExceptionId = Guid.NewGuid();
+            Id = id;
         }
     }
 }

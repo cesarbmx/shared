@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using CesarBmx.Shared.Application.Responses;
 
 
@@ -26,7 +27,7 @@ namespace CesarBmx.Shared.Application.FakeResponses
         }
         public static InternalServerError GetFake_InternalServerError()
         {
-            return new InternalServerError(Messages.ErrorMessage.InternalServerError);
+            return new InternalServerError(Messages.ErrorMessage.InternalServerError, Guid.NewGuid());
         }
         public static Unauthorized GetFake_Unauthorized()
         {

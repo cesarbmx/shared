@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace CesarBmx.Shared.Api.ActionFilters
 {
-    public class HangfireBasicAuthorization :  IDashboardAuthorizationFilter
+    public class HangfireBasicAuthorizationFilter :  IDashboardAuthorizationFilter
     {
         public bool Authorize([NotNull] DashboardContext context)
         {

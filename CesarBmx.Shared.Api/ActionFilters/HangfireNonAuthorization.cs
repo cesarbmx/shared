@@ -3,7 +3,7 @@ using Hangfire.Dashboard;
 
 namespace CesarBmx.Shared.Api.ActionFilters
 {
-    public class HangfireNonAuthorization :  IDashboardAuthorizationFilter
+    public class HangfireNonAuthorizationFilter :  IDashboardAuthorizationFilter
     {
         public bool Authorize([NotNull] DashboardContext context)
         {

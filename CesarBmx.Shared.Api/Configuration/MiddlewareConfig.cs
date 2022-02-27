@@ -3,9 +3,9 @@ using CesarBmx.Shared.Api.Middlewares;
 
 namespace CesarBmx.Shared.Api.Configuration
 {
-    public static class ErrorHandlingConfig
+    public static class MiddlewareConfig
     {
-        public static IApplicationBuilder ConfigureSharedErrorHandling(this IApplicationBuilder app)
+        public static IApplicationBuilder ConfigureSharedMiddleware(this IApplicationBuilder app)
         {
             app.UseMiddleware<ErrorHandlingMiddleware>();
 

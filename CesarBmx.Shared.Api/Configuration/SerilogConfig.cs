@@ -21,17 +21,21 @@ namespace CesarBmx.Shared.Api.Configuration
 
             return hostBuilder;
         }
-        public static void ConfigureSharedSerilog(this IApplicationBuilder app, ILoggerFactory loggerFactory, Assembly assembly, IConfiguration configuration, IHostEnvironment environment)
+        public static void ConfigureSharedSerilog(this IApplicationBuilder app, ILoggerFactory loggerFactory, Assembly assembly, IConfiguration configuration)
         {
             // Grab AppSettings
             var appSettings = new AppSettings();
             configuration.GetSection("AppSettings").Bind(appSettings);
 
+            // Grab EnvironmentSettings
+            var environmentSettings = new EnvironmentSettings();
+            configuration.GetSection("EnvironmentSettings").Bind(environmentSettings);
+
             Log.Logger = new LoggerConfiguration()
                 .Enrich.FromLogContext()
                 .Enrich.WithProperty("App", appSettings.ApplicationId)
                 .Enrich.WithProperty("Version", assembly.VersionNumber())
-                .Enrich.WithProperty("Environment", environment.EnvironmentName)
+                .Enrich.WithProperty("Environment", environmentSettings.EnvironmentName)
                 .Enrich.WithProperty("Id", Guid.NewGuid())
                 .WriteTo.File(new ExpressionTemplate(
                         "{ { ..@p, Timestamp: @t, Level: @l, Exception: @x, SourceContext: undefined(), ActionId: undefined(), ActionName: undefined() } }" + Environment.NewLine), "./Logs/log-.log",

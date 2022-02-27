@@ -6,7 +6,7 @@ using CesarBmx.Shared.Authentication.Helpers;
 
 namespace CesarBmx.Shared.Api.ActionFilters
 {
-    public class IdentityFilter : IActionFilter
+    public class Identity : IActionFilter
     {
         public void OnActionExecuting(ActionExecutingContext filterContext)
         {

@@ -25,7 +25,7 @@ namespace CesarBmx.Shared.Api.Configuration
                         // Filters
                         config.Filters.Add(typeof(ValidateRequestAttribute));
                         config.Filters.Add(typeof(StoreRequestInContextAttribute));
-                        config.Filters.Add(typeof(IdentityFilter));
+                        config.Filters.Add(typeof(Identity));
                     })
                 .ConfigureFluentValidation(validator.Assembly)
                 .ConfigureSharedSerialization();

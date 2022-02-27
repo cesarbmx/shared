@@ -5,12 +5,12 @@ using Microsoft.Extensions.Logging;
 
 namespace CesarBmx.Shared.Api.ActionFilters
 {
-    public class LogHttpRequestAttribute : ActionFilterAttribute
+    public class LogExecutionTimeAttribute : ActionFilterAttribute
     {
-        private readonly ILogger<LogHttpRequestAttribute> _logger;
+        private readonly ILogger<LogExecutionTimeAttribute> _logger;
         private readonly Stopwatch _stopwatch = new Stopwatch();
 
-        public LogHttpRequestAttribute(ILogger<LogHttpRequestAttribute> logger)
+        public LogExecutionTimeAttribute(ILogger<LogExecutionTimeAttribute> logger)
         {
             this._logger = logger;
         }

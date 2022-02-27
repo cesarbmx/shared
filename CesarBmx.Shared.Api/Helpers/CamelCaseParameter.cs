@@ -5,7 +5,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace CesarBmx.Shared.Api.Helpers
 {
-    public class CamelCaseParameOperationFilter : IOperationFilter
+    public class CamelCaseParameter : IOperationFilter
     {
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {

@@ -72,7 +72,7 @@ namespace CesarBmx.Shared.Api.Configuration
                 c.EnableAnnotations(enableAnnotationsForInheritance: true, enableAnnotationsForPolymorphism: true);
                 c.SchemaFilter<FluentValidationRules>();
                 c.OperationFilter<FluentValidationOperationFilter>();
-                c.OperationFilter<CamelCaseParameOperationFilter>();
+                c.OperationFilter<CamelCaseParameter>();
 
                 //Find all controllers from the calling assembly (Swagger custom ordering)
                 var order = GetControllerOrderMap(type.Assembly, Assembly.GetExecutingAssembly());

@@ -43,7 +43,8 @@ namespace CesarBmx.Shared.Api.Configuration
                     //retainedFileCountLimit: 31,
                     //flushToDiskInterval: TimeSpan.FromSeconds(5),
                     restrictedToMinimumLevel: LogEventLevel.Information)
-                .WriteTo.Console()
+                .WriteTo.Console(new ExpressionTemplate(
+                        "{ @p['Event'] }" + Environment.NewLine))
                 .MinimumLevel.Override("Default", LogEventLevel.Information)
                 .Filter.ByExcluding(Matching.FromSource("System"))
                 .Filter.ByExcluding(Matching.FromSource("Microsoft"))

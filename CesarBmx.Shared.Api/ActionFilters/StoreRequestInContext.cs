@@ -9,10 +9,7 @@ namespace CesarBmx.Shared.Api.ActionFilters
             if (filterContext.HttpContext.Request.Method == "POST")
             {
                 var request = filterContext.ActionArguments["request"];
-                if (request != null)
-                {
-                    filterContext.HttpContext.Items["Request"] = request;
-                }
+                filterContext.HttpContext.Items["Request"] = request;
             }
         }
 

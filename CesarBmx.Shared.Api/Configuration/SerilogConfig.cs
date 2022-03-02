@@ -38,7 +38,7 @@ namespace CesarBmx.Shared.Api.Configuration
                 .Enrich.WithProperty("Environment", environmentSettings.EnvironmentName)
                 .Enrich.WithProperty("Id", Guid.NewGuid())
                 .WriteTo.File(new ExpressionTemplate(
-                        "{ { Level: @l,..@p, Timestamp: @t, Exception: @x, SourceContext: undefined(), ActionId: undefined(), ActionName: undefined() } }" + Environment.NewLine), "./Logs/log-.log",
+                        "{ { Level: @l,..@p, Timestamp: @t, Exception: @x, SourceContext: undefined(), ActionId: undefined() } }" + Environment.NewLine), "./Logs/log-.log",
                     rollingInterval: RollingInterval.Day,
                     //retainedFileCountLimit: 31,
                     //flushToDiskInterval: TimeSpan.FromSeconds(5),

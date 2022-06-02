@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reflection;
 using CesarBmx.Shared.Api.ActionFilters;
 using CesarBmx.Shared.Api.Controllers;
-using CesarBmx.Shared.Api.Helpers;
 using MicroElements.Swashbuckle.FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -72,7 +71,7 @@ namespace CesarBmx.Shared.Api.Configuration
                 c.EnableAnnotations(enableAnnotationsForInheritance: true, enableAnnotationsForPolymorphism: true);
                 c.SchemaFilter<FluentValidationRules>();
                 c.OperationFilter<FluentValidationOperationFilter>();
-                c.OperationFilter<CamelCaseParameter>();
+                //c.OperationFilter<CamelCaseParameter>();
 
                 //Find all controllers from the calling assembly (Swagger custom ordering)
                 var order = GetControllerOrderMap(type.Assembly, Assembly.GetExecutingAssembly());

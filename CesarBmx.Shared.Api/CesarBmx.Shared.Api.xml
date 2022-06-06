@@ -4,20 +4,20 @@
         <name>CesarBmx.Shared.Api</name>
     </assembly>
     <members>
-        <member name="T:CesarBmx.Shared.Api.ActionFilters.SwaggerControllerOrderAttribute">
+        <member name="T:CesarBmx.Shared.Api.ActionFilters.SwaggerOrderAttribute">
             <summary>
             Annotates a controller with a prefix sorting order that is used when generating the Swagger 
             documentation, in order to display the controllers in the desired order.
             </summary>
         </member>
-        <member name="P:CesarBmx.Shared.Api.ActionFilters.SwaggerControllerOrderAttribute.OrderPrefix">
+        <member name="P:CesarBmx.Shared.Api.ActionFilters.SwaggerOrderAttribute.OrderPrefix">
             <summary>
             Determines the sorting order of the controller.
             </summary>
         </member>
-        <member name="M:CesarBmx.Shared.Api.ActionFilters.SwaggerControllerOrderAttribute.#ctor(System.String)">
+        <member name="M:CesarBmx.Shared.Api.ActionFilters.SwaggerOrderAttribute.#ctor(System.String)">
             <summary>
-            Initializes a new instance of the <see cref="T:CesarBmx.Shared.Api.ActionFilters.SwaggerControllerOrderAttribute"/> class.
+            Initializes a new instance of the <see cref="T:CesarBmx.Shared.Api.ActionFilters.SwaggerOrderAttribute"/> class.
             </summary>
             <param name="orderPrefix">Sets the sorting order prefix of the controller.</param>
         </member>

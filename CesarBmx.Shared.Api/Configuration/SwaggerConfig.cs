@@ -138,8 +138,8 @@ namespace CesarBmx.Shared.Api.Configuration
 
             //Build the dictionary
             var orderMap = new Dictionary<string, string>(
-                controllerTypes.Where(c => c.GetCustomAttributes<SwaggerControllerOrderAttribute>().Any())
-                    .Select(c => new { Name = StripControllerName(c.Name), c.GetCustomAttribute<SwaggerControllerOrderAttribute>()?.OrderPrefix })
+                controllerTypes.Where(c => c.GetCustomAttributes<SwaggerOrderAttribute>().Any())
+                    .Select(c => new { Name = StripControllerName(c.Name), c.GetCustomAttribute<SwaggerOrderAttribute>()?.OrderPrefix })
                     .ToDictionary(a => a.Name, a => a.OrderPrefix), StringComparer.OrdinalIgnoreCase);
 
             //Remove the Controller suffix from the name, if it exists

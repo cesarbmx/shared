@@ -12,7 +12,7 @@ namespace CesarBmx.Shared.Api.Controllers
     [SwaggerResponse(401, Type = typeof(Unauthorized))]
     [SwaggerResponse(403, Type = typeof(Forbidden))]
     [AllowAnonymous]
-    [SwaggerControllerOrder(orderPrefix: "Y")]
+    [SwaggerOrder(orderPrefix: "Y")]
     public class ErrorMessagesController : Controller
     {
         /// <summary>

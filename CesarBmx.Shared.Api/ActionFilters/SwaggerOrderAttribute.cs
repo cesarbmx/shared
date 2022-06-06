@@ -6,7 +6,7 @@ namespace CesarBmx.Shared.Api.ActionFilters
     /// Annotates a controller with a prefix sorting order that is used when generating the Swagger 
     /// documentation, in order to display the controllers in the desired order.
     /// </summary>
-    public class SwaggerControllerOrderAttribute : Attribute
+    public class SwaggerOrderAttribute : Attribute
     {
         /// <summary>
         /// Determines the sorting order of the controller.
@@ -14,10 +14,10 @@ namespace CesarBmx.Shared.Api.ActionFilters
         public string OrderPrefix { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SwaggerControllerOrderAttribute"/> class.
+        /// Initializes a new instance of the <see cref="SwaggerOrderAttribute"/> class.
         /// </summary>
         /// <param name="orderPrefix">Sets the sorting order prefix of the controller.</param>
-        public SwaggerControllerOrderAttribute(string orderPrefix)
+        public SwaggerOrderAttribute(string orderPrefix)
         {
             OrderPrefix = orderPrefix;
         }

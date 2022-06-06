@@ -7,7 +7,6 @@ namespace CesarBmx.Shared.Api.ActionFilters
     {
         public bool Authorize([NotNull] DashboardContext context)
         {
-
             return true;
         }
     }

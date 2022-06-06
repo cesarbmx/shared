@@ -33,6 +33,7 @@ namespace CesarBmx.Shared.Api.Configuration
 
             Log.Logger = new LoggerConfiguration()
                 .Enrich.FromLogContext()
+                .Enrich.WithProperty("Team", "MyTeam")
                 .Enrich.WithProperty("App", appSettings.ApplicationId)
                 .Enrich.WithProperty("Version", assembly.VersionNumber())
                 .Enrich.WithProperty("Environment", environmentSettings.EnvironmentName)

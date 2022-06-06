@@ -10,7 +10,6 @@ namespace CesarBmx.Shared.Api.Configuration
     {
         public static IApplicationBuilder ConfigureSharedDataSeeding<TDbContext>(this IApplicationBuilder app) where TDbContext : DbContext
         {
-
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
                 // Get MainDbContext

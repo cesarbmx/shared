@@ -13,16 +13,24 @@ namespace CesarBmx.Shared.Api.Configuration
 {
     public static class MvcConfig
     {
-        public static IServiceCollection ConfigureSharedMvc(this IServiceCollection services, Type validator, bool enableRazorPages)
+        public static IServiceCollection ConfigureSharedMvc(this IServiceCollection services, IConfiguration configuration, Type validator, bool enableRazorPages)
         {
+            // Grab AuthenticationSettings
+            var authenticationSettings = new AuthenticationSettings();
+            configuration.GetSection("Authentication").Bind(authenticationSettings);
+
             services.AddControllers(
                     config =>
                     {
                         // Authentication
-                        var policy = new AuthorizationPolicyBuilder()
-                            .RequireAuthenticatedUser()
-                            .Build();
-                        config.Filters.Add(new AuthorizeFilter(policy));
+                        if (authenticationSettings.Enabled)
+                        {
+                            // Authentication
+                            var policy = new AuthorizationPolicyBuilder()
+                                .RequireAuthenticatedUser()
+                                .Build();
+                            config.Filters.Add(new AuthorizeFilter(policy));
+                        }
 
                         // Filters
                         config.Filters.Add(typeof(ValidateRequestAttribute));

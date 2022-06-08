@@ -16,6 +16,9 @@ using ErrorMessage = CesarBmx.Shared.Application.Messages.ErrorMessage;
 
 namespace CesarBmx.Shared.Api.Configuration
 {
+    /// <summary>
+    /// It enables authentication (Fake Auth, API Key, JWT or Windows)
+    /// </summary>
     public static class AuthenticationConfig
     {
         public static IServiceCollection UseSharedAuthentication(this IServiceCollection services,
@@ -94,5 +97,18 @@ namespace CesarBmx.Shared.Api.Configuration
 
             return services;
         }
-    }
+        public static IServiceCollection UseSharedWindowsAuthentication(this IServiceCollection services)
+        {
+            services.AddAuthentication(IISDefaults.AuthenticationScheme)
+                .AddNegotiate();
+
+            return services;
+        }
+
+        if (authenticationSettings.AuthenticationType == "Windows" && authenticationSettings.Enabled)
+        {
+          
+            return services;
+        }
+}
 }

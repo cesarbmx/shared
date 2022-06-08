@@ -45,6 +45,8 @@ namespace CesarBmx.Shared.Api.Configuration
                         throw new ApplicationException("AuthenticationType not supported: " + authenticationSettings.AuthenticationType);
                 }
             }
+
+            return services;
         }
         private static IServiceCollection UseSharedJwtAuthentication(this IServiceCollection services, AuthenticationSettings authenticationSettings)
         {

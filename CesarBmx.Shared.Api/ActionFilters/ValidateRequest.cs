@@ -9,6 +9,10 @@ namespace CesarBmx.Shared.Api.ActionFilters
 {
     public class ValidateRequestAttribute : IActionFilter
     {
+        /// <summary>
+        /// This filter distinguishes between 422 (validation) and 400 (malformed).
+        /// </summary>
+        /// <param name="filterContext"></param>
         public void OnActionExecuting(ActionExecutingContext filterContext)
         {
             if (!filterContext.ModelState.IsValid)

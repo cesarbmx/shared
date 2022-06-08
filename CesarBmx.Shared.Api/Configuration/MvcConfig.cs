@@ -1,11 +1,13 @@
 ﻿using System;
 using CesarBmx.Shared.Api.ActionFilters;
 using CesarBmx.Shared.Api.Controllers;
+using CesarBmx.Shared.Application.Settings;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.Extensions.Configuration;
 
 namespace CesarBmx.Shared.Api.Configuration
 {
@@ -43,11 +45,18 @@ namespace CesarBmx.Shared.Api.Configuration
             return services;
         }
 
-        public static IApplicationBuilder ConfigureSharedMvc(this IApplicationBuilder app, bool enableRazorPages)
+        public static IApplicationBuilder ConfigureSharedMvc(this IApplicationBuilder app, IConfiguration configuration, bool enableRazorPages)
         {
+            // Grab AuthenticationSettings
+            var authenticationSettings = new AuthenticationSettings();
+            configuration.GetSection("Authentication").Bind(authenticationSettings);
+
             app.UseRouting();
-            app.UseAuthentication();
-            app.UseAuthorization();
+            if (authenticationSettings.Enabled)
+            {
+                app.UseAuthentication();
+                app.UseAuthorization();
+            }
             app.UseEndpoints(endpoints =>
             {
                 if (enableRazorPages) endpoints.MapRazorPages();

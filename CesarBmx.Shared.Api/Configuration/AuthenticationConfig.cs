@@ -12,12 +12,13 @@ using Newtonsoft.Json;
 using CesarBmx.Shared.Api.Helpers;
 using CesarBmx.Shared.Application.Responses;
 using CesarBmx.Shared.Application.Settings;
+using Microsoft.AspNetCore.Server.IISIntegration;
 using ErrorMessage = CesarBmx.Shared.Application.Messages.ErrorMessage;
 
 namespace CesarBmx.Shared.Api.Configuration
 {
     /// <summary>
-    /// It enables authentication (Fake Auth, API Key, JWT or Windows)
+    /// It enables authentication ()
     /// </summary>
     public static class AuthenticationConfig
     {
@@ -28,13 +29,29 @@ namespace CesarBmx.Shared.Api.Configuration
             var authenticationSettings = new AuthenticationSettings();
             configuration.GetSection("Authentication").Bind(authenticationSettings);
 
+            switch (authenticationSettings.AuthenticationType)
+            {
+                case "FAKE":
+                    return services.UseSharedFakeAuthentication();
+                case "JWT":
+                    return services.UseSharedJwtAuthentication(authenticationSettings);
+                case "API_KEY":
+                    return services.UseSharedApiKeyAuthentication();
+                case "WINDOWS":
+                    return services.UseSharedWindowsAuthentication();
+                default:
+                    throw new ApplicationException("AuthenticationType not supported: " + authenticationSettings.AuthenticationType);
+            }
+        }
+        private static IServiceCollection UseSharedJwtAuthentication(this IServiceCollection services, AuthenticationSettings authenticationSettings)
+        {
             // Configure JWT authentication
             var key = Encoding.ASCII.GetBytes(authenticationSettings.Secret);
             services.AddAuthentication(x =>
-                {
-                    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
                 .AddJwtBearer(x =>
                 {
                     x.RequireHttpsMetadata = false;
@@ -65,7 +82,7 @@ namespace CesarBmx.Shared.Api.Configuration
                         {
                             context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                             context.Response.ContentType = "application/json; charset=utf-8";
-                            var errorResponse = new Unauthorized( ErrorMessage.Unauthorized);
+                            var errorResponse = new Unauthorized(ErrorMessage.Unauthorized);
                             var result = JsonConvert.SerializeObject(errorResponse);
                             return context.Response.WriteAsync(result);
                         },
@@ -73,7 +90,7 @@ namespace CesarBmx.Shared.Api.Configuration
                         {
                             context.Response.StatusCode = StatusCodes.Status403Forbidden;
                             context.Response.ContentType = "application/json; charset=utf-8";
-                            var errorResponse = new Unauthorized( ErrorMessage.Forbidden);
+                            var errorResponse = new Unauthorized(ErrorMessage.Forbidden);
                             var result = JsonConvert.SerializeObject(errorResponse);
                             return context.Response.WriteAsync(result);
                         }
@@ -82,33 +99,25 @@ namespace CesarBmx.Shared.Api.Configuration
 
             return services;
         }
-        public static IServiceCollection UseSharedFakeAuthentication(this IServiceCollection services,
-            IConfiguration configuration)
+        private static IServiceCollection UseSharedFakeAuthentication(this IServiceCollection services)
         {
             services.AddAuthentication("FakeAuthentication")
                 .AddScheme<AuthenticationSchemeOptions, FakeAuthenticationHandler>("FakeAuthentication", null);
 
             return services;
         }
-        public static IServiceCollection UseSharedApiKeyAuthentication(this IServiceCollection services)
+        private static IServiceCollection UseSharedApiKeyAuthentication(this IServiceCollection services)
         {
             services.AddAuthentication("ApiKeyAuthentication")
                 .AddScheme<AuthenticationSchemeOptions, ApiKeyAuthenticationHandler>("ApiKeyAuthentication", null);
 
             return services;
         }
-        public static IServiceCollection UseSharedWindowsAuthentication(this IServiceCollection services)
+        private static IServiceCollection UseSharedWindowsAuthentication(this IServiceCollection services)
         {
-            services.AddAuthentication(IISDefaults.AuthenticationScheme)
-                .AddNegotiate();
+            services.AddAuthentication(IISDefaults.AuthenticationScheme);
 
             return services;
         }
-
-        if (authenticationSettings.AuthenticationType == "Windows" && authenticationSettings.Enabled)
-        {
-          
-            return services;
-        }
-}
+    }
 }

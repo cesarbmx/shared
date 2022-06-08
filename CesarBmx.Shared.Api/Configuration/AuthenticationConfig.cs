@@ -29,18 +29,21 @@ namespace CesarBmx.Shared.Api.Configuration
             var authenticationSettings = new AuthenticationSettings();
             configuration.GetSection("Authentication").Bind(authenticationSettings);
 
-            switch (authenticationSettings.AuthenticationType)
+            if (authenticationSettings.Enabled)
             {
-                case "FAKE":
-                    return services.UseSharedFakeAuthentication();
-                case "JWT":
-                    return services.UseSharedJwtAuthentication(authenticationSettings);
-                case "API_KEY":
-                    return services.UseSharedApiKeyAuthentication();
-                case "WINDOWS":
-                    return services.UseSharedWindowsAuthentication();
-                default:
-                    throw new ApplicationException("AuthenticationType not supported: " + authenticationSettings.AuthenticationType);
+                switch (authenticationSettings.AuthenticationType)
+                {
+                    case "FAKE":
+                        return services.UseSharedFakeAuthentication();
+                    case "JWT":
+                        return services.UseSharedJwtAuthentication(authenticationSettings);
+                    case "API_KEY":
+                        return services.UseSharedApiKeyAuthentication();
+                    case "WINDOWS":
+                        return services.UseSharedWindowsAuthentication();
+                    default:
+                        throw new ApplicationException("AuthenticationType not supported: " + authenticationSettings.AuthenticationType);
+                }
             }
         }
         private static IServiceCollection UseSharedJwtAuthentication(this IServiceCollection services, AuthenticationSettings authenticationSettings)

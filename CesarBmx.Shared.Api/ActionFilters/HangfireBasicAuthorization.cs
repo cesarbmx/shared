@@ -46,7 +46,7 @@ namespace CesarBmx.Shared.Api.ActionFilters
                 return false;
             }
 
-            if (username == "Admin" && password == "Pinnacle_123456")
+            if (username == "admin" && password == "admin")
             {
                 return true;
             }

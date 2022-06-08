@@ -28,7 +28,7 @@ namespace CesarBmx.Shared.Api.ActionFilters
             var actionName = context.HttpContext.GetRouteData().Values["action"]?.ToString();
             _stopwatch.Stop();
             // Log
-            _logger.LogInformation("{@Event}, {@Id}, {Id}, {@Action}, {@ExecutionTime}", "ExecutionTime", Guid.NewGuid(), Guid.NewGuid(), actionName, _stopwatch.Elapsed.TotalSeconds);
+            _logger.LogInformation("{@Event}, {@Id}, {@Action}, {@ExecutionTime}", "ExecutionTime", Guid.NewGuid(), actionName, _stopwatch.Elapsed.TotalSeconds);
         }
     }
 }

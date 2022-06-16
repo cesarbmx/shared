@@ -5,7 +5,6 @@ namespace CesarBmx.Shared.Application.Settings
 {
     public  class AuthenticationSettings
     {
-        public string AuthenticationType { get; set; }
         public bool Enabled { get; set; }
         public string TestUser { get; set; }
         public string ApiKey { get; set; }

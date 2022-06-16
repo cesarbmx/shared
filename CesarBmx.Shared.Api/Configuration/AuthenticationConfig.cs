@@ -22,34 +22,12 @@ namespace CesarBmx.Shared.Api.Configuration
     /// </summary>
     public static class AuthenticationConfig
     {
-        public static IServiceCollection UseSharedAuthentication(this IServiceCollection services,
-            IConfiguration configuration)
+        public static IServiceCollection UseSharedJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
             // Grab AuthenticationSettings
             var authenticationSettings = new AuthenticationSettings();
             configuration.GetSection("Authentication").Bind(authenticationSettings);
 
-            if (authenticationSettings.Enabled)
-            {
-                switch (authenticationSettings.AuthenticationType)
-                {
-                    case "FAKE":
-                        return services.UseSharedFakeAuthentication();
-                    case "JWT":
-                        return services.UseSharedJwtAuthentication(authenticationSettings);
-                    case "API_KEY":
-                        return services.UseSharedApiKeyAuthentication();
-                    case "WINDOWS":
-                        return services.UseSharedWindowsAuthentication();
-                    default:
-                        throw new ApplicationException("AuthenticationType not supported: " + authenticationSettings.AuthenticationType);
-                }
-            }
-
-            return services;
-        }
-        private static IServiceCollection UseSharedJwtAuthentication(this IServiceCollection services, AuthenticationSettings authenticationSettings)
-        {
             // Configure JWT authentication
             var key = Encoding.ASCII.GetBytes(authenticationSettings.Secret);
             services.AddAuthentication(x =>
@@ -104,21 +82,25 @@ namespace CesarBmx.Shared.Api.Configuration
 
             return services;
         }
-        private static IServiceCollection UseSharedFakeAuthentication(this IServiceCollection services)
+        public static IServiceCollection UseSharedFakeAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
+            // Grab AuthenticationSettings
+            var authenticationSettings = new AuthenticationSettings();
+            configuration.GetSection("Authentication").Bind(authenticationSettings);
+
             services.AddAuthentication("FakeAuthentication")
                 .AddScheme<AuthenticationSchemeOptions, FakeAuthenticationHandler>("FakeAuthentication", null);
 
             return services;
         }
-        private static IServiceCollection UseSharedApiKeyAuthentication(this IServiceCollection services)
+        public static IServiceCollection UseSharedApiKeyAuthentication(this IServiceCollection services)
         {
             services.AddAuthentication("ApiKeyAuthentication")
                 .AddScheme<AuthenticationSchemeOptions, ApiKeyAuthenticationHandler>("ApiKeyAuthentication", null);
 
             return services;
         }
-        private static IServiceCollection UseSharedWindowsAuthentication(this IServiceCollection services)
+        public static IServiceCollection UseSharedWindowsAuthentication(this IServiceCollection services)
         {
             services.AddAuthentication(IISDefaults.AuthenticationScheme);
 

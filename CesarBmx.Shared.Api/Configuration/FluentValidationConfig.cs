@@ -1,24 +1,17 @@
-﻿using System.Reflection;
-using System.Text.Json;
-using FluentValidation.AspNetCore;
+﻿using System;
 using Microsoft.Extensions.DependencyInjection;
+using FluentValidation;
 
 namespace CesarBmx.Shared.Api.Configuration
 {
     public static class FluentValidationConfigConfig
     {
-        public static IMvcBuilder ConfigureFluentValidation(this IMvcBuilder mvcBuilder, Assembly assembly)
+        public static IServiceCollection ConfigureFluentValidation(this IServiceCollection services, Type someValidator)
         {
-            mvcBuilder.AddFluentValidation(fv => fv
-                .RegisterValidatorsFromAssembly(assembly)
-                .RunDefaultMvcValidationAfterFluentValidationExecutes = true).AddJsonOptions(options =>
-            {
-                options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-            });
+            services.AddValidatorsFromAssemblyContaining(someValidator);
 
-
-
-            return mvcBuilder;
+            // Return
+            return services;
         }
     }
 }

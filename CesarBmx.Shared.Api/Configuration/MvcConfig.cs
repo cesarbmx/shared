@@ -8,12 +8,13 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
+using FluentValidation.AspNetCore;
 
 namespace CesarBmx.Shared.Api.Configuration
 {
     public static class MvcConfig
     {
-        public static IServiceCollection ConfigureSharedMvc(this IServiceCollection services, IConfiguration configuration, Type validator, bool enableRazorPages)
+        public static IServiceCollection ConfigureSharedMvc(this IServiceCollection services, IConfiguration configuration, bool enableRazorPages)
         {
             // Grab AuthenticationSettings
             var authenticationSettings = new AuthenticationSettings();
@@ -37,7 +38,6 @@ namespace CesarBmx.Shared.Api.Configuration
                         config.Filters.Add(typeof(StoreRequestInContextAttribute));
                         config.Filters.Add(typeof(Identity));
                     })
-                .ConfigureFluentValidation(validator.Assembly)
                 .ConfigureSharedSerialization();
 
             if(enableRazorPages) services.AddRazorPages();
@@ -48,7 +48,8 @@ namespace CesarBmx.Shared.Api.Configuration
             services.Configure<IISServerOptions>(options => { options.AllowSynchronousIO = true; });
             services.Configure<KestrelServerOptions>(options => { options.AllowSynchronousIO = true; });
 
-            services.AddControllers().AddApplicationPart(typeof(VersionController).Assembly);
+            services.AddControllers()
+                .AddApplicationPart(typeof(VersionController).Assembly);
 
             return services;
         }

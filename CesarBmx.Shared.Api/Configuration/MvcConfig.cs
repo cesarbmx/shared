@@ -18,7 +18,7 @@ namespace CesarBmx.Shared.Api.Configuration
         {
             // Grab AuthenticationSettings
             var authenticationSettings = new AuthenticationSettings();
-            configuration.GetSection("Authentication").Bind(authenticationSettings);
+            configuration.GetSection("AuthenticationSettings").Bind(authenticationSettings);
 
             services.AddControllers(
                     config =>
@@ -58,7 +58,7 @@ namespace CesarBmx.Shared.Api.Configuration
         {
             // Grab AuthenticationSettings
             var authenticationSettings = new AuthenticationSettings();
-            configuration.GetSection("Authentication").Bind(authenticationSettings);
+            configuration.GetSection("AuthenticationSettings").Bind(authenticationSettings);
 
             app.UseRouting();
             if (authenticationSettings.Enabled)

@@ -22,11 +22,40 @@ namespace CesarBmx.Shared.Api.Configuration
     /// </summary>
     public static class AuthenticationConfig
     {
+        public static IServiceCollection UseSharedAuthentication(this IServiceCollection services, IConfiguration configuration)
+        {
+            // Grab AuthenticationSettings
+            var authenticationSettings = new AuthenticationSettings();
+            configuration.GetSection("AuthenticationSettings").Bind(authenticationSettings);
+
+            if (authenticationSettings.Enabled)
+            {
+                switch (authenticationSettings.AuthenticationType)
+                {
+                    case "FakeAuthentication":
+                        services.UseSharedFakeAuthentication(configuration);
+                        break;
+                    case "JwtAuthentication":
+                        services.UseSharedJwtAuthentication(configuration);
+                        break;
+                    case "ApiKeyAuthentication":
+                        services.UseSharedApiKeyAuthentication();
+                        break;
+                    case "WindowsAuthentication":
+                        services.UseSharedWindowsAuthentication();
+                        break;
+                    default:
+                        throw new NotImplementedException("Authention type not supported: " + authenticationSettings.AuthenticationType);
+                }
+            }
+
+            return services;
+        }
         public static IServiceCollection UseSharedJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
             // Grab AuthenticationSettings
             var authenticationSettings = new AuthenticationSettings();
-            configuration.GetSection("Authentication").Bind(authenticationSettings);
+            configuration.GetSection("AuthenticationSettings").Bind(authenticationSettings);
 
             // Configure JWT authentication
             var key = Encoding.ASCII.GetBytes(authenticationSettings.Secret);
@@ -84,10 +113,6 @@ namespace CesarBmx.Shared.Api.Configuration
         }
         public static IServiceCollection UseSharedFakeAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
-            // Grab AuthenticationSettings
-            var authenticationSettings = new AuthenticationSettings();
-            configuration.GetSection("Authentication").Bind(authenticationSettings);
-
             services.AddAuthentication("FakeAuthentication")
                 .AddScheme<AuthenticationSchemeOptions, FakeAuthenticationHandler>("FakeAuthentication", null);
 

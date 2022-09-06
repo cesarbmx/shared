@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Description>Common library (Common)</Description>
-    <Company></Company>
-    <Authors>cesarbmx</Authors>
-    <Version>1.0.0</Version>
-    <RepositoryUrl>https://github.com/cesarbmx/shared</RepositoryUrl>
-  </PropertyGroup>
-
+	<PropertyGroup>
+		<OutputType>Library</OutputType>
+		<TargetFramework>net6.0</TargetFramework>
+		<Description>Common library (Common)</Description>
+		<Authors>cesarbmx</Authors>
+		<Version>6.0.0</Version>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<RepositoryUrl>https://github.com/Caching/shared</RepositoryUrl>
+	</PropertyGroup>
+	
 </Project>

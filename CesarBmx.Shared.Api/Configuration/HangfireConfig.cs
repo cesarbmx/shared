@@ -15,9 +15,8 @@ namespace CesarBmx.Shared.Api.Configuration
             // Return
             return services;
         }
-        public static IApplicationBuilder ConfigureSharedHangfire(this IApplicationBuilder app)
+        public static IApplicationBuilder ConfigureSharedHangfire(this IApplicationBuilder app, bool enableBasicAuthentication = true)
         {
-            enableBasicAuthentication = true;
             // Configure
             app.UseHangfireDashboard("/hangfire", new DashboardOptions
             {

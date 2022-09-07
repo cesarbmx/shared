@@ -33,7 +33,7 @@ namespace CesarBmx.Shared.Api.Configuration
                 switch (authenticationSettings.AuthenticationType)
                 {
                     case "FakeAuthentication":
-                        services.UseSharedFakeAuthentication(configuration);
+                        services.UseSharedFakeAuthentication();
                         break;
                     case "JwtAuthentication":
                         services.UseSharedJwtAuthentication(configuration);
@@ -111,7 +111,7 @@ namespace CesarBmx.Shared.Api.Configuration
 
             return services;
         }
-        public static IServiceCollection UseSharedFakeAuthentication(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection UseSharedFakeAuthentication(this IServiceCollection services)
         {
             services.AddAuthentication("FakeAuthentication")
                 .AddScheme<AuthenticationSchemeOptions, FakeAuthenticationHandler>("FakeAuthentication", null);

@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 
 namespace CesarBmx.Shared.Api.Configuration
 {
@@ -15,9 +14,6 @@ namespace CesarBmx.Shared.Api.Configuration
 
             // Automatic validation
             services.AddFluentValidationAutoValidation();
-
-            // Apply rules to swagger
-            services.AddFluentValidationRulesToSwagger();
 
             // Return
             return services;

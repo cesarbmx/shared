@@ -105,7 +105,6 @@ namespace CesarBmx.Shared.Api.Configuration
 
             return services;
         }
-
         public static IApplicationBuilder ConfigureSharedSwagger(this IApplicationBuilder app, string appName, string route)
         {
             app.UseSwagger(c =>
@@ -125,7 +124,6 @@ namespace CesarBmx.Shared.Api.Configuration
 
             return app;
         }
-
         private static Dictionary<string, string> GetControllerOrderMap(Assembly assembly, Assembly sharedAssembly)
         {
             //Find all controllers in assembly

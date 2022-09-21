@@ -52,7 +52,6 @@ namespace CesarBmx.Shared.Api.Configuration
 
             return services;
         }
-
         public static IApplicationBuilder ConfigureSharedMvc(this IApplicationBuilder app, IConfiguration configuration, bool enableRazorPages)
         {
             // Grab AuthenticationSettings

@@ -25,8 +25,7 @@ namespace CesarBmx.Shared.Api.Configuration
         public static IServiceCollection UseSharedAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
             // Grab AuthenticationSettings
-            var authenticationSettings = new AuthenticationSettings();
-            configuration.GetSection("AuthenticationSettings").Bind(authenticationSettings);
+            var authenticationSettings = configuration.GetSection<AuthenticationSettings>();
 
             if (authenticationSettings.Enabled)
             {
@@ -54,8 +53,7 @@ namespace CesarBmx.Shared.Api.Configuration
         public static IServiceCollection UseSharedJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
             // Grab AuthenticationSettings
-            var authenticationSettings = new AuthenticationSettings();
-            configuration.GetSection("AuthenticationSettings").Bind(authenticationSettings);
+            var authenticationSettings = configuration.GetSection<AuthenticationSettings>();
 
             // Configure JWT authentication
             var key = Encoding.ASCII.GetBytes(authenticationSettings.Secret);

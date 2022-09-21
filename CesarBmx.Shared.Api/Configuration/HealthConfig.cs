@@ -12,8 +12,7 @@ namespace CesarBmx.Shared.Api.Configuration
         public static IServiceCollection ConfigureSharedHealth(this IServiceCollection services, IConfiguration configuration)
         {
             // Grab AppSettings
-            var appSettings = new AppSettings();
-            configuration.GetSection("AppSettings").Bind(appSettings);
+            var appSettings = configuration.GetSection<AppSettings>();
 
             // Health checks
             services.AddHealthChecksUI(setupSettings: setup =>

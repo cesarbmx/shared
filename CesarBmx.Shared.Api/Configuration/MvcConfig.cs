@@ -17,8 +17,7 @@ namespace CesarBmx.Shared.Api.Configuration
         public static IServiceCollection ConfigureSharedMvc(this IServiceCollection services, IConfiguration configuration, bool enableRazorPages)
         {
             // Grab AuthenticationSettings
-            var authenticationSettings = new AuthenticationSettings();
-            configuration.GetSection("AuthenticationSettings").Bind(authenticationSettings);
+            var authenticationSettings = configuration.GetSection<AuthenticationSettings>();
 
             services.AddControllers(
                     config =>
@@ -57,8 +56,7 @@ namespace CesarBmx.Shared.Api.Configuration
         public static IApplicationBuilder ConfigureSharedMvc(this IApplicationBuilder app, IConfiguration configuration, bool enableRazorPages)
         {
             // Grab AuthenticationSettings
-            var authenticationSettings = new AuthenticationSettings();
-            configuration.GetSection("AuthenticationSettings").Bind(authenticationSettings);
+            var authenticationSettings = configuration.GetSection<AuthenticationSettings>();
 
             app.UseRouting();
             if (authenticationSettings.Enabled)

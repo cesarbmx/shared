@@ -24,12 +24,10 @@ namespace CesarBmx.Shared.Api.Configuration
         public static void ConfigureSharedSerilog(this IApplicationBuilder app, ILoggerFactory loggerFactory, Assembly assembly, IConfiguration configuration)
         {
             // Grab AppSettings
-            var appSettings = new AppSettings();
-            configuration.GetSection("AppSettings").Bind(appSettings);
+            var appSettings = configuration.GetSection<AppSettings>();
 
             // Grab EnvironmentSettings
-            var environmentSettings = new EnvironmentSettings();
-            configuration.GetSection("EnvironmentSettings").Bind(environmentSettings);
+            var environmentSettings = configuration.GetSection<EnvironmentSettings>();
 
             Log.Logger = new LoggerConfiguration()
                 .Enrich.FromLogContext()

@@ -10,6 +10,7 @@ namespace CesarBmx.Shared.Api.Configuration
     {
         public static IServiceCollection ConfigureSharedSettings(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddConfiguration<AppSettings>(configuration);
             services.AddConfiguration<AuthenticationSettings>(configuration);
             services.AddConfiguration<EnvironmentSettings>(configuration);
 
@@ -20,10 +21,21 @@ namespace CesarBmx.Shared.Api.Configuration
                 IConfiguration configuration)
                 where T : class
         {
+            var key = typeof(T).Name;
             var instance = Activator.CreateInstance<T>();
-            new ConfigureFromConfigurationOptions<T>(configuration.GetSection(nameof(T)))
+            new ConfigureFromConfigurationOptions<T>(configuration.GetSection(key))
                 .Configure(instance);
             services.AddSingleton(instance);
+        }
+        public static T GetSection<T>(
+               this IConfiguration configuration)
+               where T : class, new()
+        {
+            var key = typeof(T).Name;
+            var settings = new T();    
+            configuration.GetSection(key).Bind(settings);
+
+            return settings;
         }
     }
 }

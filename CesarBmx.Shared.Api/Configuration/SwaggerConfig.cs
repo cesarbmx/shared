@@ -12,7 +12,6 @@ using Microsoft.OpenApi.Models;
 using CesarBmx.Shared.Api.ResponseExamples;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Filters;
-using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 
 namespace CesarBmx.Shared.Api.Configuration
 {
@@ -96,9 +95,6 @@ namespace CesarBmx.Shared.Api.Configuration
 
                 // Polymorphism
                 c.UseOneOfForPolymorphism();
-
-                // Apply fluent validation rules to swagger
-                services.AddFluentValidationRulesToSwagger();
             });
 
             // Add swagger examples

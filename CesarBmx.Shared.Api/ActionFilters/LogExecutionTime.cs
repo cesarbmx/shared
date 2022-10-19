@@ -13,7 +13,7 @@ namespace CesarBmx.Shared.Api.ActionFilters
 
         public LogExecutionTimeAttribute(ILogger<LogExecutionTimeAttribute> logger)
         {
-            this._logger = logger;
+            _logger = logger;
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)

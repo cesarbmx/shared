@@ -19,7 +19,7 @@ namespace CesarBmx.Shared.Api.ActionFilters
             // Request must be authenticated 
             if (identity == null) throw new UnauthorizedException(ErrorMessage.Unauthorized);
             // Set the identity values
-            IdentityHelper.SetIdentityValues(ref request, identity.Claims.ToList());
+            IdentityHelper.SetIdentityValues(ref request, identity.Claims);
         }
         public void OnActionExecuted(ActionExecutedContext context)
         {

@@ -7,7 +7,7 @@ namespace CesarBmx.Shared.Authentication.Helpers
 {
     public class IdentityHelper
     {
-        public static void SetIdentityValues<T>(ref T obj, List<Claim> claims)
+        public static void SetIdentityValues<T>(ref T obj, IEnumerable<Claim> claims)
         {
             // Return if there is no request object 
             if (obj == null) return;

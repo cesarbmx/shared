@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29806.167
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32922.545
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CesarBmx.Shared.Application", "CesarBmx.Shared.Application\CesarBmx.Shared.Application.csproj", "{72063EFA-67BB-440C-83BD-0DA94603EBCB}"
 EndProject
@@ -19,9 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CesarBmx.Shared.Authenticat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CesarBmx.Shared.Serialization", "CesarBmx.Shared.Serialization\CesarBmx.Shared.Serialization.csproj", "{5B8C6825-5A28-4C58-9D7D-9C755B0086E7}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.- Layers", "1.- Layers", "{5A4A1DBD-2EC1-40FD-B9E5-6DBBCA721A8A}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.- Chassis (Layers)", "1.- Chassis (Layers)", "{5A4A1DBD-2EC1-40FD-B9E5-6DBBCA721A8A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.- CrossCutting", "2.- CrossCutting", "{EF532B66-8BFD-4021-A301-861D61E8DED7}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.- Libraries (cross cutting concerns)", "2.- Libraries (cross cutting concerns)", "{EF532B66-8BFD-4021-A301-861D61E8DED7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CesarBmx.Shared.Tests", "CesarBmx.Shared.Tests\CesarBmx.Shared.Tests.csproj", "{6880B380-AD45-41CF-A7B7-8E287E84BCB9}"
 EndProject

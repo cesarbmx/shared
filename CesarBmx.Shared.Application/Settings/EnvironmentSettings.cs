@@ -5,6 +5,6 @@ namespace CesarBmx.Shared.Application.Settings
 {
     public  class EnvironmentSettings
     {
-        public string EnvironmentName { get; set; }
+        public string Name { get; set; }
     }
 }

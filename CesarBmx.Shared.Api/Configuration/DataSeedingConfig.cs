@@ -25,7 +25,7 @@ namespace CesarBmx.Shared.Api.Configuration
                 if (environmentSettings == null) throw new ArgumentException("Not able to resolve EnvironmentSettings");
 
                 // Create database in development if it does not exist
-                if (environmentSettings.EnvironmentName == "Development")
+                if (environmentSettings.Name == "Development")
                 {
                     //mainDbContext.Database.Migrate();
                     mainDbContext.Database.EnsureCreated();

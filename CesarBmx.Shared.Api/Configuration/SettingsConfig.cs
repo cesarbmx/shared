@@ -13,6 +13,7 @@ namespace CesarBmx.Shared.Api.Configuration
             services.AddConfiguration<AppSettings>(configuration);
             services.AddConfiguration<AuthenticationSettings>(configuration);
             services.AddConfiguration<EnvironmentSettings>(configuration);
+            services.AddConfiguration<LoggingSettings>(configuration);
 
             return services;
         }

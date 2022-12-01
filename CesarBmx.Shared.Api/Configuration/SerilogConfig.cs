@@ -10,6 +10,8 @@ using Serilog.Filters;
 using Serilog.Templates;
 using System;
 using System.Reflection;
+using System.IO;
+using System.Runtime.CompilerServices;
 
 namespace CesarBmx.Shared.Api.Configuration
 {
@@ -24,36 +26,56 @@ namespace CesarBmx.Shared.Api.Configuration
         public static void ConfigureSharedSerilog(this IApplicationBuilder app, ILoggerFactory loggerFactory, Assembly assembly, IConfiguration configuration)
         {
             // Grab AppSettings
-            var appSettings = configuration.GetSection<AppSettings>();
+            var appSettings = new AppSettings();
+            configuration.GetSection("AppSettings").Bind(appSettings);
 
-            // Grab EnvironmentSettings
-            var environmentSettings = configuration.GetSection<EnvironmentSettings>();
+            var environmentSettings = new EnvironmentSettings();
+            configuration.GetSection("EnvironmentSettings").Bind(environmentSettings);
+
+            var loggingSettings = new LoggingSettings();
+            configuration.GetSection("LoggingSettings").Bind(loggingSettings);
 
             Log.Logger = new LoggerConfiguration()
+
+                // Common fields
                 .Enrich.FromLogContext()
-                .Enrich.WithProperty("Team", "MyTeam")
+                .Enrich.WithProperty("Team", "CustomerTeam")
                 .Enrich.WithProperty("App", appSettings.ApplicationId)
                 .Enrich.WithProperty("Version", assembly.VersionNumber())
-                .Enrich.WithProperty("Environment", environmentSettings.EnvironmentName)
-                .Enrich.WithProperty("Id", Guid.NewGuid())
-                .WriteTo.File(new ExpressionTemplate(
-                        "{ { Level: @l,..@p, Timestamp: @t, Exception: @x, SourceContext: undefined(), ActionId: undefined() } }" + Environment.NewLine), "./Logs/log-.log",
-                    rollingInterval: RollingInterval.Day,
-                    //retainedFileCountLimit: 31,
-                    //flushToDiskInterval: TimeSpan.FromSeconds(5),
-                    restrictedToMinimumLevel: LogEventLevel.Information)
-                .WriteTo.Console(new ExpressionTemplate(
-                        "{ @x } { @p['ExecutionTime'] }\t{ @p['Event'] }" + Environment.NewLine))
-                .MinimumLevel.Override("Default", LogEventLevel.Information)
+                .Enrich.WithProperty("Environment", environmentSettings.Name)
+
+                // Filter
                 .Filter.ByExcluding(Matching.FromSource("System"))
                 .Filter.ByExcluding(Matching.FromSource("Microsoft"))
                 .Filter.ByExcluding(Matching.FromSource("Hangfire"))
                 .Filter.ByExcluding(Matching.FromSource("Default"))
-                .Filter.ByExcluding("Scope[?] = 'HealthReportCollector is collecting health checks results.'")
+                .Filter.ByExcluding("Scope[?] = 'HealthReportCollector is collecting health checks results.'") // Do not log health collector
+                .Filter.ByExcluding(x => x.Properties.ContainsKey("AuthenticationScheme")) // Do not log 401s 
+
+                // INFO
+                .WriteTo.Logger(lc => lc
+                    .Filter.ByIncludingOnly("@l = 'Information'")
+                    .WriteTo.File(new ExpressionTemplate(
+                        "{ { ..@p, Timestamp: @t, Level: @l, Exception: @x, SourceContext: undefined(), ActionId: undefined() } }\r\n"),
+                        loggingSettings.Path + appSettings.ApplicationId + "\\INFO_.txt",
+                        rollingInterval: RollingInterval.Day))
+
+                // ERROR
+                .WriteTo.Logger(lc => lc
+                    .Filter.ByIncludingOnly("@l = 'Error'")
+                    .WriteTo.File(new ExpressionTemplate(
+                        "{ { ..@p, Timestamp: @t, Level: @l, Exception: @x, SourceContext: undefined(), ActionId: undefined() } }\r\n"),
+                        loggingSettings.Path + appSettings.ApplicationId + "\\ERROR_.txt",
+                        rollingInterval: RollingInterval.Day))
+
+                // Console
+                .WriteTo.Console(new ExpressionTemplate(
+                        "{ @x } { @p['ExecutionTime'] }\t{ @p['Event'] }" + Environment.NewLine))
+
+                // Create logger
                 .CreateLogger();
 
             loggerFactory.AddSerilog();
-            //app.UseSer
         }
     }
 }

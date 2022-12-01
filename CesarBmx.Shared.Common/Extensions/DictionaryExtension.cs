@@ -12,7 +12,6 @@ namespace CesarBmx.Shared.Common.Extensions
         {
             return dictionary.TryGetValue(key, out var value) ? value : defaultValue;
         }
-
         public static TValue GetValueOrDefault<TKey, TValue>
         (this IDictionary<TKey, TValue> dictionary,
             TKey key,

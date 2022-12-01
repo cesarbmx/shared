@@ -2,7 +2,7 @@
 using System.Linq;
 using CesarBmx.Shared.Domain.Models;
 
-namespace CesarBmx.Shared.Domain.ModelBuilders
+namespace CesarBmx.Shared.Domain.Builders
 {
     public static class EntityBuilder
     {

@@ -4,7 +4,6 @@ using Newtonsoft.Json.Serialization;
 
 namespace CesarBmx.Shared.Serialization.Resolvers
 {
-
     public class NonPublicPropertiesResolver : DefaultContractResolver
     {
         protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)

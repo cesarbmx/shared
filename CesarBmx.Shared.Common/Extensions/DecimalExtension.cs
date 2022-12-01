@@ -1,6 +1,5 @@
 ﻿
 
-
 namespace CesarBmx.Shared.Common.Extensions
 {
     public static class DecimalExtension

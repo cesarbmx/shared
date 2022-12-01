@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using CesarBmx.Shared.Domain.ModelBuilders;
+using CesarBmx.Shared.Domain.Builders;
 using CesarBmx.Shared.Domain.Models;
 
 namespace CesarBmx.Shared.Persistence.Extensions

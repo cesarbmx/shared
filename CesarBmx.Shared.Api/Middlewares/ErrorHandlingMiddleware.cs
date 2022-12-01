@@ -63,17 +63,18 @@ namespace CesarBmx.Shared.Api.Middlewares
                     break;
                 default:                      // 500
                     code = 500;
+                    var id = Guid.NewGuid();
                     errorResponse = new InternalServerError(ErrorMessage.InternalServerError, id);
                     var request = context.Items["Request"];
                     if (request != null)
                     {
                         // Log error with request
-                        _logger.LogError(exception, "{@Id}, {@Message}, {@Request}", Guid.NewGuid(), exception.Message, request);
+                        _logger.LogError(exception, "{@Id}, {@Message}, {@Request}", id, exception.Message, request);
                     }
                     else
                     {
                         // Log error
-                        _logger.LogError(exception, ", {@Id}, {@Message}", Guid.NewGuid(), exception.Message);
+                        _logger.LogError(exception, ", {@Id}, {@Message}", id, exception.Message);
                     }
                     break;
             }

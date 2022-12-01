@@ -5,7 +5,7 @@ namespace CesarBmx.Shared.Api.ActionFilters
     public class StoreRequestInContextAttribute : IActionFilter
     {
         /// <summary>
-        /// We store the request in the context so that we can grab it in case of an exception and properly log it.
+        /// We store the request in the context so that we can properly log it in the middleware.
         /// </summary>
         /// <param name="filterContext"></param>
         public void OnActionExecuting(ActionExecutingContext filterContext)

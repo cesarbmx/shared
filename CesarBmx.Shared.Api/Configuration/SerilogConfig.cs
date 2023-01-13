@@ -12,6 +12,8 @@ using System;
 using System.Reflection;
 using System.IO;
 using System.Runtime.CompilerServices;
+using Serilog.Sinks.Elasticsearch;
+using Serilog.Formatting.Elasticsearch;
 
 namespace CesarBmx.Shared.Api.Configuration
 {
@@ -51,13 +53,14 @@ namespace CesarBmx.Shared.Api.Configuration
                 .Filter.ByExcluding(Matching.FromSource("Default"))
                 .Filter.ByExcluding("Scope[?] = 'HealthReportCollector is collecting health checks results.'") // Do not log health collector
                 .Filter.ByExcluding(x => x.Properties.ContainsKey("AuthenticationScheme")) // Do not log 401s 
+                            
 
                 // INFO
                 .WriteTo.Logger(lc => lc
                     .Filter.ByIncludingOnly("@l = 'Information'")
                     .WriteTo.File(new ExpressionTemplate(
                         "{ { ..@p, Timestamp: @t, Level: @l, Exception: @x, SourceContext: undefined(), ActionId: undefined() } }\r\n"),
-                        loggingSettings.Path + appSettings.ApplicationId + "\\INFO_.txt",
+                        loggingSettings.LoggingPath + appSettings.ApplicationId + "\\INFO_.txt",
                         rollingInterval: RollingInterval.Day))
 
                 // ERROR
@@ -65,12 +68,20 @@ namespace CesarBmx.Shared.Api.Configuration
                     .Filter.ByIncludingOnly("@l = 'Error'")
                     .WriteTo.File(new ExpressionTemplate(
                         "{ { ..@p, Timestamp: @t, Level: @l, Exception: @x, SourceContext: undefined(), ActionId: undefined() } }\r\n"),
-                        loggingSettings.Path + appSettings.ApplicationId + "\\ERROR_.txt",
+                        loggingSettings.LoggingPath + appSettings.ApplicationId + "\\ERROR_.txt",
                         rollingInterval: RollingInterval.Day))
 
                 // Console
                 .WriteTo.Console(new ExpressionTemplate(
                         "{ @x } { @p['ExecutionTime'] }\t{ @p['Event'] }" + Environment.NewLine))
+
+                // Elasticsearch
+                .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(loggingSettings.ElasticsearchUrl))
+                {
+                    AutoRegisterTemplate = true,
+                    IndexFormat = $"{appSettings.ApplicationId}-{environmentSettings.Name}-{DateTime.UtcNow:yyyy-MM}",
+                    CustomFormatter = new ElasticsearchJsonFormatter()
+                })
 
                 // Create logger
                 .CreateLogger();

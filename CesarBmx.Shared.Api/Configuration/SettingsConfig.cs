@@ -14,6 +14,7 @@ namespace CesarBmx.Shared.Api.Configuration
             services.AddConfiguration<AuthenticationSettings>(configuration);
             services.AddConfiguration<EnvironmentSettings>(configuration);
             services.AddConfiguration<LoggingSettings>(configuration);
+            services.AddConfiguration<CorsSettings>(configuration);
 
             return services;
         }

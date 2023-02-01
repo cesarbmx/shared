@@ -4,15 +4,15 @@ using Newtonsoft.Json;
 
 namespace CesarBmx.Shared.Application.Responses
 {
-    public class ValidationFailed : Error
+    public class Validation : Error
     {
         [JsonProperty(Order = 2)]
         public List<ValidationError> ValidationErrors { get; set; }
 
-        public ValidationFailed(string message, List<ValidationError> validationErrors)
+        public Validation(string message, List<ValidationError> validationError)
         : base( 422, message)
         {
-            ValidationErrors = validationErrors;
+            ValidationErrors = validationError;
         }
     }
 }

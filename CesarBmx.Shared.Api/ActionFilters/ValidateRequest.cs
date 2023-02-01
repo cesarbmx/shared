@@ -38,7 +38,7 @@ namespace CesarBmx.Shared.Api.ActionFilters
                 );
 
                
-                var validationErrorsResponse = new List<ValidationError>();
+                var validationErrors = new List<ValidationError>();
                 foreach (var error in errors)
                 {
                     foreach (var value in error.Value)
@@ -46,15 +46,15 @@ namespace CesarBmx.Shared.Api.ActionFilters
                         // Handle DataAnotations Required
                         if (value.Contains("field is required"))
                         {
-                            validationErrorsResponse.Add(new ValidationError( error.Key.ToFirstLetterLower(), Application.Messages.ErrorMessage.Required));
+                            validationErrors.Add(new ValidationError( error.Key.ToFirstLetterLower(), Application.Messages.ErrorMessage.Required));
                         }
                         else // Handle fluent validations
                         {
-                            validationErrorsResponse.Add(new ValidationError(error.Key.ToFirstLetterLower(), value));
+                            validationErrors.Add(new ValidationError(error.Key.ToFirstLetterLower(), value));
                         }
                     }
                 }
-                var validationsResponse = new ValidationFailed(Application.Messages.ErrorMessage.ValidationFailed, validationErrorsResponse);
+                var validationsResponse = new Validation(Application.Messages.ErrorMessage.ValidationFailed, validationErrors);
 
                 filterContext.Result = new ObjectResult(validationsResponse) { StatusCode = 422 };
             }

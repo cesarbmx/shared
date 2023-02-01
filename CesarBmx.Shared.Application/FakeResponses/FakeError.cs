@@ -15,13 +15,13 @@ namespace CesarBmx.Shared.Application.FakeResponses
         {
             return new NotFound(Messages.ErrorMessage.NotFound);
         }
-        public static ValidationFailed GetFake_Validation()
+        public static Validation GetFake_Validation()
         {
             var validationErrorResponseList = new List<ValidationError>
             {
                 new ValidationError("fieldName", "Validation description")
             };
-            var validationResponse = new ValidationFailed(Messages.ErrorMessage.ValidationFailed, validationErrorResponseList);
+            var validationResponse = new Validation(Messages.ErrorMessage.ValidationFailed, validationErrorResponseList);
 
             return validationResponse;
         }

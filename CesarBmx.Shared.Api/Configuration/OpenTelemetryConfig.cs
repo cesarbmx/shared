@@ -14,6 +14,7 @@ using OpenTelemetry;
 using OpenTelemetry.Exporter;
 using System;
 using System.Reflection;
+using OpenTelemetry.Metrics;
 
 namespace CesarBmx.Shared.Api.Configuration
 {
@@ -30,15 +31,18 @@ namespace CesarBmx.Shared.Api.Configuration
             configuration.GetSection("LoggingSettings").Bind(loggingSettings);
 
             // Add OpenTelemetry
-            services.AddOpenTelemetry()                
-             .WithTracing(builder => builder                               
+            services.AddOpenTelemetry()
+            .WithMetrics(builder => builder
+                .AddRuntimeInstrumentation()                
+                .AddPrometheusExporter())
+            .WithTracing(builder => builder
                 .AddSource(appSettings.ApplicationId)
                 .SetResourceBuilder(ResourceBuilder.CreateDefault()
-                    .AddService(serviceName: appSettings.ApplicationId, serviceVersion: assembly.VersionNumber()))           
+                    .AddService(serviceName: appSettings.ApplicationId, serviceVersion: assembly.VersionNumber()))
                 .SetSampler(new AlwaysOnSampler())
                 .AddAspNetCoreInstrumentation()
                 .AddHttpClientInstrumentation()
-                .AddEntityFrameworkCoreInstrumentation()              
+                .AddEntityFrameworkCoreInstrumentation()
                 .AddJaegerExporter(
                  opts =>
                  {
@@ -46,11 +50,18 @@ namespace CesarBmx.Shared.Api.Configuration
                      opts.AgentPort = Convert.ToInt32(loggingSettings.JaegerAgentPort);
                      opts.Protocol = JaegerExportProtocol.UdpCompactThrift;
                  }
-                 )
-             )
+                 ))
              .StartWithHost();
 
+
             return services;
+        }
+
+        public static IApplicationBuilder ConfigureSharedOpenTelemetry(this IApplicationBuilder app)
+        {
+            app.UseOpenTelemetryPrometheusScrapingEndpoint();
+
+            return app;
         }
     }
 }

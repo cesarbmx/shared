@@ -5,13 +5,10 @@ using Microsoft.Extensions.Hosting;
 using CesarBmx.Shared.Application.Settings;
 using CesarBmx.Shared.Common.Extensions;
 using Serilog;
-using Serilog.Events;
 using Serilog.Filters;
 using Serilog.Templates;
 using System;
 using System.Reflection;
-using System.IO;
-using System.Runtime.CompilerServices;
 using Serilog.Sinks.Elasticsearch;
 using Serilog.Formatting.Elasticsearch;
 
@@ -34,8 +31,8 @@ namespace CesarBmx.Shared.Api.Configuration
             var environmentSettings = new EnvironmentSettings();
             configuration.GetSection("EnvironmentSettings").Bind(environmentSettings);
 
-            var loggingSettings = new LoggingSettings();
-            configuration.GetSection("LoggingSettings").Bind(loggingSettings);
+            var openTelemetrySettings = new OpenTelemetrySettings();
+            configuration.GetSection(nameof(OpenTelemetrySettings)).Bind(openTelemetrySettings);
 
             Log.Logger = new LoggerConfiguration()
 
@@ -60,7 +57,7 @@ namespace CesarBmx.Shared.Api.Configuration
                     .Filter.ByIncludingOnly("@l = 'Information'")
                     .WriteTo.File(new ExpressionTemplate(
                         "{ { ..@p, Timestamp: @t, Level: @l, Exception: @x, SourceContext: undefined(), ActionId: undefined() } }\r\n"),
-                        loggingSettings.LoggingPath + appSettings.ApplicationId + "\\INFO_.txt",
+                        openTelemetrySettings.LoggingPath + appSettings.ApplicationId + "\\INFO_.txt",
                         rollingInterval: RollingInterval.Day))
 
                 // ERROR
@@ -68,7 +65,7 @@ namespace CesarBmx.Shared.Api.Configuration
                     .Filter.ByIncludingOnly("@l = 'Error'")
                     .WriteTo.File(new ExpressionTemplate(
                         "{ { ..@p, Timestamp: @t, Level: @l, Exception: @x, SourceContext: undefined(), ActionId: undefined() } }\r\n"),
-                        loggingSettings.LoggingPath + appSettings.ApplicationId + "\\ERROR_.txt",
+                        openTelemetrySettings.LoggingPath + appSettings.ApplicationId + "\\ERROR_.txt",
                         rollingInterval: RollingInterval.Day))
 
                 // Console

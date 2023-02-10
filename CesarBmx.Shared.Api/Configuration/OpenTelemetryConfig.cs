@@ -27,7 +27,7 @@ namespace CesarBmx.Shared.Api.Configuration
             configuration.GetSection("AppSettings").Bind(appSettings);
 
             // Grab LoggingSettings
-            var loggingSettings = new LoggingSettings();
+            var loggingSettings = new OpenTelemetrySettings();
             configuration.GetSection("LoggingSettings").Bind(loggingSettings);
 
             // Add OpenTelemetry

@@ -3,7 +3,7 @@
 
 namespace CesarBmx.Shared.Application.Settings
 {
-    public  class LoggingSettings
+    public  class OpenTelemetrySettings
     {
         public string LoggingPath { get; set; }
         public string JaegerAgentHost { get; set; }

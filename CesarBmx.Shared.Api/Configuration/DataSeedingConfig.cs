@@ -1,6 +1,5 @@
 ﻿using System;
 using CesarBmx.Shared.Application.Settings;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -8,9 +7,10 @@ namespace CesarBmx.Shared.Api.Configuration
 {
     public static class DataSeedingConfig
     {
-        public static IApplicationBuilder ConfigureSharedDataSeeding<TDbContext>(this IApplicationBuilder app) where TDbContext : DbContext
+        public static IServiceCollection ConfigureSharedDataSeeding<TDbContext>(this IServiceCollection services) where TDbContext : DbContext
         {
-            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            var serviceProvider = services.BuildServiceProvider();
+            using (var serviceScope = serviceProvider.GetService<IServiceScopeFactory>().CreateScope())
             {
                 // Get MainDbContext
                 var mainDbContext = serviceScope.ServiceProvider.GetService<TDbContext>();
@@ -33,7 +33,7 @@ namespace CesarBmx.Shared.Api.Configuration
             }
 
             // Return
-            return app;
+            return services;
         }
     }
 }

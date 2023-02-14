@@ -22,13 +22,9 @@ namespace CesarBmx.Shared.Api.Configuration
     {
         public static IServiceCollection ConfigureSharedOpenTelemetry(this IServiceCollection services, IConfiguration configuration, Assembly assembly)
         {
-            // Grab AppSettings
-            var appSettings = new AppSettings();
-            configuration.GetSection("AppSettings").Bind(appSettings);
-
-            // Grab LoggingSettings
-            var loggingSettings = new OpenTelemetrySettings();
-            configuration.GetSection("LoggingSettings").Bind(loggingSettings);
+            // Grab settings
+            var appSettings = configuration.GetSection<AppSettings>();
+            var openTelemetrySettings = configuration.GetSection<OpenTelemetrySettings>();
 
             // Add OpenTelemetry
             services.AddOpenTelemetry()
@@ -46,8 +42,8 @@ namespace CesarBmx.Shared.Api.Configuration
                 .AddJaegerExporter(
                  opts =>
                  {
-                     opts.AgentHost = loggingSettings.JaegerAgentHost;
-                     opts.AgentPort = Convert.ToInt32(loggingSettings.JaegerAgentPort);
+                     opts.AgentHost = openTelemetrySettings.JaegerAgentHost;
+                     opts.AgentPort = Convert.ToInt32(openTelemetrySettings.JaegerAgentPort);
                      opts.Protocol = JaegerExportProtocol.UdpCompactThrift;
                  }
                  ))

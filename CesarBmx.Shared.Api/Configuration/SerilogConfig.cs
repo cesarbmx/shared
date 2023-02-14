@@ -24,15 +24,11 @@ namespace CesarBmx.Shared.Api.Configuration
         }
         public static void ConfigureSharedSerilog(this IApplicationBuilder app, ILoggerFactory loggerFactory, Assembly assembly, IConfiguration configuration)
         {
-            // Grab AppSettings
-            var appSettings = new AppSettings();
-            configuration.GetSection("AppSettings").Bind(appSettings);
-
-            var environmentSettings = new EnvironmentSettings();
-            configuration.GetSection("EnvironmentSettings").Bind(environmentSettings);
-
-            var openTelemetrySettings = new OpenTelemetrySettings();
-            configuration.GetSection(nameof(OpenTelemetrySettings)).Bind(openTelemetrySettings);
+            // Grab settings
+            var appSettings = configuration.GetSection<AppSettings>();
+            var environmentSettings = configuration.GetSection<EnvironmentSettings>();
+            var loggingettings = configuration.GetSection<LoggingSettings>();
+            var openTelemetrySettings = configuration.GetSection<OpenTelemetrySettings>();
 
             Log.Logger = new LoggerConfiguration()
 
@@ -57,7 +53,7 @@ namespace CesarBmx.Shared.Api.Configuration
                     .Filter.ByIncludingOnly("@l = 'Information'")
                     .WriteTo.File(new ExpressionTemplate(
                         "{ { ..@p, Timestamp: @t, Level: @l, Exception: @x, SourceContext: undefined(), ActionId: undefined() } }\r\n"),
-                        openTelemetrySettings.LoggingPath + appSettings.ApplicationId + "\\INFO_.txt",
+                        loggingettings.LoggingPath + appSettings.ApplicationId + "\\INFO_.txt",
                         rollingInterval: RollingInterval.Day))
 
                 // ERROR
@@ -65,7 +61,7 @@ namespace CesarBmx.Shared.Api.Configuration
                     .Filter.ByIncludingOnly("@l = 'Error'")
                     .WriteTo.File(new ExpressionTemplate(
                         "{ { ..@p, Timestamp: @t, Level: @l, Exception: @x, SourceContext: undefined(), ActionId: undefined() } }\r\n"),
-                        openTelemetrySettings.LoggingPath + appSettings.ApplicationId + "\\ERROR_.txt",
+                        loggingettings.LoggingPath + appSettings.ApplicationId + "\\ERROR_.txt",
                         rollingInterval: RollingInterval.Day))
 
                 // Console
@@ -73,7 +69,7 @@ namespace CesarBmx.Shared.Api.Configuration
                         "{ @x } { @p['ExecutionTime'] }\t{ @p['Event'] }" + Environment.NewLine))
 
                 // Elasticsearch
-                .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(loggingSettings.ElasticsearchUrl))
+                .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(openTelemetrySettings.ElasticsearchUrl))
                 {
                     AutoRegisterTemplate = true,
                     IndexFormat = $"{appSettings.ApplicationId}-{environmentSettings.Name}-{DateTime.UtcNow:yyyy-MM}",

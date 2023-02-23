@@ -46,8 +46,7 @@ namespace CesarBmx.Shared.Api.Configuration
                      opts.AgentPort = Convert.ToInt32(openTelemetrySettings.JaegerAgentPort);
                      opts.Protocol = JaegerExportProtocol.UdpCompactThrift;
                  }
-                 ))
-             .StartWithHost();
+                 ));
 
 
             return services;

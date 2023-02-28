@@ -62,7 +62,6 @@ namespace CesarBmx.Shared.Api.Configuration
                     });
                     cfg.ConfigureEndpoints(context);
                     cfg.MessageTopology.SetEntityNameFormatter(new SimpleNameFormatter(cfg.MessageTopology.EntityNameFormatter, appSettings));
-
                 });
 
                 //x.UsingInMemory((context, cfg) =>

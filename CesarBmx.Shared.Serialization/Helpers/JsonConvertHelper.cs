@@ -5,7 +5,7 @@ namespace CesarBmx.Shared.Serialization.Helpers
 {
     public static class JsonConvertHelper
     {
-        public static string SerializeObjectRaw(object value)
+        public static string SerializeObject(object value)
         {
             return JsonConvert.SerializeObject(value,
                 Formatting.None,
@@ -15,7 +15,7 @@ namespace CesarBmx.Shared.Serialization.Helpers
                     TypeNameHandling = TypeNameHandling.Auto
                 });
         }
-        public static T DeserializeObjectRaw<T>(string value)
+        public static T DeserializeObject<T>(string value)
         {
             return JsonConvert.DeserializeObject<T>(value, new JsonSerializerSettings
             {

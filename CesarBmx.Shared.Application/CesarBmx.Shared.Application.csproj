@@ -15,11 +15,13 @@
     <PackageReference Include="AutoMapper" Version="11.0.1" />
     <PackageReference Include="FluentValidation" Version="11.2.1" />
     <PackageReference Include="Hangfire.Core" Version="1.7.31" />
+    <PackageReference Include="MassTransit" Version="8.0.13" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\CesarBmx.Shared.Common\CesarBmx.Shared.Common.csproj" />
+    <ProjectReference Include="..\CesarBmx.Shared.Events\CesarBmx.Shared.Messaging.csproj" />
     <ProjectReference Include="..\CesarBmx.Shared.Logging\CesarBmx.Shared.Logging.csproj" />
     <ProjectReference Include="..\CesarBmx.Shared.Persistence\CesarBmx.Shared.Persistence.csproj" />
   </ItemGroup>

@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using static Org.BouncyCastle.Math.EC.ECCurve;
 using Microsoft.Extensions.Configuration;
 using CesarBmx.Shared.Application.Settings;
+using CesarBmx.Shared.Api.Helpers;
 
 namespace CesarBmx.Shared.Api.Configuration
 {
@@ -16,6 +17,7 @@ namespace CesarBmx.Shared.Api.Configuration
             where TSomeComsumer : IConsumer
         {
             // Grab settings
+            var appSettings = configuration.GetSection<AppSettings>();
             var rabbitMqSettings = configuration.GetSection<RabbitMqSettings>();
 
            
@@ -59,7 +61,14 @@ namespace CesarBmx.Shared.Api.Configuration
                         h.Password(rabbitMqSettings.Password);
                     });
                     cfg.ConfigureEndpoints(context);
+                    cfg.MessageTopology.SetEntityNameFormatter(new SimpleNameFormatter(cfg.MessageTopology.EntityNameFormatter, appSettings));
+
                 });
+
+                //x.UsingInMemory((context, cfg) =>
+                //{
+                //    cfg.ConfigureEndpoints(context);
+                //});
             });
 
             // Return

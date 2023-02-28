@@ -2,7 +2,7 @@
 
 namespace CesarBmx.Shared.Messaging.CryptoWatcher.Events
 {
-    public class OrderCreated
+    public class OrderAdded
     {
         public int OrderId { get; set; }
         public int WatcherId { get; set; }

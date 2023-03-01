@@ -16,6 +16,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AspNetCore.HealthChecks.Rabbitmq" Version="6.0.2" />
     <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="6.0.2" />
     <PackageReference Include="AspNetCore.HealthChecks.UI" Version="6.0.5" />
     <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.5" />
@@ -69,6 +70,7 @@
   <ItemGroup>
     <ProjectReference Include="..\CesarBmx.Shared.Application\CesarBmx.Shared.Application.csproj" />
     <ProjectReference Include="..\CesarBmx.Shared.Authentication\CesarBmx.Shared.Authentication.csproj" />
+    <ProjectReference Include="..\CesarBmx.Shared.Health\CesarBmx.Shared.Health.csproj" />
     <ProjectReference Include="..\CesarBmx.Shared.Logging\CesarBmx.Shared.Logging.csproj" />
   </ItemGroup>
 

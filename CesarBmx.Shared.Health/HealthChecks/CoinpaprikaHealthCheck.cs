@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
@@ -16,13 +17,19 @@ namespace CesarBmx.Shared.Health.HealthChecks
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = new CancellationToken())
         {
+            try
+            {
+                var response = await _coinpaprikaClient.GetClobalsAsync();
 
-            var response = await _coinpaprikaClient.GetClobalsAsync();
+                if (response.Value == null) return HealthCheckResult.Degraded("https://api.coinpaprika.com/");
+                return HealthCheckResult.Healthy("https://api.coinpaprika.com/");
 
-            if (response.Value != null) return HealthCheckResult.Healthy("https://api.coinpaprika.com/");
-
-            // Return result
-            return HealthCheckResult.Unhealthy("Coinpaprika API");
+            }
+            catch (Exception ex)
+            {
+                // Return result
+                return HealthCheckResult.Unhealthy(ex.Message);
+            }
         }
     }
 }

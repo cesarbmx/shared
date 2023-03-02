@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Notification\Events\" />
+    <Folder Include="Notification\Types\" />
+  </ItemGroup>
+
 </Project>

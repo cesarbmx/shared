@@ -105,14 +105,14 @@ namespace CesarBmx.Shared.Api.Configuration
 
             return services;
         }
-        public static IApplicationBuilder ConfigureSharedSwagger(this IApplicationBuilder app, string appName, string route)
+        public static IApplicationBuilder ConfigureSharedSwagger(this IApplicationBuilder app, string appName, string route = "")
         {
             app.UseSwagger(c =>
             {
                 c.RouteTemplate = route + "/{documentName}/swagger.json";
                 c.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
                 {
-                    swaggerDoc.Servers = new List<OpenApiServer> { new OpenApiServer { Url = $"https://{httpReq.Host.Value}{httpReq.PathBase}" } };
+                    swaggerDoc.Servers = new List<OpenApiServer> { new OpenApiServer { Url = $"{httpReq.Scheme}://{httpReq.Host.Value}{httpReq.PathBase}" } };
                 });
             });
 

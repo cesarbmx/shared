@@ -1,12 +1,11 @@
 ﻿using CesarBmx.Shared.Messaging.CryptoWatcher.Types;
 
-namespace CesarBmx.Shared.Messaging.Notification.Commands
+namespace CesarBmx.Shared.Messaging.CryptoWatcher.Commands
 {
     #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-    public class SendMessage
+    public class CancelOrder
     {
-        public Guid MessageId { get; set; }
-        public string Text { get; set; }
+        public Guid OrderId { get; set; }
 
     }
 }

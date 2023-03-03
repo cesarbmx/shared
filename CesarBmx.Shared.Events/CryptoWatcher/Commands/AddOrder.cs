@@ -5,7 +5,7 @@ namespace CesarBmx.Shared.Messaging.CryptoWatcher.Commands
     #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public class AddOrder
     {
-        public int OrderId { get; set; }
+        public Guid OrderId { get; set; }
         public int WatcherId { get; set; }
         public string UserId { get; set; }
         public string CurrencyId { get; set; }

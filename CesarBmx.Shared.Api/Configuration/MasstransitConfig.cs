@@ -3,13 +3,11 @@ using Microsoft.Extensions.DependencyInjection;
 using MassTransit;
 using System;
 using Microsoft.EntityFrameworkCore;
-using static Org.BouncyCastle.Math.EC.ECCurve;
 using Microsoft.Extensions.Configuration;
 using CesarBmx.Shared.Application.Settings;
 using CesarBmx.Shared.Api.Helpers;
 using CesarBmx.Shared.Messaging.Notification.Commands;
-using CesarBmx.Shared.Messaging.CryptoWatcher.Commands;
-using CesarBmx.Shared.Messaging.CryptoWatcher.Events;
+using CesarBmx.Shared.Messaging.Ordering.Commands;
 
 namespace CesarBmx.Shared.Api.Configuration
 {
@@ -48,7 +46,7 @@ namespace CesarBmx.Shared.Api.Configuration
 
 
             // Send
-            EndpointConvention.Map<AddOrder>(new Uri($"exchange:CryptoWatcherApi:{nameof(AddOrder)}"));
+            EndpointConvention.Map<PlaceOrder>(new Uri($"exchange:CryptoWatcherApi:{nameof(PlaceOrder)}"));
             EndpointConvention.Map<SendMessage>(new Uri($"exchange:NotificationApi:{nameof(SendMessage)}"));
 
             

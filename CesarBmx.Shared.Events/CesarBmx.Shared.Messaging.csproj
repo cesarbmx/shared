@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="CryptoWatcher\Commands\" />
     <Folder Include="Notification\Events\" />
     <Folder Include="Notification\Types\" />
   </ItemGroup>

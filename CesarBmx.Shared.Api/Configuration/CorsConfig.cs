@@ -14,7 +14,7 @@ namespace CesarBmx.Shared.Configuration
             var corsSettings = configuration.GetSection<CorsSettings>();
 
             // Allowed origins
-            var allowedorigins = corsSettings.AllowedOrigins.Split(";");
+            var allowedOrigins = corsSettings.AllowedOrigins.Split(";");
 
             services.AddCors(options =>
             {
@@ -22,7 +22,7 @@ namespace CesarBmx.Shared.Configuration
                     builder =>
                     {
                             builder
-							.WithOrigins(allowedorigins)
+							.WithOrigins(allowedOrigins)
                             .AllowAnyMethod()
                             .AllowAnyHeader();
                     });

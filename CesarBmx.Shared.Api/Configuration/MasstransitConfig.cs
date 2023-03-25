@@ -27,7 +27,7 @@ namespace CesarBmx.Shared.Api.Configuration
                 x.AddConsumersFromNamespaceContaining<TSomeComsumer>();
 
                 // Request
-                x.AddRequestClient<CancelOrder>(new Uri($"exchange:CryptoWatcherApi:{nameof(CancelOrder)}"));
+                x.AddRequestClient<CancelOrder>(new Uri($"exchange:OrderingApi:{nameof(CancelOrder)}"));
 
                 // RabbitMq
                 x.UsingRabbitMq((context, cfg) =>
@@ -46,7 +46,7 @@ namespace CesarBmx.Shared.Api.Configuration
 
 
             // Send
-            EndpointConvention.Map<PlaceOrder>(new Uri($"exchange:CryptoWatcherApi:{nameof(PlaceOrder)}"));
+            EndpointConvention.Map<PlaceOrder>(new Uri($"exchange:OrderingApi:{nameof(PlaceOrder)}"));
             EndpointConvention.Map<SendMessage>(new Uri($"exchange:NotificationApi:{nameof(SendMessage)}"));
 
             

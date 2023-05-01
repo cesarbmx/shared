@@ -43,9 +43,13 @@ namespace CesarBmx.Shared.Api.Configuration
                     o.UseBusOutbox();
                 });
 
-                x.AddConfigureEndpointsCallback((name, cfg) =>
+                x.AddConfigureEndpointsCallback((provider, name, cfg) =>
                 {
                     cfg.UseMessageRetry(r => r.Immediate(2));
+                    cfg.UseEntityFrameworkOutbox<TDbContext>(provider, x =>
+                    {
+                       
+                    });
                 });
 
                 // Request

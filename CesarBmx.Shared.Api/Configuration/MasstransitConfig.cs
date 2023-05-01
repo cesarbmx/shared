@@ -8,6 +8,7 @@ using CesarBmx.Shared.Application.Settings;
 using CesarBmx.Shared.Api.Helpers;
 using CesarBmx.Shared.Messaging.Notification.Commands;
 using CesarBmx.Shared.Messaging.Ordering.Commands;
+using MassTransit.EntityFrameworkCoreIntegration;
 
 namespace CesarBmx.Shared.Api.Configuration
 {
@@ -26,6 +27,27 @@ namespace CesarBmx.Shared.Api.Configuration
                 // Publish
                 x.AddConsumersFromNamespaceContaining<TSomeComsumer>();
 
+                // Saga state machines
+                x.AddSagaStateMachinesFromNamespaceContaining<TSomeComsumer>();
+
+                //// In memory sagas
+                x.SetEntityFrameworkSagaRepositoryProvider(r =>
+                {
+                    r.ExistingDbContext<TDbContext>();
+                });
+
+                // EF Outbox
+                x.AddEntityFrameworkOutbox<TDbContext>(o =>
+                {
+                    o.UseSqlServer();
+                    o.UseBusOutbox();
+                });
+
+                x.AddConfigureEndpointsCallback((name, cfg) =>
+                {
+                    cfg.UseMessageRetry(r => r.Immediate(2));
+                });
+
                 // Request
                 x.AddRequestClient<CancelOrder>(new Uri($"exchange:OrderingApi:{nameof(CancelOrder)}"));
 
@@ -39,17 +61,13 @@ namespace CesarBmx.Shared.Api.Configuration
                     });
                     cfg.ConfigureEndpoints(context);
                     cfg.MessageTopology.SetEntityNameFormatter(new SimpleNameFormatter(cfg.MessageTopology.EntityNameFormatter, appSettings));
-
-         
                 });
             });
 
 
             // Send
-            EndpointConvention.Map<PlaceOrder>(new Uri($"exchange:OrderingApi:{nameof(PlaceOrder)}"));
-            EndpointConvention.Map<SendMessage>(new Uri($"exchange:NotificationApi:{nameof(SendMessage)}"));
-
-            
+            EndpointConvention.Map<SubmitOrder>(new Uri($"exchange:OrderingApi:{nameof(SubmitOrder)}"));
+            EndpointConvention.Map<SendMessage>(new Uri($"exchange:NotificationApi:{nameof(SendMessage)}"));           
 
 
             // Return

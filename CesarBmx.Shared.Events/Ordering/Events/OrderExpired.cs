@@ -1,8 +1,8 @@
 ﻿using CesarBmx.Shared.Messaging.Ordering.Types;
 
-namespace CesarBmx.Shared.Messaging.Ordering.Commands
+namespace CesarBmx.Shared.Messaging.Ordering.Events
 {
-    public class PlaceOrder
+    public class OrderExpired
     {
         public Guid OrderId { get; set; }
         public int WatcherId { get; set; }
@@ -11,5 +11,7 @@ namespace CesarBmx.Shared.Messaging.Ordering.Commands
         public decimal Price { get; set; }
         public OrderType OrderType { get; set; }
         public decimal Quantity { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime ExpiredAt { get; set; }
     }
 }

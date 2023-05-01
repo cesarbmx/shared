@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MassTransit;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace CesarBmx.Shared.Persistence.Extensions
@@ -13,6 +14,12 @@ namespace CesarBmx.Shared.Persistence.Extensions
                 // refs https://docs.microsoft.com/en-us/ef/core/modeling/relational/tables#conventions
                 modelBuilder.Entity(entityType.ClrType).ToTable(entityType.ClrType.Name);
             }
+        }
+        public static void UseMasstransit(this ModelBuilder modelBuilder)
+        {
+            modelBuilder.AddInboxStateEntity();
+            modelBuilder.AddOutboxMessageEntity();
+            modelBuilder.AddOutboxStateEntity();
         }
     }
 }

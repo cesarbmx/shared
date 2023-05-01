@@ -10,7 +10,6 @@
     <Folder Include="CryptoWatcher\Commands\" />
     <Folder Include="CryptoWatcher\Events\" />
     <Folder Include="CryptoWatcher\Types\" />
-    <Folder Include="Notification\Events\" />
     <Folder Include="Notification\Types\" />
   </ItemGroup>
 

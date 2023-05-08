@@ -10,7 +10,7 @@ namespace CesarBmx.Shared.Messaging.Ordering.Events
         public decimal Price { get; set; }
         public OrderType OrderType { get; set; }
         public decimal Quantity { get; set; }
-        public DateTime CreatedAt { get; set; }
+        public DateTime SubmittedAt { get; set; }
 
     }
 }

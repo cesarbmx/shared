@@ -8,6 +8,7 @@ using CesarBmx.Shared.Application.Settings;
 using CesarBmx.Shared.Api.Helpers;
 using CesarBmx.Shared.Messaging.Notification.Commands;
 using CesarBmx.Shared.Messaging.Ordering.Commands;
+using Humanizer.Configuration;
 
 namespace CesarBmx.Shared.Api.Configuration
 {
@@ -23,13 +24,14 @@ namespace CesarBmx.Shared.Api.Configuration
             services.AddMassTransit(x =>
             {
                 // Publish
-                x.AddConsumersFromNamespaceContaining(someConsumer);
+                //x.AddConsumersFromNamespaceContaining(someConsumer);
+                x.AddConsumers(someConsumer.Assembly);
 
                 if (someSaga != null)
                 {
                     // Saga state machines
-                    x.AddSagaStateMachinesFromNamespaceContaining(someSaga);
-                  
+                    //x.AddSagaStateMachinesFromNamespaceContaining(someSaga);
+                    x.AddSagaStateMachines(someSaga.Assembly);
 
                     // EF sagas
                     x.SetEntityFrameworkSagaRepositoryProvider(r =>
@@ -39,28 +41,30 @@ namespace CesarBmx.Shared.Api.Configuration
                 }
 
                 // EF Outbox
-                x.AddEntityFrameworkOutbox<TDbContext>(o =>
-                {
-                    o.UseSqlServer();
-                    o.UseBusOutbox();
-                });
+                //x.AddEntityFrameworkOutbox<TDbContext>(o =>
+                //{
+                //    o.UseSqlServer();
+                //    o.UseBusOutbox();
+                //});
 
 
-                x.AddConfigureEndpointsCallback((provider, name, cfg) =>
-                {
-                    cfg.UseMessageRetry(r => r.Immediate(2));
-                    cfg.UseEntityFrameworkOutbox<TDbContext>(provider, x =>
-                    {
+                //x.AddConfigureEndpointsCallback((provider, name, cfg) =>
+                //{
+                //    cfg.UseMessageRetry(r => r.Immediate(2));
+                //    cfg.UseEntityFrameworkOutbox<TDbContext>(provider, x =>
+                //    {
 
-                    });
-                });
+                //    });
+                //});
 
                 // Scheduler
                 x.AddPublishMessageScheduler();
 
                 // Request
+                x.AddRequestClient<SubmitOrder>(new Uri($"exchange:OrderingApi:{nameof(SubmitOrder)}"));
+                x.AddRequestClient<PlaceOrder>(new Uri($"exchange:OrderingApi:{nameof(PlaceOrder)}"));
                 x.AddRequestClient<CancelOrder>(new Uri($"exchange:OrderingApi:{nameof(CancelOrder)}"));
-                x.AddRequestClient<CancelOrder>(new Uri($"exchange:NotificationApi:{nameof(SendMessage)}"));
+                x.AddRequestClient<SendMessage>(new Uri($"exchange:NotificationApi:{nameof(SendMessage)}"));
 
                 // RabbitMq
                 x.UsingRabbitMq((context, cfg) =>
@@ -69,9 +73,9 @@ namespace CesarBmx.Shared.Api.Configuration
                     {
                         h.Username(rabbitMqSettings.Username);
                         h.Password(rabbitMqSettings.Password);
-                    });
-                    cfg.ConfigureEndpoints(context);
+                    });                   
                     cfg.MessageTopology.SetEntityNameFormatter(new SimpleNameFormatter(cfg.MessageTopology.EntityNameFormatter, appSettings));
+                    cfg.ConfigureEndpoints(context);
                 });
             });
 

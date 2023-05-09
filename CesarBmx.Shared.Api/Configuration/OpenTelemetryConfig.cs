@@ -39,7 +39,7 @@ namespace CesarBmx.Shared.Api.Configuration
                 .SetSampler(new AlwaysOnSampler())
                 .AddAspNetCoreInstrumentation()
                 .AddHttpClientInstrumentation()
-                .AddEntityFrameworkCoreInstrumentation()
+                //.AddEntityFrameworkCoreInstrumentation()
                 .AddJaegerExporter(
                  opts =>
                  {

@@ -29,6 +29,7 @@ namespace CesarBmx.Shared.Api.Configuration
                 {
                     // Saga state machines
                     x.AddSagaStateMachinesFromNamespaceContaining(someSaga);
+                  
 
                     // EF sagas
                     x.SetEntityFrameworkSagaRepositoryProvider(r =>
@@ -78,7 +79,7 @@ namespace CesarBmx.Shared.Api.Configuration
             // Send
             EndpointConvention.Map<SubmitOrder>(new Uri($"exchange:OrderingApi:{nameof(SubmitOrder)}"));
             EndpointConvention.Map<PlaceOrder>(new Uri($"exchange:OrderingApi:{nameof(PlaceOrder)}"));
-            //EndpointConvention.Map<SendMessage>(new Uri($"exchange:NotificationApi:{nameof(SendMessage)}"));           
+            EndpointConvention.Map<SendMessage>(new Uri($"exchange:NotificationApi:{nameof(SendMessage)}"));           
 
 
             // Return

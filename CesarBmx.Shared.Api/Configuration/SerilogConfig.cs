@@ -66,7 +66,7 @@ namespace CesarBmx.Shared.Api.Configuration
 
                 // Console
                 .WriteTo.Console(new ExpressionTemplate(
-                        "{ @x } { @p['ExecutionTime'] }\t{ @p['Event'] }" + Environment.NewLine))
+                        "{ @x } { @p['ExecutionTime'],-11 }\t{ @p['App'],-16 }\t{ @p['Event'] }" + Environment.NewLine))
 
                 // Elasticsearch
                 .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(openTelemetrySettings.ElasticsearchUrl))

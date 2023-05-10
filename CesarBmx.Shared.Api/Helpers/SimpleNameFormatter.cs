@@ -1,5 +1,4 @@
-﻿using CesarBmx.Shared.Application.Settings;
-using MassTransit;
+﻿using MassTransit;
 
 namespace CesarBmx.Shared.Api.Helpers
 {
@@ -7,20 +6,20 @@ namespace CesarBmx.Shared.Api.Helpers
     IEntityNameFormatter
     {
         private readonly IEntityNameFormatter _original;
-        private readonly AppSettings _appSettings;
 
-        public SimpleNameFormatter(IEntityNameFormatter original, AppSettings appSettings)
+        public SimpleNameFormatter(IEntityNameFormatter original)
         {
             _original = original;
-            _appSettings = appSettings;
         }
         public string FormatEntityName<T>()
         {
-            var originalName = _original.FormatEntityName<T>();
-            var index = originalName.IndexOf(":");
-            var eventName = _original.FormatEntityName<T>().Substring(index);
-            var simpleName = _appSettings.ApplicationId + eventName;
-            return simpleName;
+            var name = _original.FormatEntityName<T>();
+
+            name = name.Replace("CesarBmx.Shared.Messaging.", string.Empty);
+            name = name.Replace(".Commands", string.Empty);
+            name = name.Replace(".Events", string.Empty);
+
+            return name;
         }
     }
 }

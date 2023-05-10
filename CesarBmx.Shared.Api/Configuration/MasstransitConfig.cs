@@ -18,7 +18,6 @@ namespace CesarBmx.Shared.Api.Configuration
             where TDbContext : DbContext
         {
             // Grab settings
-            var appSettings = configuration.GetSection<AppSettings>();
             var rabbitMqSettings = configuration.GetSection<RabbitMqSettings>();
 
             services.AddMassTransit(x =>
@@ -61,10 +60,10 @@ namespace CesarBmx.Shared.Api.Configuration
                 x.AddPublishMessageScheduler();
 
                 // Request
-                x.AddRequestClient<SubmitOrder>(new Uri($"exchange:OrderingApi:{nameof(SubmitOrder)}"));
-                x.AddRequestClient<PlaceOrder>(new Uri($"exchange:OrderingApi:{nameof(PlaceOrder)}"));
-                x.AddRequestClient<CancelOrder>(new Uri($"exchange:OrderingApi:{nameof(CancelOrder)}"));
-                x.AddRequestClient<SendMessage>(new Uri($"exchange:NotificationApi:{nameof(SendMessage)}"));
+                x.AddRequestClient<SubmitOrder>(new Uri($"exchange:Ordering:{nameof(SubmitOrder)}"));
+                x.AddRequestClient<PlaceOrder>(new Uri($"exchange:Ordering:{nameof(PlaceOrder)}"));
+                x.AddRequestClient<CancelOrder>(new Uri($"exchange:Ordering:{nameof(CancelOrder)}"));
+                x.AddRequestClient<SendMessage>(new Uri($"exchange:Notification:{nameof(SendMessage)}"));
 
                 // RabbitMq
                 x.UsingRabbitMq((context, cfg) =>
@@ -74,16 +73,17 @@ namespace CesarBmx.Shared.Api.Configuration
                         h.Username(rabbitMqSettings.Username);
                         h.Password(rabbitMqSettings.Password);
                     });                   
-                    cfg.MessageTopology.SetEntityNameFormatter(new SimpleNameFormatter(cfg.MessageTopology.EntityNameFormatter, appSettings));
+                    cfg.MessageTopology.SetEntityNameFormatter(new SimpleNameFormatter(cfg.MessageTopology.EntityNameFormatter));
                     cfg.ConfigureEndpoints(context);
                 });
             });
 
 
             // Send
-            EndpointConvention.Map<SubmitOrder>(new Uri($"exchange:OrderingApi:{nameof(SubmitOrder)}"));
-            EndpointConvention.Map<PlaceOrder>(new Uri($"exchange:OrderingApi:{nameof(PlaceOrder)}"));
-            EndpointConvention.Map<SendMessage>(new Uri($"exchange:NotificationApi:{nameof(SendMessage)}"));           
+            EndpointConvention.Map<SubmitOrder>(new Uri($"exchange:Ordering:{nameof(SubmitOrder)}"));
+            EndpointConvention.Map<PlaceOrder>(new Uri($"exchange:Ordering:{nameof(PlaceOrder)}"));
+            EndpointConvention.Map<CancelOrder>(new Uri($"exchange:Ordering:{nameof(CancelOrder)}"));
+            EndpointConvention.Map<SendMessage>(new Uri($"exchange:Notification:{nameof(SendMessage)}"));           
 
 
             // Return

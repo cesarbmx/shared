@@ -23,13 +23,12 @@ namespace CesarBmx.Shared.Api.Configuration
             services.AddMassTransit(x =>
             {
                 // Publish
-                //x.AddConsumersFromNamespaceContaining(someConsumer);
                 x.AddConsumers(someConsumer.Assembly);
 
                 if (someSaga != null)
                 {
                     // Saga state machines
-                    //x.AddSagaStateMachinesFromNamespaceContaining(someSaga);
+                    x.AddSagaStateMachinesFromNamespaceContaining(someSaga);
                     x.AddSagaStateMachines(someSaga.Assembly);
 
                     // EF sagas
@@ -40,21 +39,21 @@ namespace CesarBmx.Shared.Api.Configuration
                 }
 
                 // EF Outbox
-                //x.AddEntityFrameworkOutbox<TDbContext>(o =>
-                //{
-                //    o.UseSqlServer();
-                //    o.UseBusOutbox();
-                //});
+                x.AddEntityFrameworkOutbox<TDbContext>(o =>
+                {
+                    o.UseSqlServer();
+                    o.UseBusOutbox();
+                });
 
 
-                //x.AddConfigureEndpointsCallback((provider, name, cfg) =>
-                //{
-                //    cfg.UseMessageRetry(r => r.Immediate(2));
-                //    cfg.UseEntityFrameworkOutbox<TDbContext>(provider, x =>
-                //    {
+                x.AddConfigureEndpointsCallback((provider, name, cfg) =>
+                {
+                    cfg.UseMessageRetry(r => r.Immediate(2));
+                    cfg.UseEntityFrameworkOutbox<TDbContext>(provider, x =>
+                    {
 
-                //    });
-                //});
+                    });
+                });
 
                 // Scheduler
                 x.AddPublishMessageScheduler();

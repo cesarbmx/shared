@@ -19,6 +19,10 @@ namespace CesarBmx.Shared.Api.Configuration
         {
             // Grab settings
             var rabbitMqSettings = configuration.GetSection<RabbitMqSettings>();
+            var environmentSettings = configuration.GetSection<EnvironmentSettings>();
+
+            // Prefix
+            var prefix = environmentSettings.ShortName + "_CustomerTeam_";
 
             services.AddMassTransit(x =>
             {
@@ -72,17 +76,20 @@ namespace CesarBmx.Shared.Api.Configuration
                         h.Username(rabbitMqSettings.Username);
                         h.Password(rabbitMqSettings.Password);
                     });                   
-                    cfg.MessageTopology.SetEntityNameFormatter(new SimpleNameFormatter(cfg.MessageTopology.EntityNameFormatter));
+                    cfg.MessageTopology.SetEntityNameFormatter(new SimpleEntityNameFormatter(cfg.MessageTopology.EntityNameFormatter, prefix));
                     cfg.ConfigureEndpoints(context);
                 });
+
+                // Endpoint name formatter
+                x.SetEndpointNameFormatter(new DefaultEndpointNameFormatter(prefix, false));
             });
 
 
             // Send
-            EndpointConvention.Map<SubmitOrder>(new Uri($"exchange:Ordering:{nameof(SubmitOrder)}"));
-            EndpointConvention.Map<PlaceOrder>(new Uri($"exchange:Ordering:{nameof(PlaceOrder)}"));
-            EndpointConvention.Map<CancelOrder>(new Uri($"exchange:Ordering:{nameof(CancelOrder)}"));
-            EndpointConvention.Map<SendMessage>(new Uri($"exchange:Notification:{nameof(SendMessage)}"));           
+            EndpointConvention.Map<SubmitOrder>(new Uri($"exchange:{prefix}Ordering:{nameof(SubmitOrder)}"));
+            EndpointConvention.Map<PlaceOrder>(new Uri($"exchange:{prefix}Ordering:{nameof(PlaceOrder)}"));
+            EndpointConvention.Map<CancelOrder>(new Uri($"exchange:{prefix}Ordering:{nameof(CancelOrder)}"));
+            EndpointConvention.Map<SendMessage>(new Uri($"exchange:{prefix}Notification:{nameof(SendMessage)}"));           
 
 
             // Return

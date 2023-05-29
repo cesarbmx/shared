@@ -1,15 +1,18 @@
-﻿using MassTransit;
+﻿using CesarBmx.Shared.Application.Settings;
+using MassTransit;
 
 namespace CesarBmx.Shared.Api.Helpers
 {
-    public class SimpleNameFormatter :
+    public class SimpleEntityNameFormatter :
     IEntityNameFormatter
     {
         private readonly IEntityNameFormatter _original;
+        private readonly string _prefix;
 
-        public SimpleNameFormatter(IEntityNameFormatter original)
+        public SimpleEntityNameFormatter(IEntityNameFormatter original, string prefix = null)
         {
             _original = original;
+            _prefix = prefix;
         }
         public string FormatEntityName<T>()
         {
@@ -19,7 +22,7 @@ namespace CesarBmx.Shared.Api.Helpers
             name = name.Replace(".Commands", string.Empty);
             name = name.Replace(".Events", string.Empty);
 
-            return name;
+            return _prefix + name;
         }
     }
 }

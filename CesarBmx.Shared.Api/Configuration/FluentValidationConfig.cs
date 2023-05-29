@@ -8,7 +8,7 @@ namespace CesarBmx.Shared.Api.Configuration
 {
     public static class FluentValidationConfigConfig
     {
-        public static IServiceCollection ConfigureFluentValidation(this IServiceCollection services, Type someValidator)
+        public static IServiceCollection ConfigureSharedFluentValidation(this IServiceCollection services, Type someValidator)
         {
             // Register all validators
             services.AddValidatorsFromAssemblyContaining(someValidator);

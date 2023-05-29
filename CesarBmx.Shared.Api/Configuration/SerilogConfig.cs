@@ -11,6 +11,8 @@ using System;
 using System.Reflection;
 using Serilog.Sinks.Elasticsearch;
 using Serilog.Formatting.Elasticsearch;
+using System.Collections.Specialized;
+using System.Security.Policy;
 
 namespace CesarBmx.Shared.Api.Configuration
 {
@@ -68,13 +70,26 @@ namespace CesarBmx.Shared.Api.Configuration
                 .WriteTo.Console(new ExpressionTemplate(
                         "{ @x } { @p['ExecutionTime'],-11 }\t{ @p['App'],-16 }\t{ @p['Event'] }" + Environment.NewLine))
 
-                // Elasticsearch
-                .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(openTelemetrySettings.ElasticsearchUrl))
-                {
-                    AutoRegisterTemplate = true,
-                    IndexFormat = $"{appSettings.ApplicationId}-{environmentSettings.Name}-{DateTime.UtcNow:yyyy-MM}",
-                    CustomFormatter = new ElasticsearchJsonFormatter()
-                })
+
+                // Elasticsearch INFO
+                .WriteTo.Logger(lc => lc
+                    .Filter.ByIncludingOnly("@l = 'Information'")
+                    .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(openTelemetrySettings.ElasticsearchUrl))
+                    {
+                        AutoRegisterTemplate = true,
+                        IndexFormat = $"{environmentSettings.ShortName}-INFO-{appSettings.ApplicationId}-{DateTime.UtcNow:yyyy-MM}",
+                        CustomFormatter = new ElasticsearchJsonFormatter()
+                    }))
+
+                // Elasticsearch ERROR
+                .WriteTo.Logger(lc => lc
+                    .Filter.ByIncludingOnly("@l = 'Error'")
+                    .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(openTelemetrySettings.ElasticsearchUrl))
+                    {
+                        AutoRegisterTemplate = true,
+                        IndexFormat = $"{environmentSettings.ShortName}-ERROR-{appSettings.ApplicationId}-{DateTime.UtcNow:yyyy-MM}",
+                        CustomFormatter = new ExceptionAsObjectJsonFormatter()
+                    }))
 
                 // Create logger
                 .CreateLogger();

@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reflection;
 using CesarBmx.Shared.Api.ActionFilters;
 using CesarBmx.Shared.Api.Controllers;
-using MicroElements.Swashbuckle.FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;

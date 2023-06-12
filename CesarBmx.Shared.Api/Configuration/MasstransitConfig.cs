@@ -8,21 +8,25 @@ using CesarBmx.Shared.Application.Settings;
 using CesarBmx.Shared.Api.Helpers;
 using CesarBmx.Shared.Messaging.Notification.Commands;
 using CesarBmx.Shared.Messaging.Ordering.Commands;
-using Humanizer.Configuration;
 
 namespace CesarBmx.Shared.Api.Configuration
 {
     public static class MasstransitConfig
     {
-        public static IServiceCollection ConfigureSharedMasstransit<TDbContext>(this IServiceCollection services, IConfiguration configuration, Type someConsumer, Type someSaga = null) 
+        public static IServiceCollection ConfigureSharedMasstransit<TDbContext>(this IServiceCollection services, IConfiguration configuration, Type someConsumer, Type someSaga = null, bool withPrefix = false) 
             where TDbContext : DbContext
         {
             // Grab settings
+            var appSettings = configuration.GetSection<AppSettings>();
             var rabbitMqSettings = configuration.GetSection<RabbitMqSettings>();
             var environmentSettings = configuration.GetSection<EnvironmentSettings>();
 
             // Prefix
-            var prefix = environmentSettings.ShortName + "_CustomerTeam_";
+            var prefix = string.Empty;
+            if (withPrefix)
+            {
+                prefix = environmentSettings.ShortName + "_" + appSettings.Team + "_" ;
+            }            
 
             services.AddMassTransit(x =>
             {
@@ -63,10 +67,10 @@ namespace CesarBmx.Shared.Api.Configuration
                 x.AddPublishMessageScheduler();
 
                 // Request
-                x.AddRequestClient<SubmitOrder>(new Uri($"exchange:Ordering:{nameof(SubmitOrder)}"));
-                x.AddRequestClient<PlaceOrder>(new Uri($"exchange:Ordering:{nameof(PlaceOrder)}"));
-                x.AddRequestClient<CancelOrder>(new Uri($"exchange:Ordering:{nameof(CancelOrder)}"));
-                x.AddRequestClient<SendMessage>(new Uri($"exchange:Notification:{nameof(SendMessage)}"));
+                x.AddRequestClient<SubmitOrder>(new Uri($"exchange:{prefix}Ordering:{nameof(SubmitOrder)}"));
+                x.AddRequestClient<PlaceOrder>(new Uri($"exchange:{prefix}Ordering:{nameof(PlaceOrder)}"));
+                x.AddRequestClient<CancelOrder>(new Uri($"exchange:{prefix}Ordering:{nameof(CancelOrder)}"));
+                x.AddRequestClient<SendMessage>(new Uri($"exchange:{prefix}Notification:{nameof(SendMessage)}"));
 
                 // RabbitMq
                 x.UsingRabbitMq((context, cfg) =>

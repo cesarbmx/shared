@@ -2,7 +2,7 @@
 
 namespace CesarBmx.Shared.Application.Exceptions
 {
-    public class ValidationException : DomainException
+    public class ValidationException : CustomException
     {
         public ValidationException(string message) : base(message)
         {}

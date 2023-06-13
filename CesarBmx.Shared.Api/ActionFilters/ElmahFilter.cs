@@ -8,7 +8,7 @@ namespace CesarBmx.Shared.Api.ActionFilters
         public void OnErrorModuleFiltering(object sender, ExceptionFilterEventArgs args)
         {
             // We skip our custom exceptions
-            if(args.Exception is DomainException)
+            if(args.Exception is CustomException)
                 args.Dismiss();
         }
     }

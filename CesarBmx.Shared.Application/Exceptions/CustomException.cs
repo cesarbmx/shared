@@ -2,9 +2,9 @@
 
 namespace CesarBmx.Shared.Application.Exceptions
 {
-    public abstract class DomainException: System.Exception
+    public abstract class CustomException: System.Exception
     {
-        public DomainException(string message) : base(message)
+        public CustomException(string message) : base(message)
         {}
     }
 }

@@ -42,22 +42,22 @@ namespace CesarBmx.Shared.Api.Middlewares
             switch (exception)
             {
                 case UnauthorizedException _: // 401
-                    var unauthorizedException = (UnauthorizedException)exception;
+                    var unauthorizedException = exception as UnauthorizedException;
                     code = 401;
                     errorResponse = new Unauthorized( unauthorizedException.Message);
                     break;
                 case ForbiddenException _:    // 403
-                    var forbiddenException = (ForbiddenException)exception;
+                    var forbiddenException = exception as ForbiddenException;
                     code = 403;
                     errorResponse = new Forbidden(forbiddenException.Message);
                     break;
                 case NotFoundException _:     // 404
-                    var notFoundException = (NotFoundException)exception;
+                    var notFoundException = exception as NotFoundException;
                     code = 404;
                     errorResponse = new NotFound(notFoundException.Message);
                     break;
                 case ConflictException _:     // 409
-                    var conflictException = (ConflictException) exception;
+                    var conflictException = exception as ConflictException;
                     code = 409;
                     errorResponse = conflictException.Conflict;
                     break;

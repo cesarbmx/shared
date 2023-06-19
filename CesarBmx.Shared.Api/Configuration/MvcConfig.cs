@@ -14,7 +14,7 @@ namespace CesarBmx.Shared.Api.Configuration
 {
     public static class MvcConfig
     {
-        public static IServiceCollection ConfigureSharedMvc(this IServiceCollection services, IConfiguration configuration, bool enableRazorPages)
+        public static IServiceCollection ConfigureSharedMvc(this IServiceCollection services, IConfiguration configuration, bool enableRazorPages = false)
         {
             // Grab AuthenticationSettings
             var authenticationSettings = configuration.GetSection<AuthenticationSettings>();
@@ -52,7 +52,7 @@ namespace CesarBmx.Shared.Api.Configuration
 
             return services;
         }
-        public static IApplicationBuilder ConfigureSharedMvc(this IApplicationBuilder app, IConfiguration configuration, bool enableRazorPages)
+        public static IApplicationBuilder ConfigureSharedMvc(this IApplicationBuilder app, IConfiguration configuration, bool enableRazorPages = false)
         {
             // Grab AuthenticationSettings
             var authenticationSettings = configuration.GetSection<AuthenticationSettings>();

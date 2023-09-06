@@ -13,6 +13,7 @@ using Serilog.Sinks.Elasticsearch;
 using Serilog.Formatting.Elasticsearch;
 using System.Collections.Specialized;
 using System.Security.Policy;
+using Serilog.Formatting.Compact;
 
 namespace CesarBmx.Shared.Api.Configuration
 {
@@ -76,9 +77,12 @@ namespace CesarBmx.Shared.Api.Configuration
                     .Filter.ByIncludingOnly("@l = 'Information'")
                     .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(openTelemetrySettings.ElasticsearchUrl))
                     {
+                        ModifyConnectionSettings = x => x.ApiKeyAuthentication("elastic", "mypassword"),
                         AutoRegisterTemplate = true,
-                        IndexFormat = $"{environmentSettings.ShortName}-INFO-{appSettings.ApplicationId}-{DateTime.UtcNow:yyyy-MM}",
-                        CustomFormatter = new ElasticsearchJsonFormatter()
+                        IndexFormat = $"{environmentSettings.ShortName}-{appSettings.ApplicationId}-INFO-{DateTime.UtcNow:yyyy-MM}",
+                        CustomFormatter = new CompactJsonFormatter()
+                        //ExpressionTemplate(
+                        //"{ { ..@p, Timestamp: @t, Level: @l, Exception: @x, SourceContext: undefined(), ActionId: undefined() } }\r\n")
                     }))
 
                 // Elasticsearch ERROR
@@ -87,8 +91,8 @@ namespace CesarBmx.Shared.Api.Configuration
                     .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(openTelemetrySettings.ElasticsearchUrl))
                     {
                         AutoRegisterTemplate = true,
-                        IndexFormat = $"{environmentSettings.ShortName}-ERROR-{appSettings.ApplicationId}-{DateTime.UtcNow:yyyy-MM}",
-                        CustomFormatter = new ExceptionAsObjectJsonFormatter()
+                        IndexFormat = $"{environmentSettings.ShortName}-{appSettings.ApplicationId}-ERROR-{DateTime.UtcNow:yyyy-MM}",
+                        CustomFormatter = new ExceptionAsObjectJsonFormatter(),                        
                     }))
 
                 // Create logger

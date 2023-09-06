@@ -80,9 +80,8 @@ namespace CesarBmx.Shared.Api.Configuration
                         ModifyConnectionSettings = x => x.ApiKeyAuthentication("elastic", "mypassword"),
                         AutoRegisterTemplate = true,
                         IndexFormat = $"{environmentSettings.ShortName}-{appSettings.ApplicationId}-INFO-{DateTime.UtcNow:yyyy-MM}",
-                        CustomFormatter = new CompactJsonFormatter()
-                        //ExpressionTemplate(
-                        //"{ { ..@p, Timestamp: @t, Level: @l, Exception: @x, SourceContext: undefined(), ActionId: undefined() } }\r\n")
+                        CustomFormatter = new ExpressionTemplate(
+                        "{ { ..@p, Timestamp: @t, Level: @l, Exception: @x, SourceContext: undefined(), ActionId: undefined() } }\r\n")
                     }))
 
                 // Elasticsearch ERROR

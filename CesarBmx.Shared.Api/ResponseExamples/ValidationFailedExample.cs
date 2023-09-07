@@ -4,9 +4,9 @@ using Swashbuckle.AspNetCore.Filters;
 
 namespace CesarBmx.Shared.Api.ResponseExamples
 {
-    public class ValidationFailedExample : IExamplesProvider<Validation>
+    public class ValidationFailedExample : IExamplesProvider<ValidationFailed>
     {
-        public Validation GetExamples()
+        public ValidationFailed GetExamples()
         {
             return FakeError.GetFake_Validation();
         }

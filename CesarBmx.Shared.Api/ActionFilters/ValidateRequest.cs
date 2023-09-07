@@ -54,7 +54,7 @@ namespace CesarBmx.Shared.Api.ActionFilters
                         }
                     }
                 }
-                var validationsResponse = new Validation(Application.Messages.ErrorMessage.ValidationFailed, validationErrors);
+                var validationsResponse = new ValidationFailed(Application.Messages.ErrorMessage.ValidationFailed, validationErrors);
 
                 filterContext.Result = new ObjectResult(validationsResponse) { StatusCode = 422 };
             }

@@ -13,7 +13,6 @@ namespace CesarBmx.Shared.Api.Configuration
             services.AddConfiguration<AppSettings>(configuration);
             services.AddConfiguration<AuthenticationSettings>(configuration);
             services.AddConfiguration<EnvironmentSettings>(configuration);
-            services.AddConfiguration<OpenTelemetrySettings>(configuration);
             services.AddConfiguration<CorsSettings>(configuration);
             services.AddConfiguration<RabbitMqSettings>(configuration);
 

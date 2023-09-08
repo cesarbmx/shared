@@ -31,7 +31,6 @@ namespace CesarBmx.Shared.Api.Configuration
             var appSettings = configuration.GetSection<AppSettings>();
             var environmentSettings = configuration.GetSection<EnvironmentSettings>();
             var loggingettings = configuration.GetSection<LoggingSettings>();
-            var openTelemetrySettings = configuration.GetSection<OpenTelemetrySettings>();
 
             Log.Logger = new LoggerConfiguration()
 
@@ -75,7 +74,7 @@ namespace CesarBmx.Shared.Api.Configuration
                 // Elasticsearch INFO
                 .WriteTo.Logger(lc => lc
                     .Filter.ByIncludingOnly("@l = 'Information'")
-                    .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(openTelemetrySettings.ElasticsearchUrl))
+                    .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(loggingettings.ElasticsearchUrl))
                     {
                         ModifyConnectionSettings = x => x.ApiKeyAuthentication("elastic", "mypassword"),
                         AutoRegisterTemplate = true,
@@ -87,7 +86,7 @@ namespace CesarBmx.Shared.Api.Configuration
                 // Elasticsearch ERROR
                 .WriteTo.Logger(lc => lc
                     .Filter.ByIncludingOnly("@l = 'Error'")
-                    .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(openTelemetrySettings.ElasticsearchUrl))
+                    .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(loggingettings.ElasticsearchUrl))
                     {
                         AutoRegisterTemplate = true,
                         IndexFormat = $"{environmentSettings.ShortName}-{appSettings.ApplicationId}-ERROR-{DateTime.UtcNow:yyyy-MM}",

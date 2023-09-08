@@ -75,7 +75,7 @@ namespace CesarBmx.Shared.Api.Configuration
                 // RabbitMq
                 x.UsingRabbitMq((context, cfg) =>
                 {
-                    cfg.Host(rabbitMqSettings.Host, appSettings.Team + "-" + environmentSettings.ShortName, h =>
+                    cfg.Host(rabbitMqSettings.Host, "/", h =>
                     {
                         h.Username(rabbitMqSettings.Username);
                         h.Password(rabbitMqSettings.Password);

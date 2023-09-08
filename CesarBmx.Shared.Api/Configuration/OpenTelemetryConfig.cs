@@ -24,7 +24,7 @@ namespace CesarBmx.Shared.Api.Configuration
         {
             // Grab settings
             var appSettings = configuration.GetSection<AppSettings>();
-            var openTelemetrySettings = configuration.GetSection<OpenTelemetrySettings>();
+            var loggingSettings = configuration.GetSection<LoggingSettings>();
 
             // Add OpenTelemetry
             services.AddOpenTelemetry()
@@ -33,7 +33,7 @@ namespace CesarBmx.Shared.Api.Configuration
                 .AddPrometheusExporter())
             .WithTracing(builder => builder
                 .AddSource(appSettings.ApplicationId)
-                .AddSource("MassTransit")
+                //.AddSource("MassTransit")
                 .SetResourceBuilder(ResourceBuilder.CreateDefault()
                     .AddService(serviceName: appSettings.ApplicationId, serviceVersion: assembly.VersionNumber()))
                 .SetSampler(new AlwaysOnSampler())
@@ -43,8 +43,8 @@ namespace CesarBmx.Shared.Api.Configuration
                 .AddJaegerExporter(
                  opts =>
                  {
-                     opts.AgentHost = openTelemetrySettings.JaegerAgentHost;
-                     opts.AgentPort = Convert.ToInt32(openTelemetrySettings.JaegerAgentPort);
+                     opts.AgentHost = loggingSettings.JaegerAgentHost;
+                     opts.AgentPort = Convert.ToInt32(loggingSettings.JaegerAgentPort);
                      opts.Protocol = JaegerExportProtocol.UdpCompactThrift;
                  }
                  ));

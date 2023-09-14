@@ -33,7 +33,7 @@ namespace CesarBmx.Shared.Api.Configuration
                 .AddPrometheusExporter())
             .WithTracing(builder => builder
                 .AddSource(appSettings.ApplicationId)
-                //.AddSource("MassTransit")
+                .AddSource("MassTransit")
                 .SetResourceBuilder(ResourceBuilder.CreateDefault()
                     .AddService(serviceName: appSettings.ApplicationId, serviceVersion: assembly.VersionNumber()))
                 .SetSampler(new AlwaysOnSampler())

@@ -15,7 +15,7 @@ namespace CesarBmx.Shared.Api.Configuration
 
             return services;
         }
-        public static IServiceCollection AddOpenTelemetry(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddActivitySource(this IServiceCollection services, IConfiguration configuration)
         {
             // Grab settings
             var appSettings = configuration.GetSection<AppSettings>();

@@ -67,7 +67,6 @@ namespace CesarBmx.Shared.Api.Configuration
                 x.AddPublishMessageScheduler();
 
                 // Request
-                x.AddRequestClient<SubmitOrder>(new Uri($"exchange:{prefix}Ordering:{nameof(SubmitOrder)}"));
                 x.AddRequestClient<PlaceOrder>(new Uri($"exchange:{prefix}Ordering:{nameof(PlaceOrder)}"));
                 x.AddRequestClient<CancelOrder>(new Uri($"exchange:{prefix}Ordering:{nameof(CancelOrder)}"));
                 x.AddRequestClient<SendNotification>(new Uri($"exchange:{prefix}Notification:{nameof(SendNotification)}"));
@@ -90,7 +89,6 @@ namespace CesarBmx.Shared.Api.Configuration
 
 
             // Send
-            EndpointConvention.Map<SubmitOrder>(new Uri($"exchange:{prefix}Ordering:{nameof(SubmitOrder)}"));
             EndpointConvention.Map<PlaceOrder>(new Uri($"exchange:{prefix}Ordering:{nameof(PlaceOrder)}"));
             EndpointConvention.Map<CancelOrder>(new Uri($"exchange:{prefix}Ordering:{nameof(CancelOrder)}"));
             EndpointConvention.Map<SendNotification>(new Uri($"exchange:{prefix}Notification:{nameof(SendNotification)}"));           

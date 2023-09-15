@@ -69,7 +69,7 @@ namespace CesarBmx.Shared.Api.Configuration
                 // Request
                 x.AddRequestClient<PlaceOrder>(new Uri($"exchange:{prefix}Ordering:{nameof(PlaceOrder)}"));
                 x.AddRequestClient<CancelOrder>(new Uri($"exchange:{prefix}Ordering:{nameof(CancelOrder)}"));
-                x.AddRequestClient<SendNotification>(new Uri($"exchange:{prefix}Notification:{nameof(SendNotification)}"));
+                x.AddRequestClient<SendMessage>(new Uri($"exchange:{prefix}Notification:{nameof(SendMessage)}"));
 
                 // RabbitMq
                 x.UsingRabbitMq((context, cfg) =>
@@ -91,7 +91,7 @@ namespace CesarBmx.Shared.Api.Configuration
             // Send
             EndpointConvention.Map<PlaceOrder>(new Uri($"exchange:{prefix}Ordering:{nameof(PlaceOrder)}"));
             EndpointConvention.Map<CancelOrder>(new Uri($"exchange:{prefix}Ordering:{nameof(CancelOrder)}"));
-            EndpointConvention.Map<SendNotification>(new Uri($"exchange:{prefix}Notification:{nameof(SendNotification)}"));           
+            EndpointConvention.Map<SendMessage>(new Uri($"exchange:{prefix}Notification:{nameof(SendMessage)}"));           
 
 
             // Return

@@ -15,7 +15,7 @@ namespace CesarBmx.Shared.Persistence.Extensions
                 modelBuilder.Entity(entityType.ClrType).ToTable(entityType.ClrType.Name);
             }
         }
-        public static void UseMasstransit(this ModelBuilder modelBuilder)
+        public static void UseMasstransitOutbox(this ModelBuilder modelBuilder)
         {
             modelBuilder.AddInboxStateEntity();
             modelBuilder.AddOutboxMessageEntity();

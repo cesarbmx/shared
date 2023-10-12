@@ -12,7 +12,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CesarBmx.Shared.Common\CesarBmx.Shared.Common.csproj" />
-    <ProjectReference Include="..\CesarBmx.Shared.Events\CesarBmx.Shared.Messaging.csproj" />
   </ItemGroup>
 
 </Project>

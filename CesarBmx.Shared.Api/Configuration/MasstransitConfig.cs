@@ -80,7 +80,7 @@ namespace CesarBmx.Shared.Api.Configuration
                         h.Password(rabbitMqSettings.Password);
                     });                   
                     cfg.MessageTopology.SetEntityNameFormatter(new SimpleEntityNameFormatter(cfg.MessageTopology.EntityNameFormatter, prefix));
-                    cfg.ConfigureEndpoints(context);
+                    cfg.ConfigureEndpoints(context, new DefaultEndpointNameFormatter(appSettings.ApplicationId + "_", false));
                 });
 
                 // Endpoint name formatter

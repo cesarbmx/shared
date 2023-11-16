@@ -78,9 +78,9 @@ namespace CesarBmx.Shared.Api.Configuration
                     {
                         h.Username(rabbitMqSettings.Username);
                         h.Password(rabbitMqSettings.Password);
-                    });                   
-                    cfg.MessageTopology.SetEntityNameFormatter(new SimpleEntityNameFormatter(cfg.MessageTopology.EntityNameFormatter, prefix));
-                    cfg.ConfigureEndpoints(context, new DefaultEndpointNameFormatter(appSettings.ApplicationId + "_", false));
+                    });
+                    cfg.MessageTopology.SetEntityNameFormatter(new SimpleNameFormatter(cfg.MessageTopology.EntityNameFormatter, appSettings));
+                    cfg.ConfigureEndpoints(context, new DefaultEndpointNameFormatter(appSettings.ApplicationId + "_Consumer_", false));
                 });
 
                 // Endpoint name formatter

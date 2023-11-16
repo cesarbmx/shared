@@ -3,26 +3,29 @@ using MassTransit;
 
 namespace CesarBmx.Shared.Api.Helpers
 {
-    public class SimpleEntityNameFormatter :
-    IEntityNameFormatter
+    public class SimpleNameFormatter : IEntityNameFormatter
     {
         private readonly IEntityNameFormatter _original;
-        private readonly string _prefix;
+        private readonly AppSettings _appSettings;
 
-        public SimpleEntityNameFormatter(IEntityNameFormatter original, string prefix = null)
+        public SimpleNameFormatter(IEntityNameFormatter original, AppSettings appSettings)
         {
             _original = original;
-            _prefix = prefix;
+            _appSettings = appSettings;
         }
         public string FormatEntityName<T>()
         {
             var name = _original.FormatEntityName<T>();
+            var newName = string.Empty;
 
-            name = name.Replace("CesarBmx.Shared.Messaging.", string.Empty);
-            name = name.Replace(".Commands", string.Empty);
-            name = name.Replace(".Events", string.Empty);
+            name = name.Replace("Pinnacle.CustomerTeam.Messaging.", string.Empty);
 
-            return _prefix + name;
+            if (name.Contains("Events")) newName = _appSettings.ApplicationId + "_" + "Event_";
+            if (name.Contains("Commands")) newName = _appSettings.ApplicationId + "_" + "Command_";
+
+            newName += name.Substring(name.IndexOf(":") + 1);
+
+            return newName;
         }
     }
 }

@@ -11,6 +11,7 @@ using Microsoft.OpenApi.Models;
 using CesarBmx.Shared.Api.ResponseExamples;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Filters;
+using Swashbuckle.Swagger;
 
 namespace CesarBmx.Shared.Api.Configuration
 {
@@ -94,6 +95,8 @@ namespace CesarBmx.Shared.Api.Configuration
 
                 // Polymorphism
                 c.UseOneOfForPolymorphism();
+
+                c.CustomSchemaIds(type => type.FriendlyId().Replace("[", "Of").Replace("]", "").Replace(",","And"));
             });
 
             // Add swagger examples

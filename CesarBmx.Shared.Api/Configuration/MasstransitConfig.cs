@@ -13,20 +13,89 @@ namespace CesarBmx.Shared.Api.Configuration
 {
     public static class MasstransitConfig
     {
-        public static IServiceCollection ConfigureSharedMasstransit<TDbContext>(this IServiceCollection services, IConfiguration configuration, Type someConsumer, Type someSaga = null, bool withPrefix = false) 
+        //public static IServiceCollection ConfigureSharedMasstransit<TDbContext>(this IServiceCollection services, IConfiguration configuration, Type someConsumer, Type someSaga = null)
+        //    where TDbContext : DbContext
+        //{
+        //    // Grab settings
+        //    var appSettings = configuration.GetSection<AppSettings>();
+        //    var rabbitMqSettings = configuration.GetSection<RabbitMqSettings>();
+        //    var environmentSettings = configuration.GetSection<EnvironmentSettings>();
+
+        //    services.AddMassTransit(x =>
+        //    {
+        //        // Publish
+        //        x.AddConsumers(someConsumer.Assembly);
+
+        //        if (someSaga != null)
+        //        {
+        //            // Saga state machines
+        //            x.AddSagaStateMachinesFromNamespaceContaining(someSaga);
+        //            x.AddSagaStateMachines(someSaga.Assembly);
+
+        //            // EF sagas
+        //            x.SetEntityFrameworkSagaRepositoryProvider(r =>
+        //            {
+        //                r.ExistingDbContext<TDbContext>();
+        //            });
+        //        }
+
+        //        // EF Outbox
+        //        x.AddEntityFrameworkOutbox<TDbContext>(o =>
+        //        {
+        //            o.UseSqlServer();
+        //            o.UseBusOutbox();
+        //        });
+
+
+        //        x.AddConfigureEndpointsCallback((provider, name, cfg) =>
+        //        {
+        //            cfg.UseMessageRetry(r => r.Immediate(2));
+        //            cfg.UseEntityFrameworkOutbox<TDbContext>(provider, x =>
+        //            {
+
+        //            });
+        //        });
+
+        //        // Scheduler
+        //        x.AddPublishMessageScheduler();
+
+        //        // Request
+        //        x.AddRequestClient<PlaceOrder>(new Uri($"exchange:Ordering_{nameof(PlaceOrder)}"));
+        //        x.AddRequestClient<CancelOrder>(new Uri($"exchange:Ordering_{nameof(CancelOrder)}"));
+        //        x.AddRequestClient<SendMessage>(new Uri($"exchange:Notification_{nameof(SendMessage)}"));
+
+        //        // RabbitMq
+        //        x.UsingRabbitMq((context, cfg) =>
+        //        {
+        //            cfg.Host(rabbitMqSettings.Host, "/", h =>
+        //            {
+        //                h.Username(rabbitMqSettings.Username);
+        //                h.Password(rabbitMqSettings.Password);
+        //            });
+        //            cfg.ConfigureEndpoints(context);
+        //        });
+
+        //        // Endpoint name formatter
+        //        x.SetEndpointNameFormatter(new DefaultEndpointNameFormatter(false));
+        //    });
+
+
+        //    // Send
+        //    EndpointConvention.Map<PlaceOrder>(new Uri($"exchange:Ordering_{nameof(PlaceOrder)}"));
+        //    EndpointConvention.Map<CancelOrder>(new Uri($"exchange:Ordering_{nameof(CancelOrder)}"));
+        //    EndpointConvention.Map<SendMessage>(new Uri($"exchange:Notification_{nameof(SendMessage)}"));
+
+
+        //    // Return
+        //    return services;
+        //}
+        public static IServiceCollection ConfigureSharedMasstransit<TDbContext>(this IServiceCollection services, IConfiguration configuration, Type someConsumer, Type someSaga = null)
             where TDbContext : DbContext
         {
             // Grab settings
             var appSettings = configuration.GetSection<AppSettings>();
             var rabbitMqSettings = configuration.GetSection<RabbitMqSettings>();
             var environmentSettings = configuration.GetSection<EnvironmentSettings>();
-
-            // Prefix
-            var prefix = string.Empty;
-            if (withPrefix)
-            {
-                prefix = environmentSettings.ShortName + "_" + appSettings.Team + "_" ;
-            }            
 
             services.AddMassTransit(x =>
             {
@@ -64,12 +133,12 @@ namespace CesarBmx.Shared.Api.Configuration
                 });
 
                 // Scheduler
-                x.AddPublishMessageScheduler();
+                //x.AddPublishMessageScheduler();
 
                 // Request
-                x.AddRequestClient<PlaceOrder>(new Uri($"exchange:{prefix}Ordering:{nameof(PlaceOrder)}"));
-                x.AddRequestClient<CancelOrder>(new Uri($"exchange:{prefix}Ordering:{nameof(CancelOrder)}"));
-                x.AddRequestClient<SendMessage>(new Uri($"exchange:{prefix}Notification:{nameof(SendMessage)}"));
+                x.AddRequestClient<PlaceOrder>(new Uri($"queue:OrderingApi_Request_{nameof(PlaceOrder)}"));
+                x.AddRequestClient<CancelOrder>(new Uri($"queue:OrderingApi_Request_{nameof(CancelOrder)}"));
+                x.AddRequestClient<SendMessage>(new Uri($"queue:NotificationApi_Request_{nameof(SendMessage)}"));
 
                 // RabbitMq
                 x.UsingRabbitMq((context, cfg) =>
@@ -84,14 +153,14 @@ namespace CesarBmx.Shared.Api.Configuration
                 });
 
                 // Endpoint name formatter
-                x.SetEndpointNameFormatter(new DefaultEndpointNameFormatter(prefix, false));
+                x.SetEndpointNameFormatter(new DefaultEndpointNameFormatter(false));
             });
 
 
             // Send
-            EndpointConvention.Map<PlaceOrder>(new Uri($"exchange:{prefix}Ordering:{nameof(PlaceOrder)}"));
-            EndpointConvention.Map<CancelOrder>(new Uri($"exchange:{prefix}Ordering:{nameof(CancelOrder)}"));
-            EndpointConvention.Map<SendMessage>(new Uri($"exchange:{prefix}Notification:{nameof(SendMessage)}"));           
+            EndpointConvention.Map<PlaceOrder>(new Uri($"queue:OrderingApi_Command_{nameof(PlaceOrder)}"));
+            EndpointConvention.Map<CancelOrder>(new Uri($"queue:OrderingApi_Command_{nameof(CancelOrder)}"));
+            EndpointConvention.Map<SendMessage>(new Uri($"queue:NotificationApi_Command_{nameof(SendMessage)}"));
 
 
             // Return

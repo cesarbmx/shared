@@ -18,7 +18,7 @@ namespace CesarBmx.Shared.Api.Helpers
             var name = _original.FormatEntityName<T>();
             var newName = string.Empty;
 
-            name = name.Replace("Pinnacle.CustomerTeam.Messaging.", string.Empty);
+            name = name.Replace("CesarBmx.Shared.Messaging.", string.Empty);
 
             if (name.Contains("Events")) newName = _appSettings.ApplicationId + "_" + "Event_";
             if (name.Contains("Commands")) newName = _appSettings.ApplicationId + "_" + "Command_";

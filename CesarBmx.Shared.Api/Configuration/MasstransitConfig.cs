@@ -158,9 +158,9 @@ namespace CesarBmx.Shared.Api.Configuration
 
 
             // Send
-            EndpointConvention.Map<PlaceOrder>(new Uri($"queue:OrderingApi_Command_{nameof(PlaceOrder)}"));
-            EndpointConvention.Map<CancelOrder>(new Uri($"queue:OrderingApi_Command_{nameof(CancelOrder)}"));
-            EndpointConvention.Map<SendMessage>(new Uri($"queue:NotificationApi_Command_{nameof(SendMessage)}"));
+            EndpointConvention.Map<PlaceOrder>(new Uri($"exchange:OrderingApi_Command_{nameof(PlaceOrder)}"));
+            EndpointConvention.Map<CancelOrder>(new Uri($"exchange:OrderingApi_Command_{nameof(CancelOrder)}"));
+            EndpointConvention.Map<SendMessage>(new Uri($"exchange:NotificationApi_Command_{nameof(SendMessage)}"));
 
 
             // Return

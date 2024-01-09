@@ -136,9 +136,9 @@ namespace CesarBmx.Shared.Api.Configuration
                 //x.AddPublishMessageScheduler();
 
                 // Request
-                x.AddRequestClient<PlaceOrder>(new Uri($"queue:OrderingApi_Request_{nameof(PlaceOrder)}"));
-                x.AddRequestClient<CancelOrder>(new Uri($"queue:OrderingApi_Request_{nameof(CancelOrder)}"));
-                x.AddRequestClient<SendMessage>(new Uri($"queue:NotificationApi_Request_{nameof(SendMessage)}"));
+                x.AddRequestClient<PlaceOrder>(new Uri($"exchange:Ordering.Requests:{nameof(PlaceOrder)}"));
+                x.AddRequestClient<CancelOrder>(new Uri($"exchange:Ordering.Requests:{nameof(CancelOrder)}"));
+                x.AddRequestClient<SendMessage>(new Uri($"exchange:Notification.Requests:{nameof(SendMessage)}"));
 
                 // RabbitMq
                 x.UsingRabbitMq((context, cfg) =>
@@ -149,7 +149,8 @@ namespace CesarBmx.Shared.Api.Configuration
                         h.Password(rabbitMqSettings.Password);
                     });
                     cfg.MessageTopology.SetEntityNameFormatter(new SimpleNameFormatter(cfg.MessageTopology.EntityNameFormatter, appSettings));
-                    cfg.ConfigureEndpoints(context, new DefaultEndpointNameFormatter(appSettings.ApplicationId + "_Consumer_", false));
+                    cfg.ConfigureEndpoints(context, new DefaultEndpointNameFormatter(appSettings.ApplicationId.Replace("Api","") + ".Consumer:", false));
+                    //cfg.ConfigureEndpoints(context);
                 });
 
                 // Endpoint name formatter
@@ -158,9 +159,9 @@ namespace CesarBmx.Shared.Api.Configuration
 
 
             // Send
-            EndpointConvention.Map<PlaceOrder>(new Uri($"exchange:OrderingApi_Command_{nameof(PlaceOrder)}"));
-            EndpointConvention.Map<CancelOrder>(new Uri($"exchange:OrderingApi_Command_{nameof(CancelOrder)}"));
-            EndpointConvention.Map<SendMessage>(new Uri($"exchange:NotificationApi_Command_{nameof(SendMessage)}"));
+            EndpointConvention.Map<PlaceOrder>(new Uri($"exchange:Ordering.Commands:{nameof(PlaceOrder)}"));
+            EndpointConvention.Map<CancelOrder>(new Uri($"exchange:Ordering.Commands:{nameof(CancelOrder)}"));
+            EndpointConvention.Map<SendMessage>(new Uri($"exchange:Notification.Commands:{nameof(SendMessage)}"));
 
 
             // Return

@@ -16,16 +16,9 @@ namespace CesarBmx.Shared.Api.Helpers
         public string FormatEntityName<T>()
         {
             var name = _original.FormatEntityName<T>();
-            var newName = string.Empty;
-
             name = name.Replace("CesarBmx.Shared.Messaging.", string.Empty);
 
-            if (name.Contains("Events")) newName = _appSettings.ApplicationId + "_" + "Event_";
-            if (name.Contains("Commands")) newName = _appSettings.ApplicationId + "_" + "Command_";
-
-            newName += name.Substring(name.IndexOf(":") + 1);
-
-            return newName;
+            return name;
         }
     }
 }

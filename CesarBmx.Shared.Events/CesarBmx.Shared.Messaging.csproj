@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="CryptoWatcher\Commands\" />
     <Folder Include="CryptoWatcher\Events\" />
     <Folder Include="CryptoWatcher\Types\" />
   </ItemGroup>

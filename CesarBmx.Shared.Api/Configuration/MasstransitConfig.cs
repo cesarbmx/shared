@@ -89,7 +89,7 @@ namespace CesarBmx.Shared.Api.Configuration
         //    // Return
         //    return services;
         //}
-        public static IServiceCollection ConfigureSharedMasstransit<TDbContext>(this IServiceCollection services, IConfiguration configuration, Type someConsumer, Type someSaga = null)
+        public static IServiceCollection ConfigureSharedMasstransit<TDbContext>(this IServiceCollection services, IConfiguration configuration, Type someConsumer = null, Type someSaga = null)
             where TDbContext : DbContext
         {
             // Grab settings
@@ -157,12 +157,10 @@ namespace CesarBmx.Shared.Api.Configuration
                 x.SetEndpointNameFormatter(new DefaultEndpointNameFormatter(false));
             });
 
-
             // Send
             EndpointConvention.Map<PlaceOrder>(new Uri($"exchange:Ordering.Commands:{nameof(PlaceOrder)}"));
             EndpointConvention.Map<CancelOrder>(new Uri($"exchange:Ordering.Commands:{nameof(CancelOrder)}"));
             EndpointConvention.Map<SendMessage>(new Uri($"exchange:Notification.Commands:{nameof(SendMessage)}"));
-
 
             // Return
             return services;

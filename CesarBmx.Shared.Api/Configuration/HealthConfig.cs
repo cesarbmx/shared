@@ -1,5 +1,4 @@
 ﻿using CesarBmx.Shared.Application.Settings;
-using CesarBmx.Shared.Health.HealthChecks;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -28,7 +27,6 @@ namespace CesarBmx.Shared.Api.Configuration
 
             services.AddHealthChecks()
                .AddSqlServer(configuration.GetConnectionString(appSettings.DatabaseName), null, "SQL Server")
-               .AddCheck<CoinpaprikaHealthCheck>("Coinpaprika API")
                .AddRabbitMQ(new Uri($"amqp://{rabbitMqSettings.Username}:{rabbitMqSettings.Password}@{rabbitMqSettings.Host}:5672"), name: "RabbitMQ");
 
             // Return

@@ -15,7 +15,7 @@ namespace CesarBmx.Shared.Application.FakeResponses
         {
             return new NotFound(Messages.ErrorMessage.NotFound);
         }
-        public static ValidationFailed GetFake_Validation()
+        public static ValidationFailed GetFake_ValidationFailed()
         {
             var validationErrorResponseList = new List<ValidationError>
             {

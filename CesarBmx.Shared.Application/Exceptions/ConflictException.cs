@@ -1,10 +1,9 @@
-﻿
+﻿using System;
 
-using System;
 
 namespace CesarBmx.Shared.Application.Exceptions
 {
-    public class ConflictException: Exception
+    public class ConflictException: ApplicationException
     {
         public object Conflict { get; set; }
 

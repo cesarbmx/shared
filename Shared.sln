@@ -33,7 +33,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3.- Tests", "3.- Tests", "{
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CesarBmx.Shared.Domain", "CesarBmx.Shared.Domain\CesarBmx.Shared.Domain.csproj", "{A53C7722-6190-498E-A0ED-3423EE224AAA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CesarBmx.Shared.Events", "CesarBmx.Shared.Events\CesarBmx.Shared.Events.csproj", "{750425B3-7C7B-4208-AFDD-1569F50EFFDF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CesarBmx.Shared.Messaging", "CesarBmx.Shared.Messages\CesarBmx.Shared.Messaging.csproj", "{97E2555F-4076-45BE-A97E-CF68900783F3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -89,10 +89,10 @@ Global
 		{A53C7722-6190-498E-A0ED-3423EE224AAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A53C7722-6190-498E-A0ED-3423EE224AAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A53C7722-6190-498E-A0ED-3423EE224AAA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{750425B3-7C7B-4208-AFDD-1569F50EFFDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{750425B3-7C7B-4208-AFDD-1569F50EFFDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{750425B3-7C7B-4208-AFDD-1569F50EFFDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{750425B3-7C7B-4208-AFDD-1569F50EFFDF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97E2555F-4076-45BE-A97E-CF68900783F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97E2555F-4076-45BE-A97E-CF68900783F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97E2555F-4076-45BE-A97E-CF68900783F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97E2555F-4076-45BE-A97E-CF68900783F3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -110,7 +110,7 @@ Global
 		{BB83C351-F759-4FAC-9E9E-22FABC494C84} = {EF532B66-8BFD-4021-A301-861D61E8DED7}
 		{4E89835A-270B-4296-ABA5-2A795F4881E1} = {EF532B66-8BFD-4021-A301-861D61E8DED7}
 		{A53C7722-6190-498E-A0ED-3423EE224AAA} = {5A4A1DBD-2EC1-40FD-B9E5-6DBBCA721A8A}
-		{750425B3-7C7B-4208-AFDD-1569F50EFFDF} = {EF532B66-8BFD-4021-A301-861D61E8DED7}
+		{97E2555F-4076-45BE-A97E-CF68900783F3} = {EF532B66-8BFD-4021-A301-861D61E8DED7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1CE5D10D-B679-45C9-81E4-11870F30F922}

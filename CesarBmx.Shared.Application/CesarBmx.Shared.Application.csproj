@@ -20,9 +20,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CesarBmx.Shared.Authentication\CesarBmx.Shared.Authentication.csproj" />
     <ProjectReference Include="..\CesarBmx.Shared.Common\CesarBmx.Shared.Common.csproj" />
-    <ProjectReference Include="..\CesarBmx.Shared.Events\CesarBmx.Shared.Messaging.csproj" />
     <ProjectReference Include="..\CesarBmx.Shared.Logging\CesarBmx.Shared.Logging.csproj" />
+    <ProjectReference Include="..\CesarBmx.Shared.Messages\CesarBmx.Shared.Messaging.csproj" />
     <ProjectReference Include="..\CesarBmx.Shared.Persistence\CesarBmx.Shared.Persistence.csproj" />
   </ItemGroup>
 

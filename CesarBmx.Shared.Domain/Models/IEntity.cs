@@ -1,6 +1,8 @@
 ﻿
 
 
+using System;
+
 namespace CesarBmx.Shared.Domain.Models
 {
     public interface IEntity<T> 

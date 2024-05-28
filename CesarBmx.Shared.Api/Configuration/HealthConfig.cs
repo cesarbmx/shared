@@ -26,7 +26,7 @@ namespace CesarBmx.Shared.Api.Configuration
             }).AddInMemoryStorage();
 
             services.AddHealthChecks()
-               .AddSqlServer(configuration.GetConnectionString(appSettings.DatabaseName), null, "SQL Server")
+               .AddSqlServer(configuration.GetConnectionString(appSettings.DatabaseName), null, name: "SQL Server")
                .AddRabbitMQ(new Uri($"amqp://{rabbitMqSettings.Username}:{rabbitMqSettings.Password}@{rabbitMqSettings.Host}:5672"), name: "RabbitMQ");
 
             // Return

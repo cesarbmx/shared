@@ -1,97 +1,109 @@
 ﻿using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
 using CesarBmx.Shared.Application.Settings;
 using CesarBmx.Shared.Common.Extensions;
 using Serilog;
 using Serilog.Filters;
 using Serilog.Templates;
-using System;
 using System.Reflection;
-using Serilog.Sinks.Elasticsearch;
-using Serilog.Formatting.Elasticsearch;
-using System.Collections.Specialized;
-using System.Security.Policy;
-using Serilog.Formatting.Compact;
 
 namespace CesarBmx.Shared.Api.Configuration
 {
     public static class SerilogConfig
     {
-        public static IHostBuilder ConfigureSharedSerilog(this IHostBuilder hostBuilder)
+        public static void ConfigureSharedSerilog(this ILoggerFactory loggerFactory, IConfiguration configuration, Assembly assembly)
         {
-            hostBuilder.UseSerilog();
+            // Grab AppSettings
+            var appSettings =  configuration.GetSection<AppSettings>();
 
-            return hostBuilder;
-        }
-        public static void ConfigureSharedSerilog(this IApplicationBuilder app, ILoggerFactory loggerFactory, Assembly assembly, IConfiguration configuration)
-        {
-            // Grab settings
-            var appSettings = configuration.GetSection<AppSettings>();
             var environmentSettings = configuration.GetSection<EnvironmentSettings>();
-            var loggingettings = configuration.GetSection<LoggingSettings>();
+
+            var loggingSettings = configuration.GetSection<LoggingSettings>();
+
+
+            //var elkSettings = new ElkSettings();
+            //configuration.GetSection("Elk").Bind(elkSettings);
+
+            //var uri = new Uri(elkSettings.ApmEndpoint);
+            //var sinkOptions = new ElasticsearchSinkOptions(uri)
+            //{
+            //    AutoRegisterTemplate = true,
+            //    ModifyConnectionSettings = x => x.GlobalHeaders(new NameValueCollection { { "Authorization", $"Bearer {elkSettings.SecretToken}" } }),
+            //    IndexFormat = $"{environmentSettings.Name}-{appSettings.ApplicationId}-{DateTime.Now:yyyy-MM}",
+            //    CustomFormatter = new ExpressionTemplate(
+            //                "{ { ..@p, Timestamp: @t, Level: @l, Exception: @x, SourceContext: undefined(), ActionId: undefined() } }\r\n")
+            //};
 
             Log.Logger = new LoggerConfiguration()
-
-                // Common fields
                 .Enrich.FromLogContext()
+
+                // Common properties
                 .Enrich.WithProperty("Team", "CustomerTeam")
                 .Enrich.WithProperty("App", appSettings.ApplicationId)
                 .Enrich.WithProperty("Version", assembly.VersionNumber())
                 .Enrich.WithProperty("Environment", environmentSettings.Name)
 
-                // Filter
-                .Filter.ByExcluding(Matching.FromSource("System"))
-                .Filter.ByExcluding(Matching.FromSource("Microsoft"))
-                .Filter.ByExcluding(Matching.FromSource("Hangfire"))
-                .Filter.ByExcluding(Matching.FromSource("Default"))
-                .Filter.ByExcluding("Scope[?] = 'HealthReportCollector is collecting health checks results.'") // Do not log health collector
+                // Exclude everything else 
+                //.Filter.ByExcluding(Matching.FromSource("System"))
+                //.Filter.ByExcluding(Matching.FromSource("Microsoft"))
+                //.Filter.ByExcluding(Matching.FromSource("Masstransit"))
+                //.Filter.ByExcluding(Matching.FromSource("Hangfire"))
+                //.Filter.ByExcluding(Matching.FromSource("Default"))
+                //.Filter.ByExcluding(Matching.FromSource("Endpoint"))
+                //.Filter.ByExcluding(Matching.FromSource("HostAddress"))
+                //.Filter.ByExcluding("Scope[?] = 'HealthReportCollector is collecting health checks results.'") // Do not log health collector
                 .Filter.ByExcluding(x => x.Properties.ContainsKey("AuthenticationScheme")) // Do not log 401s 
-                            
 
-                // INFO
+                // Splunk
                 .WriteTo.Logger(lc => lc
                     .Filter.ByIncludingOnly("@l = 'Information'")
                     .WriteTo.File(new ExpressionTemplate(
                         "{ { ..@p, Timestamp: @t, Level: @l, Exception: @x, SourceContext: undefined(), ActionId: undefined() } }\r\n"),
-                        loggingettings.LoggingPath + appSettings.ApplicationId + "\\INFO_.txt",
+                        loggingSettings.LoggingPath + appSettings.ApplicationId + "/INFO_.txt",
                         rollingInterval: RollingInterval.Day))
 
-                // ERROR
-                .WriteTo.Logger(lc => lc
+                .WriteTo.Logger(lc => lc 
                     .Filter.ByIncludingOnly("@l = 'Error'")
                     .WriteTo.File(new ExpressionTemplate(
-                        "{ { ..@p, Timestamp: @t, Level: @l, Exception: @x, SourceContext: undefined(), ActionId: undefined() } }\r\n"),
-                        loggingettings.LoggingPath + appSettings.ApplicationId + "\\ERROR_.txt",
-                        rollingInterval: RollingInterval.Day))
+                            "{ { ..@p, Timestamp: @t, Level: @l, Exception: @x, SourceContext: undefined(), ActionId: undefined() } }\r\n"),
+                            loggingSettings.LoggingPath + appSettings.ApplicationId + "/ERROR_.txt",
+                            rollingInterval: RollingInterval.Day))
+
+                // Elk
+                // .WriteTo.Logger(lc => lc
+                //    .Filter.ByIncludingOnly("@l = 'Information'")
+                //    .WriteTo.File(new ElasticsearchJsonFormatter(), splunkSettings.Path + appSettings.ApplicationId + "/INFO_ELK_.txt")
+                //    .WriteTo.Elasticsearch(sinkOptions)
+                //    //.WriteTo.OpenTelemetry(options =>
+                //    // {
+                //    //     var header = new Dictionary<string, string>
+                //    //     {
+                //    //         { "Authorization", "Bearer o13QqDuUUk6nhXfYjy" }
+                //    //     };
+                //    //     options.Endpoint = "https://32b1b7da835640e1ad3de8874f2d0d51.apm.eu-west-1.aws.cloud.es.io:443";
+                //    //     options.Protocol = OtlpProtocol.Grpc;
+                //    //     options.Headers = header;
+                //    // })
+                //    )
+
+                //.WriteTo.Logger(lc => lc
+                //    .Filter.ByIncludingOnly("@l = 'Error'")
+                //    .WriteTo.File(new ExceptionAsObjectJsonFormatter(), splunkSettings.Path + appSettings.ApplicationId + "/ERROR_ELK_.txt")
+                //    .WriteTo.Elasticsearch(sinkOptions)
+                //    //.WriteTo.OpenTelemetry(options =>
+                //    //{
+                //    //    var header = new Dictionary<string, string>
+                //    //     {
+                //    //         { "Authorization", "Bearer o13QqDuUUk6nhXfYjy" }
+                //    //     };
+                //    //    options.Endpoint = "https://32b1b7da835640e1ad3de8874f2d0d51.apm.eu-west-1.aws.cloud.es.io:443";
+                //    //    options.Protocol = OtlpProtocol.Grpc;
+                //    //    options.Headers = header;
+                //    //})
+                //    )
 
                 // Console
-                .WriteTo.Console(new ExpressionTemplate(
-                        "{ @x } { @p['ExecutionTime'],-11 }\t{ @p['App'],-16 }\t{ @p['Event'] }" + Environment.NewLine))
-
-
-                // Elasticsearch INFO
-                .WriteTo.Logger(lc => lc
-                    .Filter.ByIncludingOnly("@l = 'Information'")
-                    .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(loggingettings.ElasticsearchUrl))
-                    {
-                        ModifyConnectionSettings = x => x.ApiKeyAuthentication("elastic", "mypassword"),
-                        AutoRegisterTemplate = true,
-                        IndexFormat = $"{environmentSettings.ShortName}-{appSettings.ApplicationId}-INFO-{DateTime.UtcNow:yyyy-MM}",
-                        CustomFormatter = new ExpressionTemplate(
-                        "{ { ..@p, Timestamp: @t, Level: @l, Exception: @x, SourceContext: undefined(), ActionId: undefined() } }\r\n")
-                    }))
-
-                // Elasticsearch ERROR
-                .WriteTo.Logger(lc => lc
-                    .Filter.ByIncludingOnly("@l = 'Error'")
-                    .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(loggingettings.ElasticsearchUrl))
-                    {
-                        AutoRegisterTemplate = true,
-                        IndexFormat = $"{environmentSettings.ShortName}-{appSettings.ApplicationId}-ERROR-{DateTime.UtcNow:yyyy-MM}",
-                        CustomFormatter = new ExceptionAsObjectJsonFormatter(),                        
-                    }))
+                .WriteTo.Console()
 
                 // Create logger
                 .CreateLogger();

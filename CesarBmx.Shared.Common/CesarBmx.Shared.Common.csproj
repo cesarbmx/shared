@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<OutputType>Library</OutputType>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<Description>Common library (Common)</Description>
 		<Authors>cesarbmx</Authors>
 		<Version>6.0.0</Version>

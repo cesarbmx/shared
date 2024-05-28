@@ -68,6 +68,7 @@ namespace CesarBmx.Shared.Api.Configuration
                 if (enableRazorPages) endpoints.MapRazorPages();
                 endpoints.MapControllers();
             });
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             return app;

@@ -120,9 +120,9 @@ namespace CesarBmx.Shared.Api.Configuration
 
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("https://localhost:65013/api/v1/swagger.json", "CryptoWatcher API");
-                c.SwaggerEndpoint("https://localhost:65015/v1/swagger.json", "Ordering API");
-                c.SwaggerEndpoint("https://localhost:65017/v1/swagger.json", "Notification API");
+                c.SwaggerEndpoint("http://localhost:65012/api/v1/swagger.json", "CryptoWatcher API");
+                c.SwaggerEndpoint("http://localhost:65014/v1/swagger.json", "Ordering API");
+                c.SwaggerEndpoint("http://localhost:65016/v1/swagger.json", "Notification API");
                 c.RoutePrefix = route;
             });
 

@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using CesarBmx.Shared.Application.Settings;
+using CesarBmx.Shared.Settings;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;

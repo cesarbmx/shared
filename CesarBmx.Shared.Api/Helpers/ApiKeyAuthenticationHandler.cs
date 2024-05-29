@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using CesarBmx.Shared.Application.Responses;
-using CesarBmx.Shared.Application.Settings;
+using CesarBmx.Shared.Settings;
 using ErrorMessage = CesarBmx.Shared.Application.Messages.ErrorMessage;
 
 namespace CesarBmx.Shared.Api.Helpers

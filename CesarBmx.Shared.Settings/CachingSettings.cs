@@ -1,7 +1,7 @@
 ﻿
 
 
-namespace CesarBmx.Shared.Caching.Settings
+namespace CesarBmx.Shared.Settings
 {
     public  class CachingSettings
     {

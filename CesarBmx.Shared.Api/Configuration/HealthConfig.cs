@@ -1,9 +1,10 @@
-﻿using CesarBmx.Shared.Application.Settings;
+﻿using CesarBmx.Shared.Settings;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using StackExchange.Redis;
 using System;
 using System.Net;
 
@@ -26,8 +27,9 @@ namespace CesarBmx.Shared.Api.Configuration
             }).AddInMemoryStorage();
 
             services.AddHealthChecks()
-               .AddSqlServer(configuration.GetConnectionString(appSettings.DatabaseName), null, name: "SQL Server")
-               .AddRabbitMQ(new Uri($"amqp://{rabbitMqSettings.Username}:{rabbitMqSettings.Password}@{rabbitMqSettings.Host}:5672"), name: "RabbitMQ");
+               .AddSqlServer(configuration.GetConnectionString(appSettings.DatabaseName), name: "SQL Server")
+               .AddRabbitMQ(new Uri($"amqp://{rabbitMqSettings.Username}:{rabbitMqSettings.Password}@{rabbitMqSettings.Host}:5672"), name: "RabbitMQ")
+               .AddSharedRedis(configuration);
 
             // Return
             return services;
@@ -54,6 +56,24 @@ namespace CesarBmx.Shared.Api.Configuration
 
             // Return
             return app;
+        }
+
+
+        public static IHealthChecksBuilder AddSharedRabbitMQ(this IHealthChecksBuilder builder, IConfiguration configuration)
+        {
+            // Grab RabbitMQ settings
+            var rabbitMqSettings = configuration.GetSection<RabbitMqSettings>();
+
+            builder.AddRabbitMQ(name: "RabbitMQ", rabbitConnectionString: $"amqps://{rabbitMqSettings.Username}:{rabbitMqSettings.Password}@{rabbitMqSettings.Host}:{rabbitMqSettings.Port}/{rabbitMqSettings.VirtualHost}", failureStatus: Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus.Degraded);
+            return builder;
+        }
+        public static IHealthChecksBuilder AddSharedRedis(this IHealthChecksBuilder builder, IConfiguration configuration)
+        {
+            var configurationOptions = configuration.GetConfigurationOptions();
+            var conn = ConnectionMultiplexer.Connect(configurationOptions);
+            builder.AddRedis(conn, name: "Redis");
+
+            return builder;
         }
     }
 }

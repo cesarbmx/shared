@@ -35,6 +35,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CesarBmx.Shared.Domain", "C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CesarBmx.Shared.Messaging", "CesarBmx.Shared.Messages\CesarBmx.Shared.Messaging.csproj", "{97E2555F-4076-45BE-A97E-CF68900783F3}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pinnacle.CustomerTeam.Settings", "..\..\Git\Shared\Pinnacle.CustomerTeam.Settings\Pinnacle.CustomerTeam.Settings.csproj", "{8E98B8AA-557C-4D61-8130-2098D2A59B89}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -93,6 +95,10 @@ Global
 		{97E2555F-4076-45BE-A97E-CF68900783F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{97E2555F-4076-45BE-A97E-CF68900783F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{97E2555F-4076-45BE-A97E-CF68900783F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E98B8AA-557C-4D61-8130-2098D2A59B89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E98B8AA-557C-4D61-8130-2098D2A59B89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E98B8AA-557C-4D61-8130-2098D2A59B89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E98B8AA-557C-4D61-8130-2098D2A59B89}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -111,6 +117,7 @@ Global
 		{4E89835A-270B-4296-ABA5-2A795F4881E1} = {EF532B66-8BFD-4021-A301-861D61E8DED7}
 		{A53C7722-6190-498E-A0ED-3423EE224AAA} = {5A4A1DBD-2EC1-40FD-B9E5-6DBBCA721A8A}
 		{97E2555F-4076-45BE-A97E-CF68900783F3} = {EF532B66-8BFD-4021-A301-861D61E8DED7}
+		{8E98B8AA-557C-4D61-8130-2098D2A59B89} = {EF532B66-8BFD-4021-A301-861D61E8DED7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1CE5D10D-B679-45C9-81E4-11870F30F922}

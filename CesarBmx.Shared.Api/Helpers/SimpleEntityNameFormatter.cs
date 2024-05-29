@@ -1,4 +1,4 @@
-﻿using CesarBmx.Shared.Application.Settings;
+﻿using CesarBmx.Shared.Settings;
 using MassTransit;
 
 namespace CesarBmx.Shared.Api.Helpers

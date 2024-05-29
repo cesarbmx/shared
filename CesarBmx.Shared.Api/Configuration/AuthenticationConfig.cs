@@ -11,7 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using CesarBmx.Shared.Api.Helpers;
 using CesarBmx.Shared.Application.Responses;
-using CesarBmx.Shared.Application.Settings;
+using CesarBmx.Shared.Settings;
 using Microsoft.AspNetCore.Server.IISIntegration;
 using ErrorMessage = CesarBmx.Shared.Application.Messages.ErrorMessage;
 

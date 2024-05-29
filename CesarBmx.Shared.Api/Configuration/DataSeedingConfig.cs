@@ -1,5 +1,5 @@
 ﻿using System;
-using CesarBmx.Shared.Application.Settings;
+using CesarBmx.Shared.Settings;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 

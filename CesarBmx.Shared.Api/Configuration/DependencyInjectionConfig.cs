@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 using CesarBmx.Shared.Api.ActionFilters;
-using CesarBmx.Shared.Application.Settings;
+using CesarBmx.Shared.Settings;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 

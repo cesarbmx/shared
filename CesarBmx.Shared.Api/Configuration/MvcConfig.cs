@@ -1,7 +1,7 @@
 ﻿using System;
 using CesarBmx.Shared.Api.ActionFilters;
 using CesarBmx.Shared.Api.Controllers;
-using CesarBmx.Shared.Application.Settings;
+using CesarBmx.Shared.Settings;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc.Authorization;

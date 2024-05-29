@@ -25,6 +25,7 @@
     <ProjectReference Include="..\CesarBmx.Shared.Logging\CesarBmx.Shared.Logging.csproj" />
     <ProjectReference Include="..\CesarBmx.Shared.Messages\CesarBmx.Shared.Messaging.csproj" />
     <ProjectReference Include="..\CesarBmx.Shared.Persistence\CesarBmx.Shared.Persistence.csproj" />
+    <ProjectReference Include="..\CesarBmx.Shared.Settings\CesarBmx.Shared.Settings.csproj" />
   </ItemGroup>
 
   <ItemGroup>

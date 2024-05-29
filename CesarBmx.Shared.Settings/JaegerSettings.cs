@@ -1,13 +1,12 @@
 ﻿
 
 
-namespace CesarBmx.Shared.Application.Settings
+namespace CesarBmx.Shared.Settings
 {
-    public  class LoggingSettings
+    public  class JaegerSettings
     {
         public string LoggingPath { get; set; }
         public string JaegerAgentHost { get; set; }
         public string JaegerAgentPort { get; set; }
-        public string ElasticsearchUrl { get; set; }
     }
 }

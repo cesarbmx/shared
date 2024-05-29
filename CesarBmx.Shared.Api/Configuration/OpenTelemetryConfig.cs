@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using CesarBmx.Shared.Application.Settings;
+using CesarBmx.Shared.Settings;
 using CesarBmx.Shared.Common.Extensions;
 using Serilog;
 using Serilog.Events;
@@ -24,7 +24,7 @@ namespace CesarBmx.Shared.Api.Configuration
         {
             // Grab settings
             var appSettings = configuration.GetSection<AppSettings>();
-            var loggingSettings = configuration.GetSection<LoggingSettings>();
+            var JaegerSettings = configuration.GetSection<JaegerSettings>();
 
             // Add OpenTelemetry
             services.AddOpenTelemetry()
@@ -43,8 +43,8 @@ namespace CesarBmx.Shared.Api.Configuration
                 .AddJaegerExporter(
                  opts =>
                  {
-                     opts.AgentHost = loggingSettings.JaegerAgentHost;
-                     opts.AgentPort = Convert.ToInt32(loggingSettings.JaegerAgentPort);
+                     opts.AgentHost = JaegerSettings.JaegerAgentHost;
+                     opts.AgentPort = Convert.ToInt32(JaegerSettings.JaegerAgentPort);
                      opts.Protocol = JaegerExportProtocol.UdpCompactThrift;
                  }
                  ));

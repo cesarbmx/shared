@@ -28,13 +28,14 @@ namespace CesarBmx.Shared.Api.Configuration
 
             var elkSettings = configuration.GetSection<ElkSettings>();
 
+            var expressionTemplate = new ExpressionTemplate("{ { ..@p, Timestamp: @t, Level: @l, Exception: @x, SourceContext: @c, ActionId: undefined() } }\r\n");
+
             var sinkOptions = new ElasticsearchSinkOptions(new Uri(elkSettings.ElasticsearchUrl))
             {
                 AutoRegisterTemplate = true,
                 ModifyConnectionSettings = x => x.GlobalHeaders(new NameValueCollection { { "Authorization", $"Bearer {elkSettings.BearerToken}" } }),
                 IndexFormat = $"{environmentSettings.Name}-{appSettings.ApplicationId}-{DateTime.Now:yyyy-MM}",
-                CustomFormatter = new ExpressionTemplate(
-                            "{ { ..@p, Timestamp: @t, Level: @l, Exception: @x, SourceContext: undefined(), ActionId: undefined() } }\r\n")
+                CustomFormatter = expressionTemplate
             };
 
             Log.Logger = new LoggerConfiguration()
@@ -47,66 +48,63 @@ namespace CesarBmx.Shared.Api.Configuration
                 .Enrich.WithProperty("Environment", environmentSettings.Name)
 
                 // Exclude everything else 
-                .Filter.ByExcluding(Matching.FromSource("System"))
-                .Filter.ByExcluding(Matching.FromSource("Microsoft"))
-                .Filter.ByExcluding(Matching.FromSource("Masstransit"))
-                .Filter.ByExcluding(Matching.FromSource("Hangfire"))
-                .Filter.ByExcluding(Matching.FromSource("Default"))
-                .Filter.ByExcluding(Matching.FromSource("Endpoint"))
-                .Filter.ByExcluding(Matching.FromSource("HostAddress"))
+                //.Filter.ByExcluding(Matching.FromSource("System"))
+                //.Filter.ByExcluding(Matching.FromSource("Microsoft"))
+                //.Filter.ByExcluding(Matching.FromSource("MassTransit"))
+                //.Filter.ByExcluding(Matching.FromSource("Hangfire"))
+                //.Filter.ByExcluding(Matching.FromSource("Default"))
                 .Filter.ByExcluding("Scope[?] = 'HealthReportCollector is collecting health checks results.'") // Do not log health collector
-                .Filter.ByExcluding(x => x.Properties.ContainsKey("AuthenticationScheme")) // Do not log 401s 
+                //.Filter.ByExcluding(x => x.Properties.ContainsKey("AuthenticationScheme")) // Do not log 401s 
 
                 // File
                 .WriteTo.Logger(lc => lc
-                    .Filter.ByIncludingOnly("@l = 'Information'")
-                    .WriteTo.File(new ExpressionTemplate(
-                        "{ { ..@p, Timestamp: @t, Level: @l, Exception: @x, SourceContext: undefined(), ActionId: undefined() } }\r\n"),
-                        loggingSettings.LoggingPath + appSettings.ApplicationId + "/INFO_.txt",
-                        rollingInterval: RollingInterval.Day))
+                .Filter.ByIncludingOnly("@l = 'Information'")
+                .Filter.ByIncludingOnly(Matching.FromSource("CesarBmx"))
+                .WriteTo.File(expressionTemplate, loggingSettings.LoggingPath + appSettings.ApplicationId + "/INFO_.txt", rollingInterval: RollingInterval.Day))
 
                 .WriteTo.Logger(lc => lc
-                    .Filter.ByIncludingOnly("@l = 'Error'")
-                    .WriteTo.File(new ExpressionTemplate(
-                            "{ { ..@p, Timestamp: @t, Level: @l, Exception: @x, SourceContext: undefined(), ActionId: undefined() } }\r\n"),
-                            loggingSettings.LoggingPath + appSettings.ApplicationId + "/ERROR_.txt",
-                            rollingInterval: RollingInterval.Day))
+                .Filter.ByIncludingOnly("@l = 'Error'")
+                .WriteTo.File(expressionTemplate, loggingSettings.LoggingPath + appSettings.ApplicationId + "/ERROR_.txt", rollingInterval: RollingInterval.Day))
 
                  // Elk
                  .WriteTo.Logger(lc => lc
-                    .Filter.ByIncludingOnly("@l = 'Information'")
-                    .WriteTo.File(new ElasticsearchJsonFormatter(), loggingSettings.LoggingPath + appSettings.ApplicationId + "/INFO_ELK_.txt")
-                    .WriteTo.Elasticsearch(sinkOptions)
-                    .WriteTo.OpenTelemetry(options =>
-                     {
-                         var header = new Dictionary<string, string>
-                         {
-                             { "Authorization", "Bearer o13QqDuUUk6nhXfYjy" }
-                         };
-                         options.Endpoint = "https://32b1b7da835640e1ad3de8874f2d0d51.apm.eu-west-1.aws.cloud.es.io:443";
-                         options.Protocol = OtlpProtocol.Grpc;
-                         options.Headers = header;
-                     })
-                    )
+                .Filter.ByIncludingOnly("@l = 'Information'")
+                .Filter.ByIncludingOnly(Matching.FromSource("CesarBmx"))
+                .WriteTo.File(new ElasticsearchJsonFormatter(), loggingSettings.LoggingPath + appSettings.ApplicationId + "/INFO_ELK_.txt")
+                .WriteTo.Elasticsearch(sinkOptions)
+                .WriteTo.OpenTelemetry(options =>
+                {
+                    var header = new Dictionary<string, string>
+                    {
+                        { "Authorization", "Bearer o13QqDuUUk6nhXfYjy" }
+                    };
+                    options.Endpoint = "https://32b1b7da835640e1ad3de8874f2d0d51.apm.eu-west-1.aws.cloud.es.io:443";
+                    options.Protocol = OtlpProtocol.Grpc;
+                    options.Headers = header;
+                }))
 
                 .WriteTo.Logger(lc => lc
-                    .Filter.ByIncludingOnly("@l = 'Error'")
-                    .WriteTo.File(new ExceptionAsObjectJsonFormatter(), loggingSettings.LoggingPath + appSettings.ApplicationId + "/ERROR_ELK_.txt")
-                    .WriteTo.Elasticsearch(sinkOptions)
-                    .WriteTo.OpenTelemetry(options =>
+                .Filter.ByIncludingOnly("@l = 'Error'")
+                .WriteTo.File(new ExceptionAsObjectJsonFormatter(), loggingSettings.LoggingPath + appSettings.ApplicationId + "/ERROR_ELK_.txt")
+                .WriteTo.Elasticsearch(sinkOptions)
+                .WriteTo.OpenTelemetry(options =>
+                {
+                    var header = new Dictionary<string, string>
                     {
-                        var header = new Dictionary<string, string>
-                         {
-                             { "Authorization", "Bearer o13QqDuUUk6nhXfYjy" }
-                         };
-                        options.Endpoint = "https://32b1b7da835640e1ad3de8874f2d0d51.apm.eu-west-1.aws.cloud.es.io:443";
-                        options.Protocol = OtlpProtocol.Grpc;
-                        options.Headers = header;
-                    })
-                    )
+                        { "Authorization", "Bearer o13QqDuUUk6nhXfYjy" }
+                    };
+                    options.Endpoint = "https://32b1b7da835640e1ad3de8874f2d0d51.apm.eu-west-1.aws.cloud.es.io:443";
+                    options.Protocol = OtlpProtocol.Grpc;
+                    options.Headers = header;
+                }))
 
                 // Console
                 .WriteTo.Console()
+                //.Filter.ByIncludingOnly("@l = 'Information'")
+                ////.Filter.ByIncludingOnly("StartsWith(SourceContext, 'CesarBmx.')")
+
+                //.WriteTo.Console()
+                //.Filter.ByIncludingOnly("@l = 'Error'")
 
                 // Create logger
                 .CreateLogger();

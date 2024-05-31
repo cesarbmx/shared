@@ -3,7 +3,7 @@
 
 	<PropertyGroup>
 		<OutputType>Library</OutputType>
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFramework>net9.0</TargetFramework>
 		<Description>Common library (Logging)</Description>
 		<Authors>cesarbmx</Authors>
 		<Version>1.0.0</Version>

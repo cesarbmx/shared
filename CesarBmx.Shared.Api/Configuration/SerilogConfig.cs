@@ -11,6 +11,7 @@ using System;
 using System.Collections.Specialized;
 using System.Collections.Generic;
 using Serilog.Sinks.OpenTelemetry;
+using Serilog.Filters;
 
 namespace CesarBmx.Shared.Api.Configuration
 {
@@ -46,14 +47,14 @@ namespace CesarBmx.Shared.Api.Configuration
                 .Enrich.WithProperty("Environment", environmentSettings.Name)
 
                 // Exclude everything else 
-                //.Filter.ByExcluding(Matching.FromSource("System"))
-                //.Filter.ByExcluding(Matching.FromSource("Microsoft"))
-                //.Filter.ByExcluding(Matching.FromSource("Masstransit"))
-                //.Filter.ByExcluding(Matching.FromSource("Hangfire"))
-                //.Filter.ByExcluding(Matching.FromSource("Default"))
-                //.Filter.ByExcluding(Matching.FromSource("Endpoint"))
-                //.Filter.ByExcluding(Matching.FromSource("HostAddress"))
-                //.Filter.ByExcluding("Scope[?] = 'HealthReportCollector is collecting health checks results.'") // Do not log health collector
+                .Filter.ByExcluding(Matching.FromSource("System"))
+                .Filter.ByExcluding(Matching.FromSource("Microsoft"))
+                .Filter.ByExcluding(Matching.FromSource("Masstransit"))
+                .Filter.ByExcluding(Matching.FromSource("Hangfire"))
+                .Filter.ByExcluding(Matching.FromSource("Default"))
+                .Filter.ByExcluding(Matching.FromSource("Endpoint"))
+                .Filter.ByExcluding(Matching.FromSource("HostAddress"))
+                .Filter.ByExcluding("Scope[?] = 'HealthReportCollector is collecting health checks results.'") // Do not log health collector
                 .Filter.ByExcluding(x => x.Properties.ContainsKey("AuthenticationScheme")) // Do not log 401s 
 
                 // File

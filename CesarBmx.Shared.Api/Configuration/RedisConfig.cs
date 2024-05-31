@@ -5,6 +5,8 @@ using StackExchange.Redis;
 using System.Security.Authentication;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Caching.Hybrid;
+using System;
 
 namespace CesarBmx.Shared.Api.Configuration
 {
@@ -24,6 +26,17 @@ namespace CesarBmx.Shared.Api.Configuration
             {
                 options.ConfigurationOptions = configuration.GetConfigurationOptions();
                 options.InstanceName = instanceName;
+            });
+
+            services.AddHybridCache(options =>
+            {
+                options.MaximumPayloadBytes = 1024 * 1024;
+                options.MaximumKeyLength = 1024;
+                options.DefaultEntryOptions = new HybridCacheEntryOptions
+                {
+                    Expiration = TimeSpan.FromSeconds(10),                   
+                    LocalCacheExpiration = TimeSpan.FromSeconds(10)
+                };
             });
         }
         public static void AddSharedCache(this IServiceCollection services, IConfiguration configuration, string applicationId)
@@ -50,13 +63,12 @@ namespace CesarBmx.Shared.Api.Configuration
                 //Ssl = true,
                 //SslProtocols = SslProtocols.Tls12 | SslProtocols.Tls13,
                 EndPoints = { $"{redisSettings.Url}:{redisSettings.Port}" },
-                AbortOnConnectFail = false,
+                AbortOnConnectFail = false,               
                 //AsyncTimeout = 2000,
                 //SyncTimeout = 2000
 
             };
-            configurationOptions.CertificateValidation += (sender, certificate, chain, errors) => true;
-
+            configurationOptions.CertificateValidation += (sender, certificate, chain, errors) => true;           
             return configurationOptions;
         }
     }

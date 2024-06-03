@@ -1,12 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
 using CesarBmx.Shared.Settings;
 using CesarBmx.Shared.Common.Extensions;
-using Serilog;
-using Serilog.Events;
-using Serilog.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
@@ -24,12 +20,13 @@ namespace CesarBmx.Shared.Api.Configuration
         {
             // Grab settings
             var appSettings = configuration.GetSection<AppSettings>();
-            var JaegerSettings = configuration.GetSection<JaegerSettings>();
+            var jaegerSettings = configuration.GetSection<JaegerSettings>();
+            var elkSettings = configuration.GetSection<ElkSettings>();
 
             // Add OpenTelemetry
             services.AddOpenTelemetry()
             .WithMetrics(builder => builder
-                .AddRuntimeInstrumentation()                
+                .AddRuntimeInstrumentation()
                 .AddPrometheusExporter())
             .WithTracing(builder => builder
                 .AddSource(appSettings.ApplicationId)
@@ -40,14 +37,21 @@ namespace CesarBmx.Shared.Api.Configuration
                 .AddAspNetCoreInstrumentation()
                 .AddHttpClientInstrumentation()
                 //.AddEntityFrameworkCoreInstrumentation()
+                .AddRedisInstrumentation()
                 .AddJaegerExporter(
                  opts =>
                  {
-                     opts.AgentHost = JaegerSettings.JaegerAgentHost;
-                     opts.AgentPort = Convert.ToInt32(JaegerSettings.JaegerAgentPort);
+                     opts.AgentHost = jaegerSettings.JaegerAgentHost;
+                     opts.AgentPort = Convert.ToInt32(jaegerSettings.JaegerAgentPort);
                      opts.Protocol = JaegerExportProtocol.UdpCompactThrift;
                  }
-                 ));
+                 )
+                .AddOtlpExporter(opts =>
+                {
+                    opts.Protocol = OtlpExportProtocol.Grpc;
+                    opts.Endpoint = new Uri(elkSettings.ElasticsearchUrl);
+                    opts.Headers = "Authorization=Bearer " + elkSettings.ElasticsearchUrl;
+                }));
 
             return services;
         }

@@ -28,6 +28,13 @@ namespace CesarBmx.Shared.Api.Configuration
             .WithMetrics(builder => builder
                 .AddRuntimeInstrumentation()
                 .AddPrometheusExporter())
+                //.AddOtlpExporter(
+                // opts =>
+                // {
+                //     opts.Endpoint = jaegerSettings.JaegerAgentHost;
+                //     opts.AgentPort = Convert.ToInt32(jaegerSettings.JaegerAgentPort);
+                //     opts.Protocol = JaegerExportProtocol.UdpCompactThrift;
+                // }))
             .WithTracing(builder => builder
                 .AddSource(appSettings.ApplicationId)
                 .AddSource("MassTransit")

@@ -39,8 +39,8 @@
     <PackageReference Include="Jaeger" Version="1.0.3" />
     <PackageReference Include="log4net" Version="2.0.17" />
     <PackageReference Include="MassTransit.AspNetCore" Version="7.3.1" />
-    <PackageReference Include="MassTransit.EntityFrameworkCore" Version="8.2.3-develop.1832" />
-    <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.3-develop.1832" />
+    <PackageReference Include="MassTransit.EntityFrameworkCore" Version="8.2.3-develop.1837" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.3-develop.1837" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.0-preview.4.24267.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0-preview.4.24267.1" />
     <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.0.0-preview.4.24267.6" />
@@ -57,23 +57,23 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.0-preview.4.24266.19" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.20.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="OpenTelemetry.Exporter.Console" Version="1.9.0-alpha.1" />
+    <PackageReference Include="OpenTelemetry.Exporter.Console" Version="1.9.0-rc.1" />
     <PackageReference Include="OpenTelemetry.Exporter.Jaeger" Version="1.6.0-rc.1" />
-    <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.9.0-alpha.1" />
+    <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.9.0-rc.1" />
     <PackageReference Include="OpenTelemetry.Exporter.Prometheus.AspNetCore" Version="1.9.0-alpha.2" />
-    <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.9.0-alpha.1" />
+    <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.9.0-rc.1" />
     <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.8.1" />
     <PackageReference Include="OpenTelemetry.Instrumentation.EntityFrameworkCore" Version="1.0.0-beta.11" />
     <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.8.1" />
     <PackageReference Include="OpenTelemetry.Instrumentation.Runtime" Version="1.8.1" />
     <PackageReference Include="OpenTelemetry.Instrumentation.StackExchangeRedis" Version="1.0.0-rc9.14" />
-    <PackageReference Include="Serilog" Version="4.0.0-dev-02201" />
+    <PackageReference Include="Serilog" Version="4.0.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="8.0.2-dev-00338" />
-    <PackageReference Include="Serilog.Expressions" Version="4.0.1-dev-00158" />
+    <PackageReference Include="Serilog.Expressions" Version="5.0.0-dev-00166" />
     <PackageReference Include="Serilog.Formatting.Elasticsearch" Version="10.0.0" />
     <PackageReference Include="Serilog.Sinks.Elasticsearch" Version="10.0.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.1-dev-00972" />
-    <PackageReference Include="Serilog.Sinks.OpenTelemetry" Version="3.0.0-dev-00298" />
+    <PackageReference Include="Serilog.Sinks.OpenTelemetry" Version="3.0.0" />
     <PackageReference Include="StackExchange.Redis" Version="2.7.33" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.6.2" />

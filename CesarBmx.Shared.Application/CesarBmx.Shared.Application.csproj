@@ -13,9 +13,9 @@
   
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
-    <PackageReference Include="FluentValidation" Version="11.9.1" />
+    <PackageReference Include="FluentValidation" Version="11.9.2" />
     <PackageReference Include="Hangfire.Core" Version="1.8.12" />
-    <PackageReference Include="MassTransit" Version="8.2.3-develop.1832" />
+    <PackageReference Include="MassTransit" Version="8.2.3-develop.1837" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 

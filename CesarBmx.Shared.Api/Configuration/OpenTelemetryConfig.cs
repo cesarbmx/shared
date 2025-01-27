@@ -43,7 +43,7 @@ namespace CesarBmx.Shared.Api.Configuration
                 .SetSampler(new AlwaysOnSampler())
                 .AddAspNetCoreInstrumentation()
                 .AddHttpClientInstrumentation()
-                //.AddEntityFrameworkCoreInstrumentation()
+                .AddEntityFrameworkCoreInstrumentation()
                 .AddRedisInstrumentation()
                 .AddJaegerExporter(
                  opts =>
@@ -58,7 +58,8 @@ namespace CesarBmx.Shared.Api.Configuration
                     opts.Protocol = OtlpExportProtocol.Grpc;
                     opts.Endpoint = new Uri(elkSettings.ElasticsearchUrl);
                     opts.Headers = "Authorization=Bearer " + elkSettings.ElasticsearchUrl;
-                }));
+                })
+                );
 
             return services;
         }

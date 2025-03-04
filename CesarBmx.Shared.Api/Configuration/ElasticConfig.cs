@@ -6,7 +6,6 @@ namespace CesarBmx.Shared.Api.Configuration
     {
         public static IServiceCollection ConfigureSharedElastic(this IServiceCollection services)
         {
-
             services.AddAllElasticApm();
 
             return services;

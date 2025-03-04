@@ -9,6 +9,7 @@ using RabbitMQ.Client;
 using StackExchange.Redis;
 using System;
 using System.Net;
+using System.Web;
 
 namespace CesarBmx.Shared.Api.Configuration
 {
@@ -70,7 +71,11 @@ namespace CesarBmx.Shared.Api.Configuration
             {
                 var factory = new ConnectionFactory
                 {
-                    Uri = new Uri($"amqps://{rabbitMqSettings.Username}:{rabbitMqSettings.Password}@{rabbitMqSettings.Host}:{rabbitMqSettings.Port}/{rabbitMqSettings.VirtualHost}")                    
+                    UserName = rabbitMqSettings.Username,
+                    Password = rabbitMqSettings.Password,
+                    VirtualHost = rabbitMqSettings.VirtualHost,
+                    HostName = rabbitMqSettings.Host,
+                    Port = AmqpTcpEndpoint.UseDefaultPort
                 };
                 return factory.CreateConnectionAsync();
             }, name: "RabbitMQ", failureStatus: HealthStatus.Degraded);

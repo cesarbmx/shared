@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using CesarBmx.Shared.Settings;
 using StackExchange.Redis;
-using System.Security.Authentication;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Caching.Hybrid;
@@ -28,16 +27,18 @@ namespace CesarBmx.Shared.Api.Configuration
                 options.InstanceName = instanceName;
             });
 
+#pragma warning disable EXTEXP0018 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             services.AddHybridCache(options =>
             {
                 options.MaximumPayloadBytes = 1024 * 1024;
                 options.MaximumKeyLength = 1024;
-                options.DefaultEntryOptions = new HybridCacheEntryOptions
+                options.DefaultEntryOptions = new Microsoft.Extensions.Caching.Hybrid.HybridCacheEntryOptions
                 {
                     Expiration = TimeSpan.FromSeconds(10),                   
                     LocalCacheExpiration = TimeSpan.FromSeconds(10)
                 };
             });
+#pragma warning restore EXTEXP0018 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         }
         public static void AddSharedCache(this IServiceCollection services, IConfiguration configuration, string applicationId)
         {

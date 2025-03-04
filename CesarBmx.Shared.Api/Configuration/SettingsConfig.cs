@@ -24,9 +24,11 @@ namespace CesarBmx.Shared.Api.Configuration
         }
         public static void AddConfiguration<T>(
                 this IServiceCollection services,
-                IConfiguration configuration)
+                IConfigurationManager configuration)
                 where T : class
         {
+            AddJsonFiles(configuration);
+
             var key = typeof(T).Name;
             var instance = Activator.CreateInstance<T>();
             new ConfigureFromConfigurationOptions<T>(configuration.GetSection(key))

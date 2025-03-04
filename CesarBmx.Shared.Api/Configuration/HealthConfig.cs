@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using RabbitMQ.Client;
 using StackExchange.Redis;
 using System;
 using System.Net;
@@ -28,7 +30,7 @@ namespace CesarBmx.Shared.Api.Configuration
 
             services.AddHealthChecks()
                .AddSqlServer(configuration.GetConnectionString(appSettings.DatabaseName), name: "SQL Server")
-               .AddRabbitMQ(new Uri($"amqp://{rabbitMqSettings.Username}:{rabbitMqSettings.Password}@{rabbitMqSettings.Host}:5672"), name: "RabbitMQ")
+               .AddSharedRabbitMQ(configuration)
                .AddSharedRedis(configuration);
 
             // Return
@@ -64,7 +66,15 @@ namespace CesarBmx.Shared.Api.Configuration
             // Grab RabbitMQ settings
             var rabbitMqSettings = configuration.GetSection<RabbitMqSettings>();
 
-            builder.AddRabbitMQ(name: "RabbitMQ", rabbitConnectionString: $"amqps://{rabbitMqSettings.Username}:{rabbitMqSettings.Password}@{rabbitMqSettings.Host}:{rabbitMqSettings.Port}/{rabbitMqSettings.VirtualHost}", failureStatus: Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus.Degraded);
+            builder.AddRabbitMQ(factory: sp =>
+            {
+                var factory = new ConnectionFactory
+                {
+                    Uri = new Uri($"amqps://{rabbitMqSettings.Username}:{rabbitMqSettings.Password}@{rabbitMqSettings.Host}:{rabbitMqSettings.Port}/{rabbitMqSettings.VirtualHost}")                    
+                };
+                return factory.CreateConnectionAsync();
+            }, name: "RabbitMQ", failureStatus: HealthStatus.Degraded);
+
             return builder;
         }
         public static IHealthChecksBuilder AddSharedRedis(this IHealthChecksBuilder builder, IConfiguration configuration)

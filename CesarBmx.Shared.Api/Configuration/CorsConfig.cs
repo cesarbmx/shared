@@ -11,21 +11,35 @@ namespace CesarBmx.Shared.Configuration
         public static IServiceCollection ConfigureSharedCors(this IServiceCollection services, IConfiguration configuration)
         {
             // Grab settings
-            var corsSettings = configuration.GetSection<CorsSettings>();
-
-            // Allowed origins
-            var allowedOrigins = corsSettings.AllowedOrigins.Split(";");
+            var environmentSettings = configuration.GetSection<EnvironmentSettings>();
 
             services.AddCors(options =>
             {
-                options.AddPolicy("AllowOrigins",
+                if (environmentSettings.Name == "Development")
+                {
+                    options.AddPolicy("AllowOrigins",
                     builder =>
                     {
-                            builder
-							.WithOrigins(allowedOrigins)
-                            .AllowAnyMethod()
-                            .AllowAnyHeader();
+                        builder
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
                     });
+                }
+                else
+                {
+                    var corsSettings = configuration.GetSection<CorsSettings>();
+                    var allowedOrigins = corsSettings.AllowedOrigins.Split(";");
+
+                    options.AddPolicy("AllowOrigins",
+                    builder =>
+                    {
+                        builder
+                        .WithOrigins(allowedOrigins)
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                    });
+                }
             });
 
             return services;

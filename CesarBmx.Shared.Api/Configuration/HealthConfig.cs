@@ -24,13 +24,13 @@ namespace CesarBmx.Shared.Api.Configuration
             // Health checks
             services.AddHealthChecksUI(setupSettings: setup =>
             {
-                setup.AddHealthCheckEndpoint(appSettings.ApplicationId, $"http://{Dns.GetHostName()}/health");
+                setup.AddHealthCheckEndpoint(appSettings.ApplicationId, $"http://{Dns.GetHostName()}:8080/health");
                 setup.SetEvaluationTimeInSeconds(60 * 10);
                 setup.DisableDatabaseMigrations();
             }).AddInMemoryStorage();
 
             services.AddHealthChecks()
-               .AddSqlServer(configuration.GetConnectionString(appSettings.DatabaseName), name: "SQL Server")
+               .AddSqlServer(configuration.GetConnectionString(appSettings.DatabaseName), name: $"SQL Server ({appSettings.DatabaseName})")
                .AddSharedRabbitMQ(configuration)
                .AddSharedRedis(configuration);
 

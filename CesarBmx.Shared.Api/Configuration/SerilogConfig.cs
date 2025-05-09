@@ -75,7 +75,7 @@ namespace CesarBmx.Shared.Api.Configuration
                     .WriteTo.File(new ElasticsearchJsonFormatter(), loggingSettings.LoggingPath + appSettings.ApplicationId + "/INFO_ELK_.txt")
                      .WriteTo.Elasticsearch([new Uri(elkSettings.Endpoint)], options =>
                      {
-                         options.DataStream = new DataStreamName($"info-{environmentSettings.Prefix}-{appSettings.ApplicationId}-{DateTime.UtcNow:yyyy-MM}");
+                         options.DataStream = new DataStreamName($"INFO-{environmentSettings.Prefix}-{appSettings.ApplicationId}-{DateTime.UtcNow:yyyy-MM}");
                          options.TextFormatting = new EcsTextFormatterConfiguration();
                          options.BootstrapMethod = BootstrapMethod.Failure;
                      }, transport =>
@@ -91,7 +91,7 @@ namespace CesarBmx.Shared.Api.Configuration
                     .WriteTo.File(new ExceptionAsObjectJsonFormatter(), loggingSettings.LoggingPath + appSettings.ApplicationId + "/ERROR_ELK_.txt")
                     .WriteTo.Elasticsearch([new Uri(elkSettings.Endpoint)], options =>
                     {
-                        options.DataStream = new DataStreamName($"error-{environmentSettings.Prefix}-{appSettings.ApplicationId}-{DateTime.UtcNow:yyyy-MM}");
+                        options.DataStream = new DataStreamName($"ERROR-{environmentSettings.Prefix}-{appSettings.ApplicationId}-{DateTime.UtcNow:yyyy-MM}");
                         options.TextFormatting = new EcsTextFormatterConfiguration();
                         options.BootstrapMethod = BootstrapMethod.Failure;
                     }, transport =>

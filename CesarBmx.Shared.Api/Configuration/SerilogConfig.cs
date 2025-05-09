@@ -14,6 +14,7 @@ using Elastic.Transport;
 using Elastic.CommonSchema.Serilog;
 using Elastic.Ingest.Elasticsearch.DataStreams;
 using Microsoft.Extensions.Hosting;
+using Elastic.Apm.SerilogEnricher;
 
 namespace CesarBmx.Shared.Api.Configuration
 {
@@ -46,6 +47,8 @@ namespace CesarBmx.Shared.Api.Configuration
                 .Enrich.WithProperty("App", appSettings.ApplicationId)
                 .Enrich.WithProperty("Version", assembly.VersionNumber())
                 .Enrich.WithProperty("Environment", environmentSettings.Name)
+
+                .Enrich.WithElasticApmCorrelationInfo()
 
                 // Exclude everything else 
                 //.Filter.ByExcluding(Matching.FromSource("System"))
@@ -99,7 +102,7 @@ namespace CesarBmx.Shared.Api.Configuration
                     {
                         transport.Authentication(new ApiKey(elkSettings.ApiKey));
                         transport.ServerCertificateValidationCallback((_, _, _, _) => true);
-                    })
+                    })                    
                 )
 
                 // Console

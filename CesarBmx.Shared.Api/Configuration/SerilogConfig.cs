@@ -7,14 +7,12 @@ using Serilog.Templates;
 using System.Reflection;
 using Serilog.Formatting.Elasticsearch;
 using System;
-using System.Collections.Generic;
-using Serilog.Sinks.OpenTelemetry;
 using Serilog.Filters;
 using Elastic.Serilog.Sinks;
-using Elastic.Ingest.Elasticsearch.DataStreams;
 using Elastic.Ingest.Elasticsearch;
-using Elastic.Channels;
 using Elastic.Transport;
+using Elastic.CommonSchema.Serilog;
+using Elastic.Ingest.Elasticsearch.DataStreams;
 
 namespace CesarBmx.Shared.Api.Configuration
 {
@@ -38,6 +36,7 @@ namespace CesarBmx.Shared.Api.Configuration
             //    CustomFormatter = expressionTemplate
             //};
 
+
             Log.Logger = new LoggerConfiguration()
                 .Enrich.FromLogContext()
 
@@ -54,91 +53,56 @@ namespace CesarBmx.Shared.Api.Configuration
                 //.Filter.ByExcluding(Matching.FromSource("Hangfire"))
                 //.Filter.ByExcluding(Matching.FromSource("Default"))
                 .Filter.ByExcluding("Scope[?] = 'HealthReportCollector is collecting health checks results.'") // Do not log health collector
-                //.Filter.ByExcluding(x => x.Properties.ContainsKey("AuthenticationScheme")) // Do not log 401s 
+                                                                                                               //.Filter.ByExcluding(x => x.Properties.ContainsKey("AuthenticationScheme")) // Do not log 401s 
 
-                // File
+                // File INFO
                 .WriteTo.Logger(lc => lc
-                .Filter.ByIncludingOnly("@l = 'Information'")
-                .Filter.ByIncludingOnly(Matching.FromSource("CesarBmx"))
-                .WriteTo.File(expressionTemplate, loggingSettings.LoggingPath + appSettings.ApplicationId + "/INFO_.txt", rollingInterval: RollingInterval.Day))
-
-                .WriteTo.Logger(lc => lc
-                .Filter.ByIncludingOnly("@l = 'Error'")
-                .WriteTo.File(expressionTemplate, loggingSettings.LoggingPath + appSettings.ApplicationId + "/ERROR_.txt", rollingInterval: RollingInterval.Day))
-
-                 // Elk
-                 .WriteTo.Logger(lc => lc
-                .Filter.ByIncludingOnly("@l = 'Information'")
-                .Filter.ByIncludingOnly(Matching.FromSource("CesarBmx"))
-                .WriteTo.File(new ElasticsearchJsonFormatter(), loggingSettings.LoggingPath + appSettings.ApplicationId + "/INFO_ELK_.txt")
-                //.WriteTo.Elasticsearch(sinkOptions)
-                .WriteTo.Elasticsearch([new Uri("http://elasticsearch:9200")], opts =>
-                {
-                    opts.DataStream = new DataStreamName("logs", "cesarbmx", appSettings.ApplicationId);
-                    //opts.BootstrapMethod = BootstrapMethod.Failure;
-                    //opts.ConfigureChannel = channelOpts =>
-                    //{
-                    //    channelOpts.BufferOptions = new BufferOptions
-                    //    {
-                    //        //ConcurrentConsumers = 10
-                    //    };
-                    //};
-                }
-                //, transport =>                
-                    // transport.Authentication(new BasicAuthentication(username, password)); // Basic Auth
-                    //transport.Authentication(new ApiKey("o13QqDuUUk6nhXfYjy")); // ApiKey
-                //}        )
-                //.WriteTo.OpenTelemetry(options =>
-                //{
-                //    var header = new Dictionary<string, string>
-                //    {
-                //        { "Authorization", "Bearer o13QqDuUUk6nhXfYjy" }
-                //    };
-                //    options.Endpoint = "https://32b1b7da835640e1ad3de8874f2d0d51.apm.eu-west-1.aws.cloud.es.io:443";
-                //    options.Protocol = OtlpProtocol.Grpc;
-                //    options.Headers = header;
-                //})
+                    .Filter.ByIncludingOnly("@l = 'Information'")
+                    .Filter.ByIncludingOnly(Matching.FromSource("CesarBmx"))
+                    .WriteTo.File(expressionTemplate, loggingSettings.LoggingPath + appSettings.ApplicationId + "/INFO_.txt", rollingInterval: RollingInterval.Day)
                 )
 
+                // File ERROR
                 .WriteTo.Logger(lc => lc
-                .Filter.ByIncludingOnly("@l = 'Error'")
-                .WriteTo.File(new ExceptionAsObjectJsonFormatter(), loggingSettings.LoggingPath + appSettings.ApplicationId + "/ERROR_ELK_.txt")
-                //.WriteTo.Elasticsearch(sinkOptions)
-                //.WriteTo.Elasticsearch([new Uri("https://32b1b7da835640e1ad3de8874f2d0d51.apm.eu-west-1.aws.cloud.es.io:443")], opts =>
-                //{
-                //    opts.DataStream = new DataStreamName("logs", "cesarc-example", "demo");
-                //    opts.BootstrapMethod = BootstrapMethod.Failure;
-                //    opts.ConfigureChannel = channelOpts =>
-                //    {
-                //        channelOpts.BufferOptions = new BufferOptions
-                //        {
-                //            //ConcurrentConsumers = 10
-                //        };
-                //    };
-                //}, transport =>
-                //{
-                //    // transport.Authentication(new BasicAuthentication(username, password)); // Basic Auth
-                //    transport.Authentication(new ApiKey("o13QqDuUUk6nhXfYjy")); // ApiKey
-                //})
-                //.WriteTo.OpenTelemetry(options =>
-                //{
-                //    var header = new Dictionary<string, string>
-                //    {
-                //        { "Authorization", "Bearer o13QqDuUUk6nhXfYjy" }
-                //    };
-                //    options.Endpoint = "https://32b1b7da835640e1ad3de8874f2d0d51.apm.eu-west-1.aws.cloud.es.io:443";
-                //    options.Protocol = OtlpProtocol.Grpc;
-                //    options.Headers = header;
-                //})
-                ))
+                    .Filter.ByIncludingOnly("@l = 'Error'")
+                    .WriteTo.File(expressionTemplate, loggingSettings.LoggingPath + appSettings.ApplicationId + "/ERROR_.txt", rollingInterval: RollingInterval.Day)
+                )
+
+                // Elk INFO
+                .WriteTo.Logger(lc => lc
+                    .Filter.ByIncludingOnly("@l = 'Information'")
+                    .Filter.ByIncludingOnly(Matching.FromSource("CesarBmx"))
+                    .WriteTo.File(new ElasticsearchJsonFormatter(), loggingSettings.LoggingPath + appSettings.ApplicationId + "/INFO_ELK_.txt")
+                     .WriteTo.Elasticsearch([new Uri(elkSettings.Endpoint)], options =>
+                     {
+                         options.DataStream = new DataStreamName($"info-{environmentSettings.Prefix}-{appSettings.ApplicationId}-{DateTime.UtcNow:yyyy-MM}");
+                         options.TextFormatting = new EcsTextFormatterConfiguration();
+                         options.BootstrapMethod = BootstrapMethod.Failure;
+                     }, transport =>
+                     {
+                         transport.Authentication(new ApiKey(elkSettings.ApiKey));
+                         transport.ServerCertificateValidationCallback((_, _, _, _) => true);
+                     })
+                )
+
+                // Elk ERROR
+                .WriteTo.Logger(lc => lc
+                    .Filter.ByIncludingOnly("@l = 'Error'")
+                    .WriteTo.File(new ExceptionAsObjectJsonFormatter(), loggingSettings.LoggingPath + appSettings.ApplicationId + "/ERROR_ELK_.txt")
+                    .WriteTo.Elasticsearch([new Uri(elkSettings.Endpoint)], options =>
+                    {
+                        options.DataStream = new DataStreamName($"error-{environmentSettings.Prefix}-{appSettings.ApplicationId}-{DateTime.UtcNow:yyyy-MM}");
+                        options.TextFormatting = new EcsTextFormatterConfiguration();
+                        options.BootstrapMethod = BootstrapMethod.Failure;
+                    }, transport =>
+                    {
+                        transport.Authentication(new ApiKey(elkSettings.ApiKey));
+                        transport.ServerCertificateValidationCallback((_, _, _, _) => true);
+                    })
+                )
 
                 // Console
                 .WriteTo.Console()
-                //.Filter.ByIncludingOnly("@l = 'Information'")
-                ////.Filter.ByIncludingOnly("StartsWith(SourceContext, 'CesarBmx.')")
-
-                //.WriteTo.Console()
-                //.Filter.ByIncludingOnly("@l = 'Error'")
 
                 // Create logger
                 .CreateLogger();

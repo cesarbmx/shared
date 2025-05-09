@@ -5,7 +5,7 @@ namespace CesarBmx.Shared.Settings
 {
     public  class ElkSettings
     {
-        public string ElasticsearchUrl { get; set; }
-        public string BearerToken { get; set; }
+        public string Endpoint { get; set; }
+        public string ApiKey { get; set; }
     }
 }

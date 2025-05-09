@@ -56,8 +56,8 @@ namespace CesarBmx.Shared.Api.Configuration
                 .AddOtlpExporter(opts =>
                 {
                     opts.Protocol = OtlpExportProtocol.Grpc;
-                    opts.Endpoint = new Uri(elkSettings.ElasticsearchUrl);
-                    opts.Headers = "Authorization=Bearer " + elkSettings.ElasticsearchUrl;
+                    opts.Endpoint = new Uri(elkSettings.Endpoint);
+                    opts.Headers = "Authorization=Bearer " + elkSettings.Endpoint;
                 })
                 );
 

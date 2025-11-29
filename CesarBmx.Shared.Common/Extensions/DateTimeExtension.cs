@@ -14,7 +14,7 @@ namespace CesarBmx.Shared.Common.Extensions
         }
         public static DateTime StripSeconds(this DateTime dateTime)
         {
-            return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, 0, DateTimeKind.Utc);
+            return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, 0, dateTime.Kind);
         }
     }
 }

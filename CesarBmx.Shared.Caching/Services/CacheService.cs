@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
 
-namespace Pinnacle.CustomerTeam.Caching.Services
+namespace CesarBmx.Shared.Caching.Services
 {
     public class CacheService
     {

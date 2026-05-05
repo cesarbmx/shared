@@ -94,7 +94,7 @@ namespace CesarBmx.Shared.Api.Configuration
             var name = typeof(T).Name;
             var scope = typeof(T).FullName;
             if (string.IsNullOrEmpty(scope)) return services;
-            scope = scope.Replace("Pinnacle.CustomerTeam.Messaging.", string.Empty);
+            scope = scope.Replace("CesarBmx.Shared.Messaging.", string.Empty);
             var index = scope.IndexOf(".");
             scope = scope.Remove(index);
 
